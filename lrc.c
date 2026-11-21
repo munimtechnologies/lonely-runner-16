@@ -40,14 +40,28 @@
  *                                divisible by c; the others are level-l times,
  *                                already covered), and the gcd clause fails.
  *
+ * Optional shift filter (shift=1; THEORY.md Sec. 5, "Lemma S"): an improper
+ * lift w at level l is also dropped when some d | l, d >= 2, has
+ *   E = {i : d does not divide w_i} non-empty and
+ *   sum_{i in E} g_i * ceil(2 (d/g_i) / (k+1)) < d,   g_i = gcd(w_i, d).
+ * Then every integer vector congruent to w mod lp has the LR property (given
+ * LRC(m) for m < k), so by the chained form of Lemma 2.2(ii) of 2609.02604 it
+ * cannot be the reduction of a counterexample.  Gates that use the filter
+ * prove "p divides the speed product" through Lemma 2.2(ii), not through
+ * J(k,p) being empty; the JSON reports how many lifts the filter removed.
+ *
  * Modes:
  *   lrc covers K P [maxsize] [timecap_s] [norm]
  *   lrc cascade K P L1,L2,.. v1 .. vK          (brute-force lifting)
  *   lrc cascadebb K P L1,L2,.. v1 .. vK        (branch-and-bound lifting)
- *       print "L level count" per level, "R status", up to 50 "W w1..wK".
- *   lrc gate K P L1,L2,.. timecap_s liftcap [norm] [bb]
+ *   lrc scascade / scascadebb  (same, with the shift filter)
+ *       print "L level count" per level, "X level shift_removed" per level,
+ *       "R status", up to 50 "W w1..wK".
+ *   lrc gate K P L1,L2,.. timecap_s liftcap [norm] [bb] [shift]
  *       covers + cascade for every canonical cover of size K and, for covers of
  *       size K-1, for every extra class x; prints one JSON object.
+ *   lrc shiftok K P l w1 .. wK
+ *       prints the smallest d certified by the shift filter at level l (or 0).
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -80,6 +94,10 @@ static int *found;      /* flattened, each entry MAXK+1 ints: size then classes 
 static long nfound, capfound;
 static long count_by_size[MAXK + 2];
 static long raw_by_size[MAXK + 2];
+
+/* shift filter */
+static int SHIFT = 0;
+static long cur_shift[MAXLEV];  /* lifts removed by the shift filter, per level */
 
 static double now(void) {
     struct timespec ts;
@@ -361,6 +379,34 @@ static int gcd_proper(const long long *w, const long long *fac, int nfac) {
     return 0;
 }
 
+static long long gcdll(long long a, long long b) {
+    if (a < 0) a = -a;
+    if (b < 0) b = -b;
+    while (b) { long long t = a % b; a = b; b = t; }
+    return a;
+}
+
+/* Lemma S (THEORY.md Sec. 5): smallest d | l, d >= 2, such that
+ * E = {i : d does not divide w_i} is non-empty and
+ * sum_{i in E} g_i * ceil(2 (d/g_i) / (K+1)) < d  (g_i = gcd(w_i, d));
+ * 0 if there is none. */
+static int shift_ok(const long long *w, long long l) {
+    for (long long d = 2; d <= l; d++) {
+        if (l % d) continue;
+        long long tot = 0;
+        int e = 0;
+        for (int i = 0; i < K && tot < d; i++) {
+            long long g = gcdll(w[i], d);
+            if (g == d) continue;
+            long long n = d / g;
+            tot += g * ((2 * n + K) / (K + 1));
+            e++;
+        }
+        if (e >= 1 && tot < d) return (int)d;
+    }
+    return 0;
+}
+
 /* proper at modulus L = l*P ? */
 static int is_proper(const long long *w, long long l, const long long *fac, int nfac) {
     if (gcd_proper(w, fac, nfac)) return 1;
@@ -394,11 +440,14 @@ static void vs_push(vecset *s, const long long *w) {
 }
 
 /* returns 0 if eventually proper within the given levels, 1 if survivors remain,
- * -1 on overflow; counts[i] receives the number of improper lifts at level i. */
+ * -1 on overflow; counts[i] receives the number of improper lifts at level i
+ * that are kept (with the shift filter on: not removed by it; the removed ones
+ * are counted in cur_shift[i]). */
 static int cascade(const int *v, const int *mult, int nlev, long liftcap,
                    long *counts, vecset *final_out) {
     vecset cur = {0}, nxt = {0};
     long long w[MAXK], w2[MAXK];
+    memset(cur_shift, 0, sizeof cur_shift);
     for (int i = 0; i < K; i++) w[i] = v[i];
     long long nofac[1];
     if (is_proper(w, 1, nofac, 0)) { free(cur.data); return 0; }
@@ -419,8 +468,12 @@ static int cascade(const int *v, const int *mult, int nlev, long liftcap,
             for (;;) {
                 for (int i = 0; i < K; i++) w2[i] = base[i] + a[i] * L;
                 if (!is_proper(w2, nl, fac, nfac)) {
-                    vs_push(&nxt, w2);
-                    if (nxt.n > liftcap) { status = -1; break; }
+                    if (SHIFT && shift_ok(w2, nl)) {
+                        cur_shift[li]++;
+                    } else {
+                        vs_push(&nxt, w2);
+                        if (nxt.n > liftcap) { status = -1; break; }
+                    }
                 }
                 int i = 0;
                 while (i < K && ++a[i] == c) { a[i] = 0; i++; }
@@ -444,8 +497,8 @@ static int cascade(const int *v, const int *mult, int nlev, long liftcap,
 
 /* ---- branch-and-bound lifting (same answers as cascade(), much faster) ---- */
 
-static int bb_c, bb_nw, bb_nfac, bb_over;
-static long long bb_L;
+static int bb_c, bb_nw, bb_nfac, bb_over, bb_li;
+static long long bb_L, bb_l;
 static long long bb_fac[16];
 static const long long *bb_base;
 static uint64_t *bb_cv;  /* (i*c + a) * nw : new times covered by w_i + a L */
@@ -469,6 +522,7 @@ static void bb_emit(void) {
     long long w2[MAXK];
     for (int i = 0; i < K; i++) w2[i] = bb_base[i] + bb_a[i] * bb_L;
     if (gcd_proper(w2, bb_fac, bb_nfac)) return;
+    if (SHIFT && shift_ok(w2, bb_l)) { cur_shift[bb_li]++; return; }
     vs_push(bb_out, w2);
     if (bb_out->n > bb_liftcap) bb_over = 1;
 }
@@ -509,6 +563,7 @@ static int cascade_bb(const int *v, const int *mult, int nlev, long liftcap,
                       long *counts, vecset *final_out) {
     vecset cur = {0}, nxt = {0};
     long long w[MAXK];
+    memset(cur_shift, 0, sizeof cur_shift);
     for (int i = 0; i < K; i++) w[i] = v[i];
     long long nofac[1];
     if (is_proper(w, 1, nofac, 0)) return 0;
@@ -532,6 +587,7 @@ static int cascade_bb(const int *v, const int *mult, int nlev, long liftcap,
         uint64_t *Ub = calloc((size_t)(K + 1) * nw, sizeof(uint64_t));
         if (!tb || !cvb || !Ub) { fprintf(stderr, "out of memory\n"); exit(4); }
         bb_c = (int)c; bb_nw = nw; bb_L = L; bb_cv = cvb; bb_U = Ub;
+        bb_l = nl; bb_li = li;
         bb_nfac = prime_factors(nl, bb_fac);
         bb_out = &nxt; bb_liftcap = liftcap; bb_over = 0;
         nxt.n = 0;
@@ -588,13 +644,24 @@ static void print_tuple_json(const int *v, int s) {
 
 int main(int argc, char **argv) {
     if (argc < 4) {
-        fprintf(stderr, "usage: lrc covers K P [maxsize] [timecap] [norm] | cascade|cascadebb K P levels v.. | gate K P levels timecap liftcap [norm] [bb]\n");
+        fprintf(stderr, "usage: lrc covers K P [maxsize] [timecap] [norm] | "
+                        "cascade|cascadebb|scascade|scascadebb K P levels v.. | "
+                        "gate K P levels timecap liftcap [norm] [bb] [shift] | "
+                        "shiftok K P l w..\n");
         return 1;
     }
     const char *mode = argv[1];
     int k = atoi(argv[2]);
     int p = atoi(argv[3]);
     setup(k, p);
+    if (!strcmp(mode, "shiftok")) {
+        if (argc < 5 + k) { fprintf(stderr, "need l and K values\n"); return 1; }
+        long long l = atoll(argv[4]);
+        long long w[MAXK];
+        for (int i = 0; i < k; i++) w[i] = atoll(argv[5 + i]);
+        printf("D %d\n", shift_ok(w, l));
+        return 0;
+    }
     if (!strcmp(mode, "covers")) {
         int maxsize = argc > 4 ? atoi(argv[4]) : k;
         double cap = argc > 5 ? atof(argv[5]) : 0;
@@ -612,8 +679,10 @@ int main(int argc, char **argv) {
                K, P, N, M, NORM, QS, nodes, timed_out, tau, nfound, now() - tstart);
         return 0;
     }
-    if (!strcmp(mode, "cascade") || !strcmp(mode, "cascadebb")) {
-        int bb = !strcmp(mode, "cascadebb");
+    if (!strcmp(mode, "cascade") || !strcmp(mode, "cascadebb") ||
+        !strcmp(mode, "scascade") || !strcmp(mode, "scascadebb")) {
+        int bb = !strcmp(mode, "cascadebb") || !strcmp(mode, "scascadebb");
+        SHIFT = mode[0] == 's';
         int mult[MAXLEV];
         int nlev = parse_levels(argv[4], mult);
         if (argc < 5 + k) { fprintf(stderr, "need K classes\n"); return 1; }
@@ -621,12 +690,19 @@ int main(int argc, char **argv) {
         for (int i = 0; i < k; i++) v[i] = atoi(argv[5 + i]);
         long counts[MAXLEV] = {0};
         vecset fin = {0};
-        int st = bb ? cascade_bb(v, mult, nlev, 50000000L, counts, &fin)
-                    : cascade(v, mult, nlev, 50000000L, counts, &fin);
+        const char *lcs = getenv("LRC_LIFTCAP");
+        long lc = lcs ? atol(lcs) : 50000000L;
+        int st = bb ? cascade_bb(v, mult, nlev, lc, counts, &fin)
+                    : cascade(v, mult, nlev, lc, counts, &fin);
         long long l = 1;
         for (int i = 0; i < nlev; i++) {
             l *= mult[i];
             printf("L %lld %ld\n", l, counts[i]);
+        }
+        l = 1;
+        for (int i = 0; i < nlev; i++) {
+            l *= mult[i];
+            printf("X %lld %ld\n", l, cur_shift[i]);
         }
         printf("R %d\n", st);
         for (long s = 0; s < fin.n && s < 50; s++) {
@@ -643,15 +719,16 @@ int main(int argc, char **argv) {
         long liftcap = argc > 6 ? atol(argv[6]) : 2000000L;
         int norm = argc > 7 ? atoi(argv[7]) : 0;
         int bb = argc > 8 ? atoi(argv[8]) : 0;
+        SHIFT = argc > 9 ? atoi(argv[9]) : 0;
         double t0 = now();
         run_covers(k, cap, norm);
         double tcov = now() - t0;
         int tau = 0;
         for (int s = 1; s <= k; s++) if (count_by_size[s]) { tau = s; break; }
-        printf("{\"k\":%d,\"p\":%d,\"n\":%d,\"m\":%d,\"norm\":%d,\"bb\":%d,\"qs\":%d,"
+        printf("{\"k\":%d,\"p\":%d,\"n\":%d,\"m\":%d,\"norm\":%d,\"bb\":%d,\"shift\":%d,\"qs\":%d,"
                "\"cover_nodes\":%lld,\"cover_timed_out\":%d,"
                "\"cover_seconds\":%.3f,\"tau\":%d,\"orbits_by_size\":{",
-               K, P, N, M, NORM, bb, QS, nodes, timed_out, tcov, tau);
+               K, P, N, M, NORM, bb, SHIFT, QS, nodes, timed_out, tcov, tau);
         int first = 1;
         for (int s = 1; s <= k; s++) if (count_by_size[s]) {
             printf("%s\"%d\":%ld", first ? "" : ",", s, count_by_size[s]);
@@ -667,6 +744,8 @@ int main(int argc, char **argv) {
         long tuples = 0, killed = 0, survived = 0, overflow = 0;
         long maxcount[MAXLEV] = {0};
         long sumcount[MAXLEV] = {0};
+        long sumshift[MAXLEV] = {0};
+        long tuples_using_shift = 0;
         printf("\"survivors\":[");
         int firsts = 1;
         int printed = 0;
@@ -686,10 +765,14 @@ int main(int argc, char **argv) {
                     int st = bb ? cascade_bb(v, mult, nlev, liftcap, counts, NULL)
                                 : cascade(v, mult, nlev, liftcap, counts, NULL);
                     tuples++;
+                    int used = 0;
                     for (int j = 0; j < nlev; j++) {
                         if (counts[j] > maxcount[j]) maxcount[j] = counts[j];
                         sumcount[j] += counts[j];
+                        sumshift[j] += cur_shift[j];
+                        if (cur_shift[j]) used = 1;
                     }
+                    if (used) tuples_using_shift++;
                     if (st == 0) killed++;
                     else {
                         if (st == 1) survived++; else overflow++;
@@ -712,7 +795,10 @@ int main(int argc, char **argv) {
         for (int j = 0; j < nlev; j++) printf("%s%ld", j ? "," : "", maxcount[j]);
         printf("],\"sum_improper_by_level\":[");
         for (int j = 0; j < nlev; j++) printf("%s%ld", j ? "," : "", sumcount[j]);
-        printf("],\"small_orbits_unhandled\":%ld,\"complete\":%d,\"total_seconds\":%.3f}\n",
+        printf("],\"shift_removed_by_level\":[");
+        for (int j = 0; j < nlev; j++) printf("%s%ld", j ? "," : "", sumshift[j]);
+        printf("],\"tuples_using_shift\":%ld", tuples_using_shift);
+        printf(",\"small_orbits_unhandled\":%ld,\"complete\":%d,\"total_seconds\":%.3f}\n",
                small_orbits, complete && overflow == 0, now() - t0);
         return 0;
     }

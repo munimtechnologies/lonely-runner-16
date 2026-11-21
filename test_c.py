@@ -1,10 +1,12 @@
 # Copyright 2026 Munim, Inc. (MV2, mv2@munimtech.com)
 # SPDX-License-Identifier: Apache-2.0
 """Cross-check the C engine (lrc.c) against the brute-force reference, and its
-two cover normalisations and two lifting methods against each other.
+two cover normalisations and two lifting methods against each other; and the
+optional shift filter (THEORY.md Sec. 5) against the Python reference.
 Skipped when no C compiler is available."""
 import json
 import os
+import random
 import shutil
 import subprocess
 import tempfile
@@ -40,6 +42,11 @@ def c_cascade(mode, k, p, mults, v):
     status = [int(ln.split()[1]) for ln in lines if ln.startswith("R ")][0]
     surv = sorted(tuple(int(x) for x in ln.split()[1:]) for ln in lines if ln.startswith("W"))
     return counts, status, surv
+
+
+def c_shift_removed(mode, k, p, mults, v):
+    lines = run(mode, k, p, ",".join(map(str, mults)), *v)
+    return [int(ln.split()[2]) for ln in lines if ln.startswith("X ")]
 
 
 @unittest.skipUnless(CC, "no C compiler")
@@ -112,6 +119,73 @@ class CEngine(unittest.TestCase):
                         "complete", "max_improper_by_level", "sum_improper_by_level"):
                 self.assertEqual(d0[key], d1[key], (k, p, key))
             self.assertEqual(d0["k"], k)
+            self.assertEqual(d0["shift"], 0)
+            self.assertEqual(d0["shift_removed_by_level"], [0, 0, 0])
+
+    # ---------------- shift filter ----------------
+
+    def test_shiftok_matches_reference(self):
+        rng = random.Random(17)
+        for k in (7, 14, 15):
+            p = 101
+            for _ in range(400):
+                l = rng.choice([2, 4, 8, 16, 32, 48, 64, 6, 12, 15, 30])
+                L = l * p
+                style = rng.random()
+                if style < 0.5:
+                    # mostly multiples of a divisor of l, a few exceptions
+                    d = rng.choice([x for x in range(2, l + 1) if l % x == 0])
+                    e = rng.randint(1, 8)
+                    w = [(d * rng.randint(1, 3 * p)) % L for _ in range(k - e)] + \
+                        [rng.randrange(1, L) for _ in range(e)]
+                else:
+                    w = [rng.randrange(1, L) for _ in range(k)]
+                got = int(run("shiftok", k, p, l, *w)[0].split()[1])
+                self.assertEqual(got, R.shift_ok(w, k, l), (k, l, w))
+
+    def test_shift_cascade_matches_reference(self):
+        cases = [
+            (7, 31, [2, 2], tuple(range(1, 8))),
+            (7, 41, [2, 2], tuple(range(1, 8))),
+            (5, 23, [2, 3], (1, 2, 3, 4, 5)),
+            (3, 11, [2, 2], (1, 2, 3)),
+        ]
+        for k, p, mults, v in cases:
+            counts, _ = R.cascade(v, k, p, mults, shift=True)
+            plain, _ = R.cascade(v, k, p, mults, shift=False)
+            for a, b in zip(counts, plain):
+                self.assertLessEqual(a, b, (k, p, mults))
+            for mode in ("scascade", "scascadebb"):
+                ccounts, _, _ = c_cascade(mode, k, p, mults, v)
+                self.assertEqual(ccounts[:len(counts)], counts, (mode, k, p, mults, v))
+
+    def test_shift_filter_two_lifting_methods_agree(self):
+        for k, p, mults in [(7, 43, [2, 2, 2]), (7, 59, [2, 2, 2, 2]), (8, 53, [2, 2])]:
+            covs, _ = c_covers(k, p)
+            tuples = [c for c in covs if len(c) == k]
+            for c in covs:
+                if len(c) == k - 1:
+                    tuples += [c + (x,) for x in range(1, (p - 1) // 2 + 1, 5)]
+            for v in tuples[:20]:
+                a = c_cascade("scascade", k, p, mults, v)
+                b = c_cascade("scascadebb", k, p, mults, v)
+                self.assertEqual(a[:2], b[:2], (k, p, mults, v))
+                ra = c_shift_removed("scascade", k, p, mults, v)
+                rb = c_shift_removed("scascadebb", k, p, mults, v)
+                self.assertEqual(ra, rb, (k, p, mults, v))
+                # the filter can only remove: kept counts never exceed the plain run
+                c = c_cascade("cascadebb", k, p, mults, v)
+                for x, y in zip(b[0], c[0]):
+                    self.assertLessEqual(x, y, (k, p, mults, v))
+
+    def test_gate_with_shift(self):
+        for k, p in [(7, 47), (8, 53)]:
+            d0 = json.loads(run("gate", k, p, "2,2,2", 60, 100000, 1, 1, 0)[-1])
+            d1 = json.loads(run("gate", k, p, "2,2,2", 60, 100000, 1, 1, 1)[-1])
+            self.assertEqual(d1["shift"], 1)
+            self.assertEqual(d0["tuples"], d1["tuples"])
+            self.assertGreaterEqual(d1["killed"], d0["killed"])
+            self.assertEqual(len(d1["shift_removed_by_level"]), 3)
 
 
 if __name__ == "__main__":

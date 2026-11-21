@@ -45,17 +45,31 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## The bound for 16 runners (worked out in `THEORY.md`)
+## The bound for 16 runners (worked out in `THEORY.md`, Sections 1-3)
 
 We carried the paper's shape lemma (its Lemma 3.7, proved there for 14 and 15
 runners) to 16 runners. It gives **R_15 < 49/100**, so a primitive counterexample
 with 15 speeds has `log(v_1...v_15) < 496.727`. After the forced divisor
 720720 = lcm(2..16), **prime gates with log-sum above 483.239** prove the 16-runner
 case: roughly 80 primes, against 71 used for 15 runners. Every inequality in the
-note is re-checked in exact rational arithmetic by `test_bounds.py`.
+note is re-checked in exact rational arithmetic by `test_bounds.py`. A second,
+independent pass over the derivation (run 3) agreed, apart from one rounded
+constant that nothing depends on (erratum in `THEORY.md`).
 
-For 16 runners, `k+1 = 16 = 2^4` is a prime power, so the binary lifting levels
-already reach the natural level 16.
+## Surviving orbits (`THEORY.md`, Section 5)
+
+For 14 and 15 runners, the tight vectors (1..13), (1..11,13,24) and (1..14) survive
+every binary lifting level, and the paper needs separate level-14 and level-15
+searches. For 16 runners, k+1 = 16 = 2^4, so the binary levels reach the tight
+witness 1/16 directly:
+
+- **Lemma L:** every *linear* lift lambda (1..15) mod 16p is proper at level 16.
+- **Lemma S:** a shift lemma for composite d (4, 8, 16, 32, ...), the 16-runner
+  substitute for the paper's Lemma 4.6, which is useless at d = 2.
+- **Lemma C:** the lifting cascade may drop every lift that Lemma S certifies.
+
+`PLAN.md` (addendum 2) pre-registers the prediction that the orbit of (1..15) is
+empty at level 16 at all ten pilot primes; job `lrc16-shift-v1` tests it.
 
 ## Two engines
 
@@ -67,16 +81,20 @@ both ways:
 | orbit normalisation of covers | any class moved to 1; lexicographic minimum | Lemma 4.1: the class with the most private times moved to 1 (prunes the search) |
 | lifting to the next level | all c^k lifts, each tested by a full scan of times | branch and bound over coordinates on the new times only |
 
+Either engine can run with the optional shift filter (`scascade`, `scascadebb`,
+or the `shift` argument of `gate`).
+
 ## What is here
 
 | file | what it does |
 |---|---|
-| `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade (both engines) |
-| `lrc_ref.py` | brute-force reference used to test the engine on small cases |
+| `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade (both engines), shift filter |
+| `lrc_ref.py` | brute-force reference used to test the engine on small cases; exact loneliness; Lemma S |
 | `bounds.py` | exact flag bound (rational arithmetic), shape bound sweep, exact n = 15 shape checks, gate-set planning |
 | `job.py` | `repro` (k = 13, 14 re-check), `pilot` (k = 15 survey), `engine2` (cross-check, then both with engine 2) |
-| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2 |
-| `THEORY.md` | the 16-runner bound, derived step by step |
+| `job_shift.py` | k = 15 orbit probe (prediction P1) and shift-filtered pilot gates |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L |
+| `THEORY.md` | the 16-runner bound, derived step by step, and the surviving-orbit lemmas |
 | `PLAN.md` | the pre-registered plan and what counts as success |
 
 Build and test:
@@ -85,7 +103,8 @@ Build and test:
 cc -O3 -o lrc lrc.c
 python -m unittest -v
 python bounds.py 13 14 15
-./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1
+./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1 1
+./lrc scascadebb 15 401 2,2,2,2,2,2 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 ```
 
 ## Credit

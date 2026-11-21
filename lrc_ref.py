@@ -5,7 +5,10 @@
 
 Definitions follow Allikvere, arXiv:2609.02604, Sections 2 and 4 (k speeds,
 k+1 runners).  Everything here is brute force and only meant for tiny p.
+The shift lemma ("Lemma S") and the exact loneliness of an integer vector are
+described in THEORY.md, Sec. 5.
 """
+from fractions import Fraction
 from itertools import combinations, combinations_with_replacement, product
 from math import gcd
 
@@ -124,8 +127,32 @@ def proper(w, k, p, l):
     return False
 
 
-def cascade(v, k, p, mults):
-    """number of improper lifts at each level, and the final survivors"""
+# ---------------- Lemma S (THEORY.md Sec. 5) ----------------
+
+def shift_cost(x, d, k):
+    """number of shifts q in 0..d-1 that coordinate x can forbid (0 if d | x)"""
+    g = gcd(x, d)
+    if g == d:
+        return 0
+    n = d // g
+    return g * (-(-2 * n // (k + 1)))  # g * ceil(2n/(k+1))
+
+
+def shift_ok(w, k, l):
+    """smallest d | l (d >= 2) certified by Lemma S, or 0"""
+    for d in range(2, l + 1):
+        if l % d:
+            continue
+        e = sum(1 for x in w if x % d)
+        tot = sum(shift_cost(x, d, k) for x in w)
+        if e >= 1 and tot < d:
+            return d
+    return 0
+
+
+def cascade(v, k, p, mults, shift=False):
+    """number of improper lifts kept at each level, and the final survivors.
+    With shift=True, improper lifts certified by Lemma S are dropped."""
     if proper(v, k, p, 1):
         return [], []
     cur = [tuple(v)]
@@ -139,6 +166,8 @@ def cascade(v, k, p, mults):
             for a in product(range(c), repeat=k):
                 w2 = tuple(w[i] + a[i] * L for i in range(k))
                 if not proper(w2, k, p, nl):
+                    if shift and shift_ok(w2, k, nl):
+                        continue
                     nxt.append(w2)
         counts.append(len(nxt))
         cur = nxt
@@ -158,3 +187,48 @@ def improper_at_level_bruteforce(k, p, l):
         if not proper(w, k, p, l):
             out.add(w)
     return out
+
+
+# ---------------- exact loneliness of an integer vector ----------------
+
+def dist(x):
+    """distance of a Fraction to the nearest integer"""
+    f = x - (x.numerator // x.denominator)
+    return min(f, 1 - f)
+
+
+def loneliness(u):
+    """max over real t of min_i ||t u_i|| for positive integers u (exact).
+    At a maximum two active constraints have opposite slopes, so
+    t = a/(u_i + u_j) for some i <= j and integer a."""
+    u = [x for x in u if x]
+    best, arg = Fraction(0), Fraction(0)
+    for i in range(len(u)):
+        for j in range(i, len(u)):
+            s = u[i] + u[j]
+            for a in range(1, s):
+                t = Fraction(a, s)
+                m = min(dist(t * x) for x in u)
+                if m > best:
+                    best, arg = m, t
+    return best, arg
+
+
+def bad_shifts(t0, x, d, k):
+    """the shifts q in 0..d-1 with ||(t0 + q/d) x|| < 1/(k+1)"""
+    lim = Fraction(1, k + 1)
+    return [q for q in range(d) if dist((t0 + Fraction(q, d)) * x) < lim]
+
+
+def shift_witness(u, k, d):
+    """Constructive form of Lemma S: an LR time for the coordinates divisible by d
+    (exact loneliness, which LRC(m) bounds below by 1/(m+1)), then the first
+    shift q/d that is a witness for every coordinate; returns (t, q) or None."""
+    D = sorted({x for x in u if x % d == 0})
+    t0 = loneliness(D)[1] if D else Fraction(0)
+    lim = Fraction(1, k + 1)
+    for q in range(d):
+        t = t0 + Fraction(q, d)
+        if all(dist(t * x) >= lim for x in u):
+            return t, q
+    return None

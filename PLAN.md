@@ -51,6 +51,39 @@ It then reruns the repro and pilot gates with engine 2. Its results on gates
 that `lrc-repro-k14-v1` and `lrc16-pilot-v1` also finish must match theirs in the
 same way; the same rule applies.
 
+## Addendum 2 (2026-11-21, run 3, before any k = 15 lifting result): step 4
+
+Tools written up in `THEORY.md` Section 5: Lemma L (linear lifts of a tight vector
+die once its witness denominator divides the level), Lemma S (shift lemma for
+composite d) and Lemma C (the cascade may drop what Lemma S certifies).
+Job `lrc16-shift-v1` (`job_shift.py`) tests them.
+
+**Primary prediction (P1).** For the tight vector (1,...,15), the plain binary
+cascade (engine 2 lifting, no shift filter) is **empty at level 16 at all ten
+pilot primes** (251, 283, 307, 353, 401, 449, 503, 601, 701, 809).
+Reason: Lemma L kills every linear lift at level 16, and for 14 runners the paper
+found that every witness-free lift at the natural level 14 was a multiple of 7
+(that is, linear with a non-unit multiplier). P1 is **falsified** at a prime if
+the level-16 kept count is positive there; it is **untested** at a prime where the
+probe overflows or times out. We report the number of primes in each class.
+
+**Secondary (P2).** The same for (1,...,13,15,28) at every prime where it is
+level-1 improper.
+
+**What each outcome means.**
+- P1 holds everywhere: 16 runners has no persistent tight orbit of the kind that
+  needed separate fibre searches for 14 and 15 runners. The remaining work is
+  the gates themselves (and any primes with small tau).
+- P1 fails somewhere: the surviving nonlinear lifts are listed. If the shift
+  filter (Lemma C) removes them by level 32 or 64, the filter is the argument; if
+  not, a new argument is needed, and we say so.
+
+**Part B** of the same job runs the ten pilot gates for k = 15 with engine 2 and the
+shift filter. No prediction is made; it measures how many level-one tuples are
+left after the filter, which decides the cost of the full 16-runner computation.
+A gate result counts toward a proof only after the engine cross-check
+(`lrc16-engine2-v1`) agrees and the repro matches the paper.
+
 ## Honesty rules
 
 - No claim of a proof for 16 runners until steps 1-5 are complete and audited.
