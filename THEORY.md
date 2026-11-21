@@ -5,7 +5,8 @@ MV2's name. **No human expert has checked this yet.** Every inequality in
 Sections 1-3 is re-checked in exact rational arithmetic by
 `bounds.shape_n15_exact()` and `bounds.check_quartic_factor_n15()` (tests in
 `test_bounds.py`); Section 5 is checked by `test_shift.py` and `test_c.py`;
-Section 6 by `test_ext.py`; Section 7 by `test_tight.py`.
+Section 6 by `test_ext.py`; Section 7 by `test_tight.py`; Section 8 by
+`test_uniform.py`.
 
 Sections 1-3 carry Section 3 of J. Allikvere, *Fourteen and fifteen lonely runners*,
 arXiv:2609.02604 v2 (the "flag bound") from n = 14 to n = 15 speeds, i.e. from 15 to
@@ -15,7 +16,8 @@ n = 13, 14) and the resulting constants. Section 5 (added in run 3) prepares the
 argument for the orbits that survive binary lifting. Section 6 (run 4) closes the
 gap left by primes whose level-one covers can be small. Section 7 (run 5) asks
 which tight sets exist for 16 runners, since tight sets are what survived binary
-lifting for 14 and 15 runners.
+lifting for 14 and 15 runners. Section 8 (run 6) separates the prime from the
+lifting problem, so one computation covers every gate prime at once.
 
 Notation as in the paper: n speeds, v positive and primitive, S = sum v_i,
 x_i = v_i/S, u_i = v_i / max_j v_j, q_i = q(u_i) with q(u) = 1 + 2u - u^2,
@@ -139,12 +141,13 @@ formal (Lean or interval-arithmetic) check is still needed.
    composite d, including d = 4, 8, 16, 32) and the chained form of
    Lemma 2.2(ii) that lets the cascade drop what Lemma S certifies. What survives
    all of them is measured by `lrc16-shift-v1`. Section 7 explains why we expect
-   nothing to survive.
+   nothing to survive. Section 8 turns the question for the orbit of (1..15) into
+   one computation that holds at every prime p >= 251 (job `lrc16-uniform-v1`).
 3. Primes where tau_15(p) <= 13 (covers on at most 13 classes exist). Section 6
    makes their gates complete, at a cost, and job `lrc16-tau-v1` finds which
    primes they are.
 4. An independent check of this note by a human reader, or a Lean/interval
-   formalisation of Sections 2, 5 and 6.
+   formalisation of Sections 2, 5, 6 and 8.
 
 ## 5. Tools for the surviving orbits (run 3)
 
@@ -468,3 +471,142 @@ level 32 should leave **no survivors at all** at the 16-runner gates. That
 would make 16 runners structurally simpler than 14 and 15, which both needed
 separate fibre searches. `PLAN.md` addendum 4 pre-registers this as P4, before
 any 16-runner lifting result exists.
+
+## 8. Binary lifting of one orbit, uniformly in p (run 6)
+
+Sections 5 and 7 predict that the orbit of (1..15) dies by level 16, and jobs
+`lrc16-shift-v1` and `lrc16-engine2-v1` test that at ten pilot primes, one prime
+at a time. This section separates the prime from the problem, so one finite
+computation (`uniform.py`, job `lrc16-uniform-v1`) answers the question at
+every gate prime together.
+
+### 8.1 Lemma D: where the prime enters
+
+Fix k, a level-one vector s of positive integers with p > max s_i, and a level
+L coprime to p. A lift of s to level L is w in Z_{Lp}^k with w_i = s_i (mod p);
+put z_i = w_i mod L. Write 1 = AL + Bp. For b in Z_{Lp},
+
+  b w_i / (Lp) = b w_i A / p + b w_i B / L = (bA mod p) s_i / p + (bB mod L) z_i / L  (mod 1),
+
+and b -> (beta, sigma) = (bB mod L, bA mod p) is a bijection Z_{Lp} -> Z_L x Z_p
+(B is a unit mod L because Bp = 1 mod L, A is a unit mod p, then CRT). So:
+
+**Lemma D.** w is proper at level L iff the gcd clause holds (for L a power of
+2: at most one z_i is odd) or there are beta in Z_L and t in (1/p)Z with
+||beta z_i / L + t s_i|| >= 1/(k+1) for every i.
+
+The prime enters only through the grid (1/p)Z of times t.
+
+### 8.2 Lemma U: two prime-free sets that sandwich the true survivors
+
+For fixed beta and z, let G_beta(z) be the set of strict witnesses,
+{t : ||beta z_i / L + t s_i|| > 1/(k+1) for all i}. It is a finite union of open
+arcs, and every endpoint is a point where some ||beta z_i/L + t s_i|| equals
+1/(k+1), a rational whose denominator divides Q = lcm(L, k+1) lcm(s_1, ..., s_k).
+
+For P a positive integer or infinity, call z **P-killed at level L** if
+(a) at most one z_i is odd (L >= 2), or (b) some beta has
+||beta z_i / L|| >= 1/(k+1) for all i (the time t = 0), or (c) for some beta,
+G_beta(z) has a component longer than 1/P (for P = infinity: G_beta(z) is not
+empty). Let U_P(1) = {s} if s is not P-killed at level 1 and empty otherwise,
+and let U_P(2L) be the lifts to level 2L of members of U_P(L) that are not
+P-killed. Let J_p(L) be the same cascade at one prime p, with "proper" in place
+of "P-killed" (the cascade of the published method, restricted to this orbit).
+
+**Lemma U.** (i) For every prime p >= P with p > max s_i: J_p(L) is contained
+in U_P(L). (ii) For every prime p > max s_i that does not divide Q: U_inf(L) is
+contained in J_p(L).
+
+*Proof.* (i) If z is P-killed and p >= P, then w is proper: (a) is the gcd
+clause; (b) is the time with sigma = 0; in (c), an open interval longer than
+1/P >= 1/p contains a point of (1/p)Z, which is a strict witness. (ii) If w is
+proper, z is inf-killed: the gcd clause is (a); a witness with sigma = 0 is (b);
+a witness with sigma != 0 is t = sigma/p, whose denominator is p, so t is not an
+arc endpoint (those have denominators dividing Q, and p does not divide Q). So
+every inequality at t is strict, t lies in G_beta(z), and (c) holds. Both
+cascades lift only their own survivors, so induction over the levels gives both
+inclusions. []
+
+For s = (1, ..., 15), Q has prime factors 2, 3, 5, 7, 11, 13 only. So **U_251
+bounds the survivors from above at every prime p >= 251** (every planned gate and
+pilot prime), and **U_inf bounds them from below at every prime p >= 17**.
+
+### 8.3 Reductions used by the search
+
+- **Units.** z -> lambda z (lambda odd) maps P-killed vectors to P-killed
+  vectors (beta -> beta lambda^{-1}), and is the action of the unit
+  Lambda = lambda (mod L), 1 (mod p). One representative per class is kept (the
+  lexicographic minimum).
+- **Only odd beta are new at level 2L.** For beta = 2b,
+  2b z'_i / (2L) = b z_i / L (mod 1), the parent's positions at level L, where the
+  parent was not killed. (The direct check `uniform_killed` tests every beta;
+  the tests compare it with the reduced search.)
+- **Branch and bound.** Each coordinate of a level-L parent has two lifts, z_i
+  and z_i + L. For each odd beta the circle is cut at every arc endpoint of both
+  choices. A choice covers a set of cells (a bitmask) and may make t = 0 bad. A
+  partial choice is dropped when, for some beta, the remaining coordinates
+  cannot cover every cell longer than 1/P together with the point t = 0. At the
+  leaves the check is exact: adjacent uncovered cells are merged (their common
+  endpoint is not an endpoint of a chosen arc, so it is a strict witness too).
+
+All times are integers in units of 1/Q, so nothing is rounded.
+
+### 8.4 Checks (`test_uniform.py`)
+
+- The cell masks agree with exact Fraction evaluation at every cell midpoint,
+  and every arc endpoint is at distance exactly 1/(k+1) (random s, z, L, beta).
+- The merged-run test agrees with a plain circular scan (random masks).
+- **The sandwich itself:** U_inf(L) is in J_p(L), and J_p(L) is in U_p(L), level
+  by level, with J_p computed by brute force over every time b in Z_{Lp}
+  (`lrc_ref.proper`): s = (1,2,3) at p = 11, 13, 29, 101 up to level 16;
+  s = (1..7) at p = 29 up to level 8 (the 8-runner analogue, where k + 1 = 8 is
+  also a power of 2); random 3- to 5-speed sets.
+- Branch and bound agrees with the direct check of all 2^k lifts.
+- (1..13,15,28) is killed at level 1 (P = infinity and P = 1500: Section 7.3's
+  interval has length 1/1344), (1..15) is not; the linear lift (1..7) mod 8 is
+  killed at level 8 and (1..7) mod 4 is not at level 4 (Lemma L analogue).
+
+### 8.5 What the computation decides
+
+**Linear lifts.** If z = lambda s (mod L): for lambda even all z_i are even
+(gcd clause); for lambda odd and s = (1..15), Lemma L kills z at level 16 by
+t = 0. So every member of U_P(16) for s = (1..15) is a nonlinear lift.
+
+**Why no binary level can kill (1..k) when k + 1 is not a power of 2.** For
+s = (1..k) and lambda odd, the lift z = lambda s (mod L) lies in U_P(L) for every
+P and every binary level L. *Proof.* The positions are i x with
+x = beta lambda / L + t. If ||i x|| >= 1/(k+1) for i = 1..k, then the k + 1 points
+0, x, 2x, ..., kx are pairwise at distance >= 1/(k+1) (their differences are
+i x with 1 <= i <= k), so the k + 1 gaps between them, which sum to 1, all equal
+1/(k+1); the points form the group (1/(k+1))Z/Z and x = j/(k+1) with
+gcd(j, k+1) = 1. So G_beta is empty (equality, never strict), and t = 0 is a
+witness only if beta lambda / L, a dyadic rational, equals j/(k+1) in lowest
+terms, which needs k + 1 to be a power of 2. And the odd i give odd z_i, so the
+gcd clause fails. [] For k = 13, 14 (14 and 15 runners) this is the prime-free
+reason the published proofs needed separate fibre searches at levels 14 and 15.
+It doubles as a sanity check of the code (S1 in `PLAN.md`, addendum 5). For
+k = 15, k + 1 = 16 and the same argument shows the linear lifts are killed
+exactly from level 16 on (Lemma L).
+
+**For 16 runners.**
+- If U_251(16) is empty for s = (1..15), then for **every prime p >= 251** no
+  lift of the orbit of (1..15) survives level 16. That proves prediction P1 at
+  all ten pilot primes without using `lrc.c`, and removes this orbit from every
+  16-runner gate at once.
+- If U_inf(16) is not empty, its members survive level 16 at **every prime
+  p >= 17**, so P1 is false at every pilot prime, and those lifts need level 32
+  (computed by the same job) or another argument.
+- If U_inf(16) is empty but U_251(16) is not, the answer depends on the prime
+  for the listed lifts only, and the per-prime engine settles them.
+
+**Evidence from 8 runners.** Rosenfeld's 8-runner proof (arXiv:2509.14111,
+Lemma 6) works at the single level k + 1 = 8: at each of his primes
+(31, 37, 43, ..., 163) every level-8 vector that fails the gcd clause is proper,
+and he reports that every prime p >= 31 except 41 works. For k = 7, k + 1 = 8 is
+a power of 2, as 16 is for k = 15, so this is the closest published analogue of
+prediction P1. By Lemma U(ii) it also implies that U_inf(8) is empty for
+s = (1..7), which the job checks (X2 in `PLAN.md`).
+
+The same job runs (1..13,15,28) (prediction P2) and, as sanity checks, (1..14),
+(1..13), (1..11,13,24) and (1..7). Its readings are pre-registered in `PLAN.md`,
+addendum 5.

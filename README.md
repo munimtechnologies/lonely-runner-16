@@ -93,6 +93,28 @@ should leave **no survivors at all** at the 16-runner pilot gates (prediction P4
 which would make 16 runners simpler than 14 and 15 at this step. `test_tight.py`
 checks all of this in exact arithmetic.
 
+## One computation for every prime (`THEORY.md`, Section 8)
+
+Lifting an orbit is usually done one prime at a time. Section 8 separates the
+prime from the problem. By the Chinese remainder theorem a time at level L is a
+pair (beta, t) with beta in Z_L and t in (1/p)Z, and a lift is proper iff some
+pair has ||beta z_i / L + t s_i|| >= 1/(k+1) for all i (or the gcd clause holds).
+The prime only fixes the grid of t. **Lemma U** then gives two prime-free cascades
+that sandwich the true one: U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P
+(not dividing a fixed Q). For s = (1..15):
+
+- if U_251(16) is empty, the orbit of (1..15) dies by level 16 at **every** prime
+  p >= 251, which covers every planned gate in one computation;
+- if U_inf(16) is not empty, its lifts survive level 16 at **every** prime p >= 17.
+
+The same section gives a two-line, prime-free proof that the tight orbit (1..k)
+can never be killed by binary lifting when k + 1 is not a power of 2: the
+reason the 14- and 15-runner proofs needed separate fibre searches.
+`uniform.py` computes the two cascades in exact integer arithmetic (branch and
+bound over cell bitmasks), and `test_uniform.py` checks the sandwich level by level
+against the brute-force definition at small primes. Job `lrc16-uniform-v1`
+runs it; the readings are pre-registered in `PLAN.md` (addendum 5).
+
 ## Small covers and the gate primes (`THEORY.md`, Section 6)
 
 At primes where the folded times can be covered by at most k - 2 speed classes
@@ -128,12 +150,14 @@ or the `shift` argument of `gate`) and the general completion (`ext` argument).
 |---|---|
 | `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade (both engines), shift filter, general completion |
 | `lrc_ref.py` | brute-force reference used to test the engine on small cases; exact loneliness; Lemma S |
+| `uniform.py` | prime-free lifting of one orbit (Lemma U): U_inf and U_P cascades in exact arithmetic |
 | `bounds.py` | exact flag bound (rational arithmetic), shape bound sweep, exact n = 15 shape checks, gate-set planning |
 | `job.py` | `repro` (k = 13, 14 re-check), `pilot` (k = 15 survey), `engine2` (cross-check, then both with engine 2) |
 | `job_shift.py` | k = 15 orbit probe (prediction P1) and shift-filtered pilot gates |
 | `job_tau.py` | tau(p) scans: the paper's k = 14 table (R1) and k = 15 up to p = 1000 (P3) |
-| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`) |
-| `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers, tight sets |
+| `job_uniform.py` | Lemma U cascades for (1..15), (1..13,15,28) and the 14/15-runner sanity orbits (P5, P6, S1) |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`) |
+| `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p |
 | `PLAN.md` | the pre-registered plan and what counts as success |
 
 Build and test:
@@ -142,6 +166,7 @@ Build and test:
 cc -O3 -o lrc lrc.c
 python -m unittest -v
 python bounds.py 13 14 15
+python job_uniform.py --out-dir out --only e7
 ./lrc tau 15 401 13 600
 ./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1 1 1
 ./lrc scascadebb 15 401 2,2,2,2,2,2 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

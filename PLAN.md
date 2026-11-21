@@ -170,6 +170,63 @@ witness, persists.)
 - Untested everywhere (cover searches time out at 1500 s or 600 s): the pilot
   costs are too high at these caps, and P4 waits for longer gate runs.
 
+## Addendum 5 (2026-11-21, run 6, before any lifting result): uniform in p
+
+Written at about 19:00 UTC on 2026-11-21. None of the five earlier jobs has
+started; no lifting result for any k exists. `THEORY.md` Section 8 proves
+Lemma U: for a level-one vector s, two prime-free cascades U_inf(L) and U_P(L)
+satisfy U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P not dividing Q
+(J_p = the true cascade of the orbit of s at the prime p). Job
+`lrc16-uniform-v1` (`job_uniform.py`) computes U_inf and U_P for the vectors
+below, levels 2 to 32, and writes `summary_uniform.json`.
+
+A run is **tested up to level L** if its `levels` list reaches L (or becomes empty
+earlier) with `cut` = null. Counts are of unit classes (z ~ lambda z, lambda odd).
+
+**P5 (primary).** For s = (1..15), U_251 is **empty at level 16 or earlier**.
+Consequence if it holds: for every prime p >= 251, no lift of the orbit of
+(1..15) survives level 16, which proves P1 at all ten pilot primes and removes
+this orbit from every 16-runner gate. **Falsified** if U_251(16) is non-empty
+(its members are listed); **untested** if the run is cut before level 16.
+Reason for the prediction: Section 7 (no other tight set nearby) and Lemma L;
+we have no proof, and the near-integer analysis of `THEORY.md` 5.1 leaves room
+for nonlinear survivors.
+
+**P5b.** For s = (1..15), U_inf is empty at level 16 or earlier (implied by P5).
+If P5b fails, the listed lifts survive level 16 at **every** prime p >= 17, and
+P1 is false at every pilot prime: that is a theorem, not a measurement.
+
+**P6.** For s = (1..13,15,28): U_inf is empty already at level 1 (certain: it is
+not tight, `THEORY.md` 7.3), and U_251 is empty at level 16 or earlier.
+
+**S1 (sanity checks; proved in `THEORY.md` 8.5, so failure means a bug).** For
+s = (1..14) (P = 239 and P = inf) and s = (1..13) (P = 89), every level computed
+up to 16 has at least one linear survivor. For s = (1..15), U_P(2), U_P(4) and
+U_P(8) each have at least one linear survivor, and no member of U_P(16) is
+linear.
+
+**X1 (cross-check with the per-prime engine, read when `lrc16-shift-v1` reports).**
+At each pilot prime p, the level-16 kept count of the (1..15) probe must be 0 if
+U_251(16) is empty, and positive if U_inf(16) is not empty; every listed
+survivor w, reduced to z = w mod 16 and put in canonical form, must lie in
+U_251(16). Any violation is a bug in `uniform.py` or in `lrc.c`, found before
+either is used again.
+
+**X2 (external check against the 8-runner proof).** Rosenfeld
+(arXiv:2509.14111, Lemma 6) proves 8 runners by checking, at the single modulus
+(k+1)p = 8p, that every vector in Z_{8p}^7 with no coordinate divisible by p and
+gcd(S, 8p) = 1 for every 6-element subset S has a witness. In our terms: every
+level-8 vector that fails the gcd clause is proper, so J_p(8) is empty for every
+orbit. p = 31 is one of his proof primes, and 31 does not divide
+Q = 3360. By Lemma U(ii), **U_inf(8) must be empty for s = (1..7)**. If it is
+not, our code or Lemma U is wrong (or we misread his lemma), and nothing from
+`uniform.py` is used until that is explained.
+
+**Measurements (no prediction).** The 8-runner analogue s = (1..7) (k + 1 = 8,
+P = inf and 29): at which level its orbit empties (Rosenfeld reports that
+p = 29 and p = 41 do not work at level 8 for k = 7, for some orbit). (1..11,13,24) at P = 89.
+s = (1..15) at P = 17 (every prime p >= 17). Run times.
+
 ## Honesty rules
 
 - No claim of a proof for 16 runners until steps 1-5 are complete and audited.
