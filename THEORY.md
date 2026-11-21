@@ -4,14 +4,16 @@ MV2 of Munim, Inc. Text CC BY 4.0. Written 2026-11-21 by AI agents working in
 MV2's name. **No human expert has checked this yet.** Every inequality in
 Sections 1-3 is re-checked in exact rational arithmetic by
 `bounds.shape_n15_exact()` and `bounds.check_quartic_factor_n15()` (tests in
-`test_bounds.py`); Section 5 is checked by `test_shift.py` and `test_c.py`.
+`test_bounds.py`); Section 5 is checked by `test_shift.py` and `test_c.py`;
+Section 6 by `test_ext.py`.
 
 Sections 1-3 carry Section 3 of J. Allikvere, *Fourteen and fifteen lonely runners*,
 arXiv:2609.02604 v2 (the "flag bound") from n = 14 to n = 15 speeds, i.e. from 15 to
 16 runners. Everything structural is the paper's. What is new here is the
 n = 15 case of the shape lemma (the paper's Lemma 3.7 is stated and proved only for
 n = 13, 14) and the resulting constants. Section 5 (added in run 3) prepares the
-argument for the orbits that survive binary lifting.
+argument for the orbits that survive binary lifting. Section 6 (run 4) closes the
+gap left by primes whose level-one covers can be small.
 
 Notation as in the paper: n speeds, v positive and primitive, S = sum v_i,
 x_i = v_i/S, u_i = v_i / max_j v_j, q_i = q(u_i) with q(u) = 1 + 2u - u^2,
@@ -135,8 +137,11 @@ formal (Lean or interval-arithmetic) check is still needed.
    composite d, including d = 4, 8, 16, 32) and the chained form of
    Lemma 2.2(ii) that lets the cascade drop what Lemma S certifies. What survives
    all of them is measured by `lrc16-shift-v1`.
-3. An independent check of this note by a human reader, or a Lean/interval
-   formalisation of Sections 2 and 5.
+3. Primes where tau_15(p) <= 13 (covers on at most 13 classes exist). Section 6
+   makes their gates complete, at a cost, and job `lrc16-tau-v1` finds which
+   primes they are.
+4. An independent check of this note by a human reader, or a Lean/interval
+   formalisation of Sections 2, 5 and 6.
 
 ## 5. Tools for the surviving orbits (run 3)
 
@@ -266,3 +271,101 @@ that needed special fibre searches for 14 and 15 runners should be easier for 16
 runners, and Lemma S is the 16-runner substitute for the paper's Lemma 4.6. The
 prediction, its test and what counts as each outcome are in `PLAN.md`
 (addendum 2), written before any k = 15 lifting result exists.
+
+### 5.5 Third reading, written to break Section 5 (run 4)
+
+A separate pass (again an AI agent, told to look for errors rather than confirm)
+re-derived every step of 5.1-5.3 and the engine code that implements them. It
+found no error. What it checked, so a human reader can check the same points:
+
+- **Lemma L.** b = lambda^{-1} j (lp/D) needs D | l (so lp/D is an integer) and
+  lambda a unit mod lp (gcd(lambda, l) = 1 and p does not divide lambda). The case
+  gcd(lambda, l) = g > 1 uses that g divides every residue w_i mod lp, which holds
+  because g | lp. Witness inequalities are non-strict (||t v_i|| >= 1/(k+1)),
+  matching the paper's strict cover condition (k+1) d_p(av) < p.
+- **2-adic conditions.** At level 32, for j odd, ||j w_i/32|| < 1/16 iff
+  j w_i = 0 or +-1 mod 32: an even w_i that is not 0 mod 32 gives
+  ||j w_i/32|| >= 2/32 = 1/16, so only odd coordinates (two bad j each) and
+  multiples of 32 matter. Eight odd coordinates are needed to block all 16 odd j.
+- **Lemma S.** Counting lattice points in an open arc: r points of a coset of
+  (1/N)Z/Z in an open arc of length L satisfy (r-1)/N < L, so r <= ceil(LN) in both
+  cases (LN an integer or not). All 15 entries of the k = 15 cost table were
+  recomputed as g * ceil(N/8).
+- **The gcd clause is the case e = 1 of Lemma S.** If gcd(l, w_j : j != i) = g > 1
+  and v is primitive, then g does not divide v_i; with g' = gcd(v_i, g) and
+  N = g/g' >= 2 the cost is g' ceil(2N/16) < g' N = g. So Lemma S with d = g,
+  E = {i} gives the LR property. This is the argument Lemma C cites for the gcd
+  clause, made explicit.
+- **Lemma C and orbit reduction.** F'_0 needs no certification check (d | 1 is
+  impossible), and the CRT unit Lambda exists because gcd(p, l_r) = 1.
+- **Engine.** `gcd_proper` tests the prime factors of l (equivalent to
+  gcd(l, ...) > 1); `shift_ok` computes g * ceil(2n/(K+1)) as
+  g * ((2n + K) / (K + 1)) in integer division, which is the same number; the
+  branch-and-bound lifter only re-tests times b not divisible by the level
+  multiplier, which is valid because those are the old level's times, already
+  covered by the improper parent.
+
+## 6. Small covers and the choice of gate primes (run 4)
+
+### 6.1 The gap
+
+Let tau_k(p) be the fewest speed classes that cover all folded times (the
+paper's tau(p)). Every level-one improper k-multiset contains an irredundant
+cover on s classes, tau_k(p) <= s <= k. The paper's shortcut (its Sec. 4.1) is
+that when tau_k(p) >= k - 1 it suffices to take every irredundant cover on k
+classes and every irredundant cover on k - 1 classes plus one arbitrary class.
+Our engine did exactly this, and flagged a gate incomplete
+(`small_orbits_unhandled`) when a cover on <= k - 2 classes exists. For 15
+runners the paper needed the general enumeration at 19 of its 71 primes (all
+between 89 and 241). For 16 runners we did not yet know which primes need it.
+
+A cover on s classes needs s m >= n with n = (p-1)/2 and m = floor((p-1)/16), so
+tau_15(p) >= ceil(n/m) >= 8 for every p; that bound is far below 14, so only a
+computation can tell which primes have tau_15(p) <= 13.
+
+### 6.2 General completion (engine option `ext`)
+
+**Claim.** Let T be the list of level-one tuples formed from every canonical
+irredundant cover C (one per unit orbit, |C| = s <= k) followed by every
+non-decreasing sequence of k - s classes in 1..n. Then every level-one improper
+k-multiset is, after multiplication by a unit, sign changes and a permutation, a
+member of T.
+
+*Proof.* The support of an improper multiset covers all folded times. Removing
+redundant classes one at a time leaves an irredundant cover C' inside the support,
+with |C'| = s <= k. The cover search lists one representative C of the unit orbit
+of C' (`test_c.test_covers_match_reference` and
+`test_c.test_two_normalisations_agree` check this against brute force), so some
+unit lambda has lambda C' = C after folding. lambda maps the other k - s elements
+of the multiset to some multiset of folded classes, which T lists in
+non-decreasing order. []
+
+With `ext = 0` the same list is restricted to s >= k - 1, which is complete exactly
+when tau_k(p) >= k - 1. `test_ext.py` checks the claim end to end: for (k, p) =
+(8, 23), (9, 23), (4, 13) and (5, 23) it enumerates every k-multiset of classes by
+brute force, keeps the improper ones, and checks that the unit orbits hit by T
+are exactly the improper orbits, for both cover normalisations. At p = 23 with
+k = 8 or 9 a class covers two times, {c, 2c} folded, and the six classes with
+c = 1, 3, 4, 5, 6, 7 cover all eleven, so tau = 6 <= k - 2 and the old list is
+provably incomplete there. The test checks that too.
+
+**Cost.** A cover on s classes gives C(n + k - s - 1, k - s) tuples. For k = 15,
+s = 13 and p = 401 that is C(201, 2) = 20,100 tuples per cover, so the general
+completion is affordable only at primes with few small covers. The paper's
+private-time branch (its Lemma 4.1) is cheaper; ours is simpler and is checked
+exhaustively on small cases. Which primes need it is measured next.
+
+### 6.3 Which primes need it (job `lrc16-tau-v1`)
+
+`lrc tau K P maxsize` decides whether a cover on <= maxsize classes exists (stop at
+the first irredundant cover found, with the paper's private-time bound q_s as a
+pruning rule), and so gives tau exactly when it is <= maxsize. The job runs it
+
+- for k = 14, maxsize 12, at all 71 primes of the paper's Table 2, which states
+  tau(p) <= 12 for 89, 131, ..., 241 (19 primes) and tau(p) >= 13 for every prime
+  from 239 to 569 except 241: an independent check of a published table;
+- for k = 15, maxsize 13, at every prime from 17 to 1000: the list of primes
+  where the old enumeration is complete (tau_15 >= 14), the smallest set of such
+  primes whose log-sum passes 483.239, and the primes that need Section 6.2.
+
+The pre-registered readings are in `PLAN.md`, addendum 3.

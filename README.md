@@ -69,7 +69,24 @@ witness 1/16 directly:
 - **Lemma C:** the lifting cascade may drop every lift that Lemma S certifies.
 
 `PLAN.md` (addendum 2) pre-registers the prediction that the orbit of (1..15) is
-empty at level 16 at all ten pilot primes; job `lrc16-shift-v1` tests it.
+empty at level 16 at all ten pilot primes; job `lrc16-shift-v1` tests it. A third
+reading of Section 5, written to find errors, found none (`THEORY.md` 5.5).
+
+## Small covers and the gate primes (`THEORY.md`, Section 6)
+
+At primes where the folded times can be covered by at most k - 2 speed classes
+(tau(p) <= k - 2), the usual shortcut enumeration misses some level-one orbits.
+The paper handled 19 such primes for 15 runners with a general enumeration.
+`lrc.c` now has:
+
+- **`ext`**: a general completion (every small cover plus every multiset of extra
+  classes), tested against a brute-force enumeration of all k-multisets at
+  primes where tau(p) <= k - 2;
+- **`tau`**: decides whether a cover on at most a given number of classes exists.
+
+Job `lrc16-tau-v1` re-checks the paper's tau table for 15 runners (71 primes) and
+maps tau_15(p) for every prime up to 1000, which fixes the gate primes for 16
+runners. Its readings are pre-registered in `PLAN.md` (addendum 3).
 
 ## Two engines
 
@@ -82,19 +99,20 @@ both ways:
 | lifting to the next level | all c^k lifts, each tested by a full scan of times | branch and bound over coordinates on the new times only |
 
 Either engine can run with the optional shift filter (`scascade`, `scascadebb`,
-or the `shift` argument of `gate`).
+or the `shift` argument of `gate`) and the general completion (`ext` argument).
 
 ## What is here
 
 | file | what it does |
 |---|---|
-| `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade (both engines), shift filter |
+| `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade (both engines), shift filter, general completion |
 | `lrc_ref.py` | brute-force reference used to test the engine on small cases; exact loneliness; Lemma S |
 | `bounds.py` | exact flag bound (rational arithmetic), shape bound sweep, exact n = 15 shape checks, gate-set planning |
 | `job.py` | `repro` (k = 13, 14 re-check), `pilot` (k = 15 survey), `engine2` (cross-check, then both with engine 2) |
 | `job_shift.py` | k = 15 orbit probe (prediction P1) and shift-filtered pilot gates |
-| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L |
-| `THEORY.md` | the 16-runner bound, derived step by step, and the surviving-orbit lemmas |
+| `job_tau.py` | tau(p) scans: the paper's k = 14 table (R1) and k = 15 up to p = 1000 (P3) |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion |
+| `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers |
 | `PLAN.md` | the pre-registered plan and what counts as success |
 
 Build and test:
@@ -103,7 +121,8 @@ Build and test:
 cc -O3 -o lrc lrc.c
 python -m unittest -v
 python bounds.py 13 14 15
-./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1 1
+./lrc tau 15 401 13 600
+./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1 1 1
 ./lrc scascadebb 15 401 2,2,2,2,2,2 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 ```
 

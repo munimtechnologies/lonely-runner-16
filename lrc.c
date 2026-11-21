@@ -50,16 +50,29 @@
  * prove "p divides the speed product" through Lemma 2.2(ii), not through
  * J(k,p) being empty; the JSON reports how many lifts the filter removed.
  *
+ * Optional general completion (ext=1; THEORY.md Sec. 6): canonical irredundant
+ * covers of size s <= k-2 are completed by every multiset of k-s extra classes
+ * (non-decreasing), so primes with tau(p) <= k-2 give complete gates too.  With
+ * ext=0 such covers are only counted ("small_orbits_unhandled") and the gate is
+ * marked incomplete, exactly as before.
+ *
  * Modes:
  *   lrc covers K P [maxsize] [timecap_s] [norm]
+ *   lrc tau K P maxsize [timecap_s]
+ *       exact tau(p) if it is <= maxsize, otherwise a certificate that no
+ *       cover on <= maxsize classes exists (Lemma 4.1 pruning, stop at the
+ *       first cover found); prints "T key=value ..." and "F classes" if found.
  *   lrc cascade K P L1,L2,.. v1 .. vK          (brute-force lifting)
  *   lrc cascadebb K P L1,L2,.. v1 .. vK        (branch-and-bound lifting)
  *   lrc scascade / scascadebb  (same, with the shift filter)
  *       print "L level count" per level, "X level shift_removed" per level,
  *       "R status", up to 50 "W w1..wK".
- *   lrc gate K P L1,L2,.. timecap_s liftcap [norm] [bb] [shift]
+ *   lrc gate K P L1,L2,.. timecap_s liftcap [norm] [bb] [shift] [ext]
  *       covers + cascade for every canonical cover of size K and, for covers of
- *       size K-1, for every extra class x; prints one JSON object.
+ *       size K-1, for every extra class x (with ext=1: for covers of any size
+ *       s, every multiset of K-s extra classes); prints one JSON object.
+ *   lrc tuples K P [ext] [norm]
+ *       prints "T v1..vK" for every level-1 tuple the gate would lift.
  *   lrc shiftok K P l w1 .. wK
  *       prints the smallest d certified by the shift filter at level l (or 0).
  */
@@ -88,6 +101,10 @@ static bset uncov, allowed;
 static long long nodes;
 static double tstart, timecap;
 static int timed_out;
+
+/* stop-at-first-cover mode (tau) */
+static int STOPFIRST = 0, stopnow = 0;
+static int firstcov[MAXK + 1], nfirst = 0;
 
 /* canonical covers found */
 static int *found;      /* flattened, each entry MAXK+1 ints: size then classes */
@@ -237,6 +254,16 @@ static void to_global_canonical(int *c, int s) {
 }
 
 static void report(void) {
+    if (STOPFIRST) {
+        /* tau mode: any irredundant cover settles existence at this size */
+        if (!stopnow) {
+            stopnow = 1;
+            nfirst = nch;
+            memcpy(firstcov, chosen, nch * sizeof(int));
+            qsort(firstcov, nfirst, sizeof(int), cmp_int);
+        }
+        return;
+    }
     int c[MAXK + 1];
     int s = nch;
     memcpy(c, chosen, s * sizeof(int));
@@ -273,7 +300,7 @@ static void report(void) {
 static void search(void) {
     nodes++;
     if ((nodes & 0xFFFF) == 0 && timecap > 0 && now() - tstart > timecap) timed_out = 1;
-    if (timed_out) return;
+    if (timed_out || stopnow) return;
     if (npriv0) return;
     if (NORM && pc[1] < QS) return; /* private counts only fall as classes are added */
     int U = bs_pop(&uncov);
@@ -320,7 +347,7 @@ static void search(void) {
         search();
         nch--;
         remove_class(v);
-        if (timed_out) break;
+        if (timed_out || stopnow) break;
     }
     for (int i = 0; i < nc; i++) bs_set(&allowed, cands[i]);
 }
@@ -340,6 +367,7 @@ static void run_covers(int maxsize, double cap, int norm) {
     nfound = 0;
     npriv0 = 0;
     nch = 0;
+    stopnow = 0;
     memset(&uncov, 0, sizeof uncov);
     memset(&allowed, 0, sizeof allowed);
     for (int a = 1; a <= N; a++) { bs_set(&uncov, a); bs_set(&allowed, a); }
@@ -642,11 +670,81 @@ static void print_tuple_json(const int *v, int s) {
     printf("]");
 }
 
+/* ---------------- gate: one level-1 tuple at a time ---------------- */
+
+static int g_list, g_bb, g_nlev, g_cut, g_printed, g_firsts, g_complete;
+static int g_mult[MAXLEV];
+static long g_liftcap, g_tuples, g_killed, g_survived, g_overflow, g_using;
+static long g_maxcount[MAXLEV], g_sumcount[MAXLEV], g_sumshift[MAXLEV];
+static double g_t0;
+
+static void gate_tuple(const int *v) {
+    if (g_list) {
+        printf("T");
+        for (int i = 0; i < K; i++) printf(" %d", v[i]);
+        printf("\n");
+        g_tuples++;
+        return;
+    }
+    long counts[MAXLEV] = {0};
+    int st = g_bb ? cascade_bb(v, g_mult, g_nlev, g_liftcap, counts, NULL)
+                  : cascade(v, g_mult, g_nlev, g_liftcap, counts, NULL);
+    g_tuples++;
+    int used = 0;
+    for (int j = 0; j < g_nlev; j++) {
+        if (counts[j] > g_maxcount[j]) g_maxcount[j] = counts[j];
+        g_sumcount[j] += counts[j];
+        g_sumshift[j] += cur_shift[j];
+        if (cur_shift[j]) used = 1;
+    }
+    if (used) g_using++;
+    if (st == 0) g_killed++;
+    else {
+        if (st == 1) g_survived++; else g_overflow++;
+        if (g_printed < 200) {
+            printf("%s{\"tuple\":", g_firsts ? "" : ",");
+            print_tuple_json(v, K);
+            printf(",\"status\":%d,\"counts\":[", st);
+            for (int j = 0; j < g_nlev; j++) printf("%s%ld", j ? "," : "", counts[j]);
+            printf("]}");
+            g_firsts = 0;
+            g_printed++;
+        }
+    }
+    if (timecap > 0 && now() - g_t0 > 3 * timecap) { g_complete = 0; g_cut = 1; }
+}
+
+/* complete v[0..s-1] by every non-decreasing sequence of classes >= from */
+static void gate_extend(int *v, int s, int from) {
+    if (g_cut) return;
+    if (s == K) { gate_tuple(v); return; }
+    for (int x = from; x <= N; x++) {
+        v[s] = x;
+        gate_extend(v, s + 1, x);
+        if (g_cut) return;
+    }
+}
+
+/* every stored canonical cover of size K (as is), of size K-1 (with every extra
+ * class), and with ext also every smaller cover (with every multiset of extras) */
+static void gate_all_tuples(int ext) {
+    for (long i = 0; i < nfound && !g_cut; i++) {
+        int *c = found + (size_t)i * (MAXK + 1);
+        int s = c[0];
+        if (s < K - 1 && !ext) continue;
+        int v[MAXK];
+        memcpy(v, c + 1, s * sizeof(int));
+        gate_extend(v, s, 1);
+    }
+}
+
 int main(int argc, char **argv) {
     if (argc < 4) {
         fprintf(stderr, "usage: lrc covers K P [maxsize] [timecap] [norm] | "
+                        "tau K P maxsize [timecap] | "
                         "cascade|cascadebb|scascade|scascadebb K P levels v.. | "
-                        "gate K P levels timecap liftcap [norm] [bb] [shift] | "
+                        "gate K P levels timecap liftcap [norm] [bb] [shift] [ext] | "
+                        "tuples K P [ext] [norm] | "
                         "shiftok K P l w..\n");
         return 1;
     }
@@ -677,6 +775,38 @@ int main(int argc, char **argv) {
         for (int s = 1; s <= maxsize; s++) if (count_by_size[s]) { tau = s; break; }
         printf("S k=%d p=%d n=%d m=%d norm=%d qs=%d nodes=%lld timed_out=%d tau=%d orbits=%ld seconds=%.3f\n",
                K, P, N, M, NORM, QS, nodes, timed_out, tau, nfound, now() - tstart);
+        return 0;
+    }
+    if (!strcmp(mode, "tau")) {
+        int maxsize = argc > 4 ? atoi(argv[4]) : k;
+        double cap = argc > 5 ? atof(argv[5]) : 0;
+        if (maxsize > MAXK) maxsize = MAXK;
+        double t0 = now();
+        long long totnodes = 0;
+        int tau = 0, unknown = 0, none_upto = 0;
+        int lb = (N + M - 1) / M; /* s classes cover at most s*M times */
+        STOPFIRST = 1;
+        for (int s = 1; s <= maxsize; s++) {
+            if (s < lb) { none_upto = s; continue; }
+            double rem = 0;
+            if (cap > 0) {
+                rem = cap - (now() - t0);
+                if (rem <= 0) { unknown = 1; break; }
+            }
+            run_covers(s, rem, 1);
+            totnodes += nodes;
+            if (stopnow) { tau = s; break; }
+            if (timed_out) { unknown = 1; break; }
+            none_upto = s;
+        }
+        STOPFIRST = 0;
+        printf("T k=%d p=%d n=%d m=%d maxsize=%d tau=%d none_upto=%d unknown=%d nodes=%lld seconds=%.3f\n",
+               K, P, N, M, maxsize, tau, none_upto, unknown, totnodes, now() - t0);
+        if (tau) {
+            printf("F");
+            for (int i = 0; i < nfirst; i++) printf(" %d", firstcov[i]);
+            printf("\n");
+        }
         return 0;
     }
     if (!strcmp(mode, "cascade") || !strcmp(mode, "cascadebb") ||
@@ -712,94 +842,71 @@ int main(int argc, char **argv) {
         }
         return 0;
     }
+    if (!strcmp(mode, "tuples")) {
+        int ext = argc > 4 ? atoi(argv[4]) : 0;
+        int norm = argc > 5 ? atoi(argv[5]) : 0;
+        run_covers(k, 0, norm);
+        g_list = 1;
+        g_cut = 0;
+        g_tuples = 0;
+        g_t0 = now();
+        gate_all_tuples(ext);
+        long small_orbits = 0;
+        for (int s = 1; s <= k - 2; s++) small_orbits += count_by_size[s];
+        printf("S k=%d p=%d ext=%d norm=%d tuples=%ld small_orbits=%ld\n",
+               K, P, ext, norm, g_tuples, small_orbits);
+        return 0;
+    }
     if (!strcmp(mode, "gate")) {
-        int mult[MAXLEV];
-        int nlev = parse_levels(argv[4], mult);
+        if (argc < 5) { fprintf(stderr, "need levels\n"); return 1; }
+        g_nlev = parse_levels(argv[4], g_mult);
         double cap = argc > 5 ? atof(argv[5]) : 0;
-        long liftcap = argc > 6 ? atol(argv[6]) : 2000000L;
+        g_liftcap = argc > 6 ? atol(argv[6]) : 2000000L;
         int norm = argc > 7 ? atoi(argv[7]) : 0;
-        int bb = argc > 8 ? atoi(argv[8]) : 0;
+        g_bb = argc > 8 ? atoi(argv[8]) : 0;
         SHIFT = argc > 9 ? atoi(argv[9]) : 0;
-        double t0 = now();
+        int ext = argc > 10 ? atoi(argv[10]) : 0;
+        g_t0 = now();
         run_covers(k, cap, norm);
-        double tcov = now() - t0;
+        double tcov = now() - g_t0;
         int tau = 0;
         for (int s = 1; s <= k; s++) if (count_by_size[s]) { tau = s; break; }
-        printf("{\"k\":%d,\"p\":%d,\"n\":%d,\"m\":%d,\"norm\":%d,\"bb\":%d,\"shift\":%d,\"qs\":%d,"
+        printf("{\"k\":%d,\"p\":%d,\"n\":%d,\"m\":%d,\"norm\":%d,\"bb\":%d,\"shift\":%d,\"ext\":%d,\"qs\":%d,"
                "\"cover_nodes\":%lld,\"cover_timed_out\":%d,"
                "\"cover_seconds\":%.3f,\"tau\":%d,\"orbits_by_size\":{",
-               K, P, N, M, NORM, bb, SHIFT, QS, nodes, timed_out, tcov, tau);
+               K, P, N, M, NORM, g_bb, SHIFT, ext, QS, nodes, timed_out, tcov, tau);
         int first = 1;
         for (int s = 1; s <= k; s++) if (count_by_size[s]) {
             printf("%s\"%d\":%ld", first ? "" : ",", s, count_by_size[s]);
             first = 0;
         }
         printf("},\"levels\":[");
-        for (int i = 0; i < nlev; i++) printf("%s%d", i ? "," : "", mult[i]);
+        for (int i = 0; i < g_nlev; i++) printf("%s%d", i ? "," : "", g_mult[i]);
         printf("],");
-        int complete = !timed_out;
+        g_complete = !timed_out;
         long small_orbits = 0;
         for (int s = 1; s <= k - 2; s++) small_orbits += count_by_size[s];
-        if (small_orbits) complete = 0;
-        long tuples = 0, killed = 0, survived = 0, overflow = 0;
-        long maxcount[MAXLEV] = {0};
-        long sumcount[MAXLEV] = {0};
-        long sumshift[MAXLEV] = {0};
-        long tuples_using_shift = 0;
+        if (small_orbits && !ext) g_complete = 0;
+        g_list = 0;
+        g_tuples = g_killed = g_survived = g_overflow = g_using = 0;
+        memset(g_maxcount, 0, sizeof g_maxcount);
+        memset(g_sumcount, 0, sizeof g_sumcount);
+        memset(g_sumshift, 0, sizeof g_sumshift);
+        g_firsts = 1;
+        g_printed = 0;
+        g_cut = 0;
         printf("\"survivors\":[");
-        int firsts = 1;
-        int printed = 0;
-        int cut = 0;
-        if (!timed_out) {
-            for (long i = 0; i < nfound && !cut; i++) {
-                int *c = found + (size_t)i * (MAXK + 1);
-                int s = c[0];
-                if (s < k - 1) continue;
-                int xlo = 1, xhi = N;
-                if (s == k) { xlo = 0; xhi = 0; }
-                for (int x = xlo; x <= xhi; x++) {
-                    int v[MAXK];
-                    memcpy(v, c + 1, s * sizeof(int));
-                    if (s == k - 1) v[k - 1] = x;
-                    long counts[MAXLEV] = {0};
-                    int st = bb ? cascade_bb(v, mult, nlev, liftcap, counts, NULL)
-                                : cascade(v, mult, nlev, liftcap, counts, NULL);
-                    tuples++;
-                    int used = 0;
-                    for (int j = 0; j < nlev; j++) {
-                        if (counts[j] > maxcount[j]) maxcount[j] = counts[j];
-                        sumcount[j] += counts[j];
-                        sumshift[j] += cur_shift[j];
-                        if (cur_shift[j]) used = 1;
-                    }
-                    if (used) tuples_using_shift++;
-                    if (st == 0) killed++;
-                    else {
-                        if (st == 1) survived++; else overflow++;
-                        if (printed < 200) {
-                            printf("%s{\"tuple\":", firsts ? "" : ",");
-                            print_tuple_json(v, k);
-                            printf(",\"status\":%d,\"counts\":[", st);
-                            for (int j = 0; j < nlev; j++) printf("%s%ld", j ? "," : "", counts[j]);
-                            printf("]}");
-                            firsts = 0;
-                            printed++;
-                        }
-                    }
-                    if (timecap > 0 && now() - t0 > 3 * timecap) { complete = 0; cut = 1; break; }
-                }
-            }
-        }
+        if (!timed_out) gate_all_tuples(ext);
         printf("],\"tuples\":%ld,\"killed\":%ld,\"survived\":%ld,\"overflow\":%ld,\"cascade_cut\":%d,"
-               "\"max_improper_by_level\":[", tuples, killed, survived, overflow, cut);
-        for (int j = 0; j < nlev; j++) printf("%s%ld", j ? "," : "", maxcount[j]);
+               "\"max_improper_by_level\":[", g_tuples, g_killed, g_survived, g_overflow, g_cut);
+        for (int j = 0; j < g_nlev; j++) printf("%s%ld", j ? "," : "", g_maxcount[j]);
         printf("],\"sum_improper_by_level\":[");
-        for (int j = 0; j < nlev; j++) printf("%s%ld", j ? "," : "", sumcount[j]);
+        for (int j = 0; j < g_nlev; j++) printf("%s%ld", j ? "," : "", g_sumcount[j]);
         printf("],\"shift_removed_by_level\":[");
-        for (int j = 0; j < nlev; j++) printf("%s%ld", j ? "," : "", sumshift[j]);
-        printf("],\"tuples_using_shift\":%ld", tuples_using_shift);
-        printf(",\"small_orbits_unhandled\":%ld,\"complete\":%d,\"total_seconds\":%.3f}\n",
-               small_orbits, complete && overflow == 0, now() - t0);
+        for (int j = 0; j < g_nlev; j++) printf("%s%ld", j ? "," : "", g_sumshift[j]);
+        printf("],\"tuples_using_shift\":%ld", g_using);
+        printf(",\"small_orbits\":%ld,\"small_orbits_unhandled\":%ld,\"complete\":%d,\"total_seconds\":%.3f}\n",
+               small_orbits, ext ? 0L : small_orbits, g_complete && g_overflow == 0, now() - g_t0);
         return 0;
     }
     fprintf(stderr, "unknown mode\n");

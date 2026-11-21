@@ -84,6 +84,40 @@ left after the filter, which decides the cost of the full 16-runner computation.
 A gate result counts toward a proof only after the engine cross-check
 (`lrc16-engine2-v1`) agrees and the repro matches the paper.
 
+## Addendum 3 (2026-11-21, run 4, before any tau result): small covers
+
+`THEORY.md` Section 6 adds the general completion (engine option `ext`) for primes
+where a cover on at most k - 2 classes exists, and a `tau` mode that decides this.
+Job `lrc16-tau-v1` (`job_tau.py`) runs two scans. No result of either exists as
+this is written; none of the four earlier jobs has started.
+
+**R1 (re-check of a published table).** For k = 14, our `tau` mode agrees with
+Table 2 of arXiv:2609.02604 v2 at every one of its 71 primes: a cover on <= 12
+classes exists at the 19 primes 89, 131, 149, 157, 163, 167, 173, 179, 181, 191,
+193, 197, 199, 211, 223, 227, 229, 233, 241, and none exists at the 52 primes
+from 239 to 569 other than 241. Reported as the number of primes that agree,
+disagree and are untested (300 s cap per prime). Any disagreement is a
+discrepancy with the published proof's bookkeeping, or a bug of ours; it is
+investigated before any further use of the engine, and the cover found (or the
+certificate) is kept so the paper's author can check it.
+
+**P3 (16 runners).** **Every prime p from 400 to 1000 has tau_15(p) >= 14**, so the
+old enumeration is complete there and the general completion is needed only below
+400. Reason: an independence heuristic (each of n = (p-1)/2 times is missed by a
+random class with probability about 7/8, and there are about (p/2)^12/13! unit
+orbits of 13-class sets) puts the last 13-class covers near p = 435 for k = 15,
+but the same heuristic for k = 14 puts the last 12-class covers near p = 380,
+while the paper found none above 241. Scaling by that ratio (0.63) puts the k = 15
+threshold near 275. P3 is **falsified** by any prime in [400, 1000] with
+tau_15(p) <= 13 (the cover found is the evidence), and **untested** at primes
+that hit the 400 s cap.
+
+**Measurements (no prediction).** The exact tau_15(p) where it is <= 13; the
+largest prime with tau_15(p) <= 13; the smallest P0 above which every scanned
+prime has tau_15(p) >= 14; and the smallest set of primes with tau_15(p) >= 14
+whose log-sum passes 483.239. Together with the pilot's cost per gate, these
+fix the prime list for the full 16-runner computation.
+
 ## Honesty rules
 
 - No claim of a proof for 16 runners until steps 1-5 are complete and audited.
