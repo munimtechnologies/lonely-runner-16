@@ -115,6 +115,18 @@ bound over cell bitmasks), and `test_uniform.py` checks the sandwich level by le
 against the brute-force definition at small primes. Job `lrc16-uniform-v1`
 runs it; the readings are pre-registered in `PLAN.md` (addendum 5).
 
+## Grid-point witnesses: a second implementation (`THEORY_9.md`)
+
+Section 9 answers the same question as `uniform.py` a different way: from each grid
+point c/D it measures exactly how far the strict witnesses reach (**Lemma G**).
+With D = 2Q the test is exact, and `test_grid.py` checks that `grid.py` and
+`uniform.py`, which share no code, agree on every case tried. With the coarse
+grid D = 16 the test is fast and, at level 2 for (1..15), solvable by hand:
+**Lemma G2** names exactly which 13,054 of the 32,768 level-2 lifts survive the
+near-grid tests, which gives a check of the uniform job's output that can be read
+off by eye (`PLAN_addendum6.md`, X3). Section 9.4 notes that Lemma U holds at any
+level, the route to a prime-free version of the 14- and 15-runner fibre searches.
+
 ## Small covers and the gate primes (`THEORY.md`, Section 6)
 
 At primes where the folded times can be covered by at most k - 2 speed classes
@@ -151,14 +163,16 @@ or the `shift` argument of `gate`) and the general completion (`ext` argument).
 | `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade (both engines), shift filter, general completion |
 | `lrc_ref.py` | brute-force reference used to test the engine on small cases; exact loneliness; Lemma S |
 | `uniform.py` | prime-free lifting of one orbit (Lemma U): U_inf and U_P cascades in exact arithmetic |
+| `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test, exact at D = 2Q; near-grid masks for Lemma G2 |
 | `bounds.py` | exact flag bound (rational arithmetic), shape bound sweep, exact n = 15 shape checks, gate-set planning |
 | `job.py` | `repro` (k = 13, 14 re-check), `pilot` (k = 15 survey), `engine2` (cross-check, then both with engine 2) |
 | `job_shift.py` | k = 15 orbit probe (prediction P1) and shift-filtered pilot gates |
 | `job_tau.py` | tau(p) scans: the paper's k = 14 table (R1) and k = 15 up to p = 1000 (P3) |
 | `job_uniform.py` | Lemma U cascades for (1..15), (1..13,15,28) and the 14/15-runner sanity orbits (P5, P6, S1) |
-| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`) |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`) |
 | `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p |
-| `PLAN.md` | the pre-registered plan and what counts as success |
+| `THEORY_9.md` | Section 9: grid-point witnesses, Lemma G2, Lemma U at any level |
+| `PLAN.md`, `PLAN_addendum6.md` | the pre-registered plan and what counts as success |
 
 Build and test:
 
