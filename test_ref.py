@@ -33,6 +33,20 @@ class Reference(unittest.TestCase):
         counts, _ = R.cascade((1, 2, 3), 3, 11, [2])
         self.assertEqual(len(counts), 1)
 
+    def test_lift_of_improper_new_times_only(self):
+        # the fact the branch-and-bound lifting relies on: for a level-l improper
+        # w, every time b/(c l p) with c | b is already covered by every lift
+        k, p = 4, 13
+        for v in [(1, 2, 3, 4), (1, 3, 4, 6)]:
+            if R.proper(v, k, p, 1):
+                continue
+            for a in [(0, 1, 0, 1), (1, 1, 0, 0), (1, 0, 1, 1)]:
+                w = tuple(v[i] + a[i] * p for i in range(k))
+                L = 2 * p
+                for b in range(2, L, 2):
+                    self.assertTrue(any((k + 1) * min((b * x) % L, L - (b * x) % L) < L
+                                        for x in w), (v, a, b))
+
 
 if __name__ == "__main__":
     unittest.main()

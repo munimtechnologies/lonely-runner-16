@@ -14,8 +14,9 @@ minimised over u in (0,1]^n with max u_i = 1.
 Exact rational arithmetic is used for K_n; logarithms use Decimal at 60 digits.
 The shape bound here is computed numerically with a rigorous interval sweep of
 the one-parameter families (j coordinates equal to 1, the rest equal to t) that
-the paper's Lemma 3.7 reduces to; the reduction itself is the paper's argument
-and must be re-derived for each new n before a bound is relied upon.
+the paper's Lemma 3.7 reduces to.  The reduction for n = 15 is written out in
+THEORY.md (it gives R_15 < 49/100); shape_n15_exact() checks its final
+inequality in exact rational arithmetic.
 """
 import json
 import math
@@ -25,6 +26,9 @@ from decimal import Decimal, getcontext
 from fractions import Fraction
 
 getcontext().prec = 60
+
+# r_n used for the product bound (paper values for n = 13, 14; THEORY.md for 15)
+R_USED = {13: Fraction(101, 200), 14: Fraction(1, 2), 15: Fraction(49, 100)}
 
 
 def B(n, r):
@@ -171,6 +175,75 @@ def shape(n, pieces=200000):
     return fam, hlb
 
 
+# ---------------- exact checks for the n = 15 shape lemma (THEORY.md) ----------------
+
+def shape_n15_exact():
+    """Exact rational versions of the inequalities used in THEORY.md, Sec. 2.
+    Returns a dict of booleans; every value must be True."""
+    F = Fraction
+    out = {}
+    # alpha_15 = (13 - sqrt 113)/28 lies in (0.0846, 0.0847): 10.6284^2 < 113 < 10.6312^2
+    out["alpha_bracket"] = F(106284, 10000) ** 2 < 113 < F(106312, 10000) ** 2
+    # P15(u) = 7u^5+14u^4-27u^3-11u^2-4u+1 > 0 on (0, 0.0847]: drop the positive
+    # terms; 1-4u-11u^2-27u^3 is decreasing, so check it at u = 0.0847
+    u = F(847, 10000)
+    out["P15_positive"] = 1 - 4 * u - 11 * u ** 2 - 27 * u ** 3 > 0
+    # a(u) > 8/5 on (0,1]: min(a(alpha), a(1)=2); a(alpha) > q(0.0846) * 0.0847^(-2/15).
+    # Check (q(0.0846)/(8/5))^15 * (1/0.0847)^2 > 1 exactly.
+    ql = 1 + 2 * F(846, 10000) - F(846, 10000) ** 2
+    out["a_gt_8_5"] = (ql / F(8, 5)) ** 15 * (F(10000, 847)) ** 2 > 1
+    # two or more ones: H >= 4 (8/5)^13 > (15/(49/100))^2
+    thr = (F(15) / F(49, 100)) ** 2
+    out["two_ones"] = 4 * F(8, 5) ** 13 > thr
+    # one coordinate 1, fourteen equal to t: sign of dlogH/dt is that of
+    # h(t) = 378t^3 + 25t^2 + 10t - 1 (times the positive factor 28(1-t));
+    # its root t0 lies in (0.0724, 0.0725)
+    h = lambda t: 378 * t ** 3 + 25 * t ** 2 + 10 * t - 1
+    t_lo, t_hi = F(724, 10000), F(725, 10000)
+    out["t0_bracket"] = h(t_lo) < 0 < h(t_hi)
+    # H(t0) >= g(t_lo) q(t_lo)^13 t_hi^(-28/15) with g = 1+2t+27t^2.  Compare the
+    # 15th powers: (g q^13)^15 / t_hi^28 > thr^15
+    g = 1 + 2 * t_lo + 27 * t_lo ** 2
+    qq = 1 + 2 * t_lo - t_lo ** 2
+    out["one_one"] = (g * qq ** 13) ** 15 > thr ** 15 * t_hi ** 28
+    return out
+
+
+def check_quartic_factor_n15():
+    """numerator of dlogH/dt for the one-1 family equals 28(1-t)h(t) (exact)"""
+    # coefficients of -10584 t^4 + 9884 t^3 + 420 t^2 + 308 t - 28 (derived in THEORY.md)
+    # recomputed here from the definition with polynomial arithmetic
+    def mul(a, b):
+        r = [0] * (len(a) + len(b) - 1)
+        for i, x in enumerate(a):
+            for j, y in enumerate(b):
+                r[i + j] += x * y
+        return r
+
+    def add(*ps):
+        n = max(len(p) for p in ps)
+        return [sum(p[i] if i < len(p) else 0 for p in ps) for i in range(n)]
+
+    def scale(p, c):
+        return [c * x for x in p]
+
+    n, s = 15, 14
+    qp = [1, 2, -1]               # q = 1 + 2t - t^2
+    g = [1, 2, 2 * s - 1]         # g = 1 + 2t + 27 t^2
+    gp = [2, 2 * (2 * s - 1)]     # g'
+    qprime = [2, -2]
+    t = [0, 1]
+    # n t q g' + n t g (s-1) q' - 2 s g q   (logderivative times n t g q)
+    A = scale(mul(mul(t, qp), gp), n)
+    Bp = scale(mul(mul(t, g), qprime), n * (s - 1))
+    C = scale(mul(g, qp), -2 * s)
+    num = add(A, Bp, C)
+    target = scale(mul([1, -1], [-1, 10, 25, 378]), 28)
+    while num and num[-1] == 0:
+        num.pop()
+    return num == target
+
+
 def primes_between(a, b):
     out = []
     for x in range(max(2, a), b + 1):
@@ -203,13 +276,16 @@ def report(n, r=None, pieces=200000, gate_start=None):
         "forced_divisor_lcm": lcm_upto(n + 1),
         "required_gate_logsum": str(required_gate_logsum(n, r)),
     }
+    if n == 15:
+        out["shape_n15_exact"] = shape_n15_exact()
+        out["quartic_factor_n15"] = check_quartic_factor_n15()
     if gate_start:
         need = float(required_gate_logsum(n, r))
         acc, gates = 0.0, []
         for pr in primes_between(gate_start, 5000):
             gates.append(pr)
             acc += math.log(pr)
-            if acc > need + math.log(pr):
+            if acc > need:
                 break
         out["example_gate_set"] = {"from": gate_start, "to": gates[-1], "count": len(gates),
                                    "logsum": acc}
@@ -220,7 +296,6 @@ if __name__ == "__main__":
     ns = [int(x) for x in sys.argv[1:]] or [13, 14, 15]
     res = {}
     for n in ns:
-        r = {13: Fraction(101, 200), 14: Fraction(1, 2)}.get(n)
-        res[n] = report(n, r, gate_start=281 if n == 15 else None)
+        res[n] = report(n, R_USED.get(n), gate_start=281 if n == 15 else None)
         res[n]["random_search_min_H"] = random_search(n, trials=40, iters=3000)
     json.dump(res, sys.stdout, indent=1, default=str)

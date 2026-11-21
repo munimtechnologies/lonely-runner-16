@@ -21,16 +21,31 @@
  *     (a) for some i, gcd(l, w_1..w_k without w_i) > 1, or
  *     (b) some t = b/(lp) has  (k+1) d_{lp}(b w_i) >= lp  for every i.
  *
+ * Two independent ways of doing each step are built in, so that they can be
+ * cross-checked against each other on every gate:
+ *   cover normalisation  norm=0: some class of the cover is moved to 1 by a
+ *                                unit; canonical = lexicographic minimum over
+ *                                all such images.
+ *                        norm=1: Lemma 4.1 of 2609.02604: a class with the
+ *                                MOST private times is moved to 1 (it has at
+ *                                least q_s = ceil((2n - s m)/s) of them, which
+ *                                prunes the search); canonical = minimum over
+ *                                the classes tied for most private times.
+ *                                The stored cover is then converted to the
+ *                                norm=0 canonical form, so outputs compare.
+ *   lifting              bb=0:   all c^k lifts tested by a full scan of times.
+ *                        bb=1:   branch and bound over coordinates: a lift of
+ *                                an improper vector is improper iff its
+ *                                coordinates cover every NEW time b (b not
+ *                                divisible by c; the others are level-l times,
+ *                                already covered), and the gcd clause fails.
+ *
  * Modes:
- *   lrc covers K P [maxsize] [timecap_s]
- *       enumerate, up to multiplication by units, all irredundant covers of the
- *       folded times by <= maxsize (default K) speed classes; prints
- *       "C s v1..vs" for each canonical cover, then a summary line "S ...".
- *   lrc cascade K P L1,L2,.. v1 .. vK
- *       lift one level-1 vector through levels l1, l1*l2, ...; prints the number
- *       of improper lifts at each level ("L level count") and the survivors at
- *       the last level ("W w1..wK", at most 50).
- *   lrc gate K P L1,L2,.. timecap_s liftcap
+ *   lrc covers K P [maxsize] [timecap_s] [norm]
+ *   lrc cascade K P L1,L2,.. v1 .. vK          (brute-force lifting)
+ *   lrc cascadebb K P L1,L2,.. v1 .. vK        (branch-and-bound lifting)
+ *       print "L level count" per level, "R status", up to 50 "W w1..wK".
+ *   lrc gate K P L1,L2,.. timecap_s liftcap [norm] [bb]
  *       covers + cascade for every canonical cover of size K and, for covers of
  *       size K-1, for every extra class x; prints one JSON object.
  */
@@ -47,7 +62,7 @@
 
 typedef struct { uint64_t w[MAXW]; } bset;
 
-static int P, K, N, M, NW, MAXSIZE;
+static int P, K, N, M, NW, MAXSIZE, NORM, QS;
 static bset *cov;      /* cov[v]: folded times covered by speed class v */
 static bset *who;      /* who[a]: speed classes covering time a */
 static int *covlist;   /* covlist[v*M + j] */
@@ -169,19 +184,38 @@ static int cmp_int(const void *a, const void *b) {
     return (x > y) - (x < y);
 }
 
+/* t = sorted fold(c_j^{-1} * c) */
+static void unit_image(const int *c, int s, int j, int *t) {
+    long long inv = powmod(c[j], P - 2, P);
+    for (int i = 0; i < s; i++) t[i] = fold(inv * c[i]);
+    qsort(t, s, sizeof(int), cmp_int);
+}
+
+static int lexcmp(const int *a, const int *b, int s) {
+    for (int i = 0; i < s; i++)
+        if (a[i] != b[i]) return a[i] < b[i] ? -1 : 1;
+    return 0;
+}
+
 /* is the sorted cover c[0..s-1] the lexicographic minimum of {c_j^{-1} c}? */
 static int is_canonical(const int *c, int s) {
     int t[MAXK + 1];
     for (int j = 1; j < s; j++) {
-        long long inv = powmod(c[j], P - 2, P);
-        for (int i = 0; i < s; i++) t[i] = fold(inv * c[i]);
-        qsort(t, s, sizeof(int), cmp_int);
-        for (int i = 0; i < s; i++) {
-            if (t[i] < c[i]) return 0;
-            if (t[i] > c[i]) break;
-        }
+        unit_image(c, s, j, t);
+        if (lexcmp(t, c, s) < 0) return 0;
     }
     return 1;
+}
+
+/* replace the sorted cover c by the lexicographic minimum of {c_j^{-1} c} */
+static void to_global_canonical(int *c, int s) {
+    int best[MAXK + 1], t[MAXK + 1];
+    memcpy(best, c, s * sizeof(int));
+    for (int j = 0; j < s; j++) {
+        unit_image(c, s, j, t);
+        if (lexcmp(t, best, s) < 0) memcpy(best, t, s * sizeof(int));
+    }
+    memcpy(c, best, s * sizeof(int));
 }
 
 static void report(void) {
@@ -190,7 +224,22 @@ static void report(void) {
     memcpy(c, chosen, s * sizeof(int));
     qsort(c, s, sizeof(int), cmp_int);
     raw_by_size[s]++;
-    if (!is_canonical(c, s)) return;
+    if (NORM) {
+        /* class 1 must have the most private times; private counts are
+         * invariant under multiplication by units */
+        int mx = 0;
+        for (int i = 0; i < s; i++) if (pc[c[i]] > mx) mx = pc[c[i]];
+        if (pc[1] < mx) return;
+        int t[MAXK + 1];
+        for (int j = 1; j < s; j++) {
+            if (pc[c[j]] != mx) continue;
+            unit_image(c, s, j, t);
+            if (lexcmp(t, c, s) < 0) return;
+        }
+        to_global_canonical(c, s);
+    } else if (!is_canonical(c, s)) {
+        return;
+    }
     count_by_size[s]++;
     if (nfound == capfound) {
         capfound = capfound ? capfound * 2 : 1024;
@@ -208,6 +257,7 @@ static void search(void) {
     if ((nodes & 0xFFFF) == 0 && timecap > 0 && now() - tstart > timecap) timed_out = 1;
     if (timed_out) return;
     if (npriv0) return;
+    if (NORM && pc[1] < QS) return; /* private counts only fall as classes are added */
     int U = bs_pop(&uncov);
     if (U == 0) { report(); return; }
     int b = MAXSIZE - nch;
@@ -257,11 +307,19 @@ static void search(void) {
     for (int i = 0; i < nc; i++) bs_set(&allowed, cands[i]);
 }
 
-static void run_covers(int maxsize, double cap) {
+static void run_covers(int maxsize, double cap, int norm) {
     MAXSIZE = maxsize;
+    NORM = norm;
+    {
+        int slack = 2 * N - maxsize * M;
+        QS = slack > 0 ? (slack + maxsize - 1) / maxsize : 0;
+    }
     memset(cnt, 0, sizeof cnt);
     memset(own, 0, sizeof own);
     memset(pc, 0, sizeof pc);
+    memset(count_by_size, 0, sizeof count_by_size);
+    memset(raw_by_size, 0, sizeof raw_by_size);
+    nfound = 0;
     npriv0 = 0;
     nch = 0;
     memset(&uncov, 0, sizeof uncov);
@@ -271,7 +329,8 @@ static void run_covers(int maxsize, double cap) {
     timed_out = 0;
     timecap = cap;
     tstart = now();
-    /* orbit normalisation: every orbit has a member containing class 1 */
+    /* orbit normalisation: every orbit has a member containing class 1 (for
+     * norm=1: a member in which class 1 has the most private times) */
     bs_clr(&allowed, 1);
     add_class(1);
     chosen[nch++] = 1;
@@ -292,14 +351,19 @@ static int prime_factors(long long l, long long *f) {
     return nf;
 }
 
-/* proper at modulus L = l*P ? */
-static int is_proper(const long long *w, long long l, const long long *fac, int nfac) {
+static int gcd_proper(const long long *w, const long long *fac, int nfac) {
     for (int j = 0; j < nfac; j++) {
         int bad = 0;
         for (int i = 0; i < K; i++)
             if (w[i] % fac[j] != 0) bad++;
         if (bad <= 1) return 1; /* gcd clause (a) */
     }
+    return 0;
+}
+
+/* proper at modulus L = l*P ? */
+static int is_proper(const long long *w, long long l, const long long *fac, int nfac) {
+    if (gcd_proper(w, fac, nfac)) return 1;
     long long L = l * P;
     long long lo = (L + K) / (K + 1); /* smallest d with (K+1) d >= L */
     long long hi = L - lo;
@@ -378,6 +442,133 @@ static int cascade(const int *v, const int *mult, int nlev, long liftcap,
     return status;
 }
 
+/* ---- branch-and-bound lifting (same answers as cascade(), much faster) ---- */
+
+static int bb_c, bb_nw, bb_nfac, bb_over;
+static long long bb_L;
+static long long bb_fac[16];
+static const long long *bb_base;
+static uint64_t *bb_cv;  /* (i*c + a) * nw : new times covered by w_i + a L */
+static uint64_t *bb_U;   /* (depth) * nw   : uncovered new times */
+static int bb_a[MAXK];
+static vecset *bb_out;
+static long bb_liftcap;
+
+static inline int pop_words(const uint64_t *x, int nw) {
+    int c = 0;
+    for (int j = 0; j < nw; j++) c += __builtin_popcountll(x[j]);
+    return c;
+}
+static inline int pop_and_words(const uint64_t *x, const uint64_t *y, int nw) {
+    int c = 0;
+    for (int j = 0; j < nw; j++) c += __builtin_popcountll(x[j] & y[j]);
+    return c;
+}
+
+static void bb_emit(void) {
+    long long w2[MAXK];
+    for (int i = 0; i < K; i++) w2[i] = bb_base[i] + bb_a[i] * bb_L;
+    if (gcd_proper(w2, bb_fac, bb_nfac)) return;
+    vs_push(bb_out, w2);
+    if (bb_out->n > bb_liftcap) bb_over = 1;
+}
+
+static void bb_fill(int i) { /* every new time is covered: all completions */
+    if (bb_over) return;
+    if (i == K) { bb_emit(); return; }
+    for (int a = 0; a < bb_c; a++) { bb_a[i] = a; bb_fill(i + 1); }
+}
+
+static void bb_dfs(int i) {
+    if (bb_over) return;
+    const uint64_t *Ui = bb_U + (size_t)i * bb_nw;
+    int need = pop_words(Ui, bb_nw);
+    if (need == 0) { bb_fill(i); return; }
+    if (i == K) return; /* an uncovered new time is a witness: proper */
+    int sum = 0;
+    for (int j = i; j < K && sum < need; j++) {
+        int best = 0;
+        for (int a = 0; a < bb_c; a++) {
+            int g = pop_and_words(bb_cv + (size_t)(j * bb_c + a) * bb_nw, Ui, bb_nw);
+            if (g > best) best = g;
+        }
+        sum += best;
+    }
+    if (sum < need) return;
+    uint64_t *Un = bb_U + (size_t)(i + 1) * bb_nw;
+    for (int a = 0; a < bb_c; a++) {
+        const uint64_t *cv = bb_cv + (size_t)(i * bb_c + a) * bb_nw;
+        for (int x = 0; x < bb_nw; x++) Un[x] = Ui[x] & ~cv[x];
+        bb_a[i] = a;
+        bb_dfs(i + 1);
+        if (bb_over) return;
+    }
+}
+
+static int cascade_bb(const int *v, const int *mult, int nlev, long liftcap,
+                      long *counts, vecset *final_out) {
+    vecset cur = {0}, nxt = {0};
+    long long w[MAXK];
+    for (int i = 0; i < K; i++) w[i] = v[i];
+    long long nofac[1];
+    if (is_proper(w, 1, nofac, 0)) return 0;
+    vs_push(&cur, w);
+    long long l = 1;
+    int status = 1;
+    for (int li = 0; li < nlev; li++) {
+        long long c = mult[li];
+        long long L = l * P;
+        long long nl = l * c;
+        long long Lp = nl * P;
+        long long half = Lp / 2;
+        int T = 0;
+        for (long long b = 1; b <= half; b++) if (b % c) T++;
+        long long *tb = malloc((size_t)(T ? T : 1) * sizeof(long long));
+        T = 0;
+        for (long long b = 1; b <= half; b++) if (b % c) tb[T++] = b;
+        int nw = (T + 63) / 64;
+        if (nw == 0) nw = 1;
+        uint64_t *cvb = calloc((size_t)K * c * nw, sizeof(uint64_t));
+        uint64_t *Ub = calloc((size_t)(K + 1) * nw, sizeof(uint64_t));
+        if (!tb || !cvb || !Ub) { fprintf(stderr, "out of memory\n"); exit(4); }
+        bb_c = (int)c; bb_nw = nw; bb_L = L; bb_cv = cvb; bb_U = Ub;
+        bb_nfac = prime_factors(nl, bb_fac);
+        bb_out = &nxt; bb_liftcap = liftcap; bb_over = 0;
+        nxt.n = 0;
+        for (long s = 0; s < cur.n; s++) {
+            const long long *base = cur.data + (size_t)s * K;
+            bb_base = base;
+            memset(cvb, 0, (size_t)K * c * nw * sizeof(uint64_t));
+            for (int i = 0; i < K; i++)
+                for (long long a = 0; a < c; a++) {
+                    long long x = (base[i] + a * L) % Lp;
+                    uint64_t *dst = cvb + (size_t)(i * c + a) * nw;
+                    for (int j = 0; j < T; j++) {
+                        long long r = (tb[j] * x) % Lp;
+                        long long d = r < Lp - r ? r : Lp - r;
+                        if ((long long)(K + 1) * d < Lp) dst[j >> 6] |= 1ULL << (j & 63);
+                    }
+                }
+            memset(Ub, 0, (size_t)nw * sizeof(uint64_t));
+            for (int j = 0; j < T; j++) Ub[j >> 6] |= 1ULL << (j & 63);
+            bb_dfs(0);
+            if (bb_over) { status = -1; break; }
+        }
+        free(tb); free(cvb); free(Ub);
+        counts[li] = nxt.n;
+        vecset t = cur; cur = nxt; nxt = t;
+        l = nl;
+        if (status == -1) break;
+        if (cur.n == 0) { status = 0; break; }
+    }
+    if (final_out && status == 1) {
+        for (long s = 0; s < cur.n; s++) vs_push(final_out, cur.data + (size_t)s * K);
+    }
+    free(cur.data);
+    free(nxt.data);
+    return status;
+}
+
 static int parse_levels(const char *s, int *mult) {
     int n = 0;
     const char *q = s;
@@ -397,7 +588,7 @@ static void print_tuple_json(const int *v, int s) {
 
 int main(int argc, char **argv) {
     if (argc < 4) {
-        fprintf(stderr, "usage: lrc covers K P [maxsize] [timecap] | cascade K P levels v.. | gate K P levels timecap liftcap\n");
+        fprintf(stderr, "usage: lrc covers K P [maxsize] [timecap] [norm] | cascade|cascadebb K P levels v.. | gate K P levels timecap liftcap [norm] [bb]\n");
         return 1;
     }
     const char *mode = argv[1];
@@ -407,7 +598,8 @@ int main(int argc, char **argv) {
     if (!strcmp(mode, "covers")) {
         int maxsize = argc > 4 ? atoi(argv[4]) : k;
         double cap = argc > 5 ? atof(argv[5]) : 0;
-        run_covers(maxsize, cap);
+        int norm = argc > 6 ? atoi(argv[6]) : 0;
+        run_covers(maxsize, cap, norm);
         for (long i = 0; i < nfound; i++) {
             int *c = found + (size_t)i * (MAXK + 1);
             printf("C %d", c[0]);
@@ -416,11 +608,12 @@ int main(int argc, char **argv) {
         }
         int tau = 0;
         for (int s = 1; s <= maxsize; s++) if (count_by_size[s]) { tau = s; break; }
-        printf("S k=%d p=%d n=%d m=%d nodes=%lld timed_out=%d tau=%d orbits=%ld seconds=%.3f\n",
-               K, P, N, M, nodes, timed_out, tau, nfound, now() - tstart);
+        printf("S k=%d p=%d n=%d m=%d norm=%d qs=%d nodes=%lld timed_out=%d tau=%d orbits=%ld seconds=%.3f\n",
+               K, P, N, M, NORM, QS, nodes, timed_out, tau, nfound, now() - tstart);
         return 0;
     }
-    if (!strcmp(mode, "cascade")) {
+    if (!strcmp(mode, "cascade") || !strcmp(mode, "cascadebb")) {
+        int bb = !strcmp(mode, "cascadebb");
         int mult[MAXLEV];
         int nlev = parse_levels(argv[4], mult);
         if (argc < 5 + k) { fprintf(stderr, "need K classes\n"); return 1; }
@@ -428,7 +621,8 @@ int main(int argc, char **argv) {
         for (int i = 0; i < k; i++) v[i] = atoi(argv[5 + i]);
         long counts[MAXLEV] = {0};
         vecset fin = {0};
-        int st = cascade(v, mult, nlev, 50000000L, counts, &fin);
+        int st = bb ? cascade_bb(v, mult, nlev, 50000000L, counts, &fin)
+                    : cascade(v, mult, nlev, 50000000L, counts, &fin);
         long long l = 1;
         for (int i = 0; i < nlev; i++) {
             l *= mult[i];
@@ -447,14 +641,17 @@ int main(int argc, char **argv) {
         int nlev = parse_levels(argv[4], mult);
         double cap = argc > 5 ? atof(argv[5]) : 0;
         long liftcap = argc > 6 ? atol(argv[6]) : 2000000L;
+        int norm = argc > 7 ? atoi(argv[7]) : 0;
+        int bb = argc > 8 ? atoi(argv[8]) : 0;
         double t0 = now();
-        run_covers(k, cap);
+        run_covers(k, cap, norm);
         double tcov = now() - t0;
         int tau = 0;
         for (int s = 1; s <= k; s++) if (count_by_size[s]) { tau = s; break; }
-        printf("{\"k\":%d,\"p\":%d,\"n\":%d,\"m\":%d,\"cover_nodes\":%lld,\"cover_timed_out\":%d,"
+        printf("{\"k\":%d,\"p\":%d,\"n\":%d,\"m\":%d,\"norm\":%d,\"bb\":%d,\"qs\":%d,"
+               "\"cover_nodes\":%lld,\"cover_timed_out\":%d,"
                "\"cover_seconds\":%.3f,\"tau\":%d,\"orbits_by_size\":{",
-               K, P, N, M, nodes, timed_out, tcov, tau);
+               K, P, N, M, NORM, bb, QS, nodes, timed_out, tcov, tau);
         int first = 1;
         for (int s = 1; s <= k; s++) if (count_by_size[s]) {
             printf("%s\"%d\":%ld", first ? "" : ",", s, count_by_size[s]);
@@ -469,11 +666,13 @@ int main(int argc, char **argv) {
         if (small_orbits) complete = 0;
         long tuples = 0, killed = 0, survived = 0, overflow = 0;
         long maxcount[MAXLEV] = {0};
+        long sumcount[MAXLEV] = {0};
         printf("\"survivors\":[");
         int firsts = 1;
         int printed = 0;
+        int cut = 0;
         if (!timed_out) {
-            for (long i = 0; i < nfound; i++) {
+            for (long i = 0; i < nfound && !cut; i++) {
                 int *c = found + (size_t)i * (MAXK + 1);
                 int s = c[0];
                 if (s < k - 1) continue;
@@ -484,9 +683,13 @@ int main(int argc, char **argv) {
                     memcpy(v, c + 1, s * sizeof(int));
                     if (s == k - 1) v[k - 1] = x;
                     long counts[MAXLEV] = {0};
-                    int st = cascade(v, mult, nlev, liftcap, counts, NULL);
+                    int st = bb ? cascade_bb(v, mult, nlev, liftcap, counts, NULL)
+                                : cascade(v, mult, nlev, liftcap, counts, NULL);
                     tuples++;
-                    for (int j = 0; j < nlev; j++) if (counts[j] > maxcount[j]) maxcount[j] = counts[j];
+                    for (int j = 0; j < nlev; j++) {
+                        if (counts[j] > maxcount[j]) maxcount[j] = counts[j];
+                        sumcount[j] += counts[j];
+                    }
                     if (st == 0) killed++;
                     else {
                         if (st == 1) survived++; else overflow++;
@@ -500,14 +703,15 @@ int main(int argc, char **argv) {
                             printed++;
                         }
                     }
-                    if (timecap > 0 && now() - t0 > 3 * timecap) { complete = 0; goto done; }
+                    if (timecap > 0 && now() - t0 > 3 * timecap) { complete = 0; cut = 1; break; }
                 }
             }
         }
-    done:
-        printf("],\"tuples\":%ld,\"killed\":%ld,\"survived\":%ld,\"overflow\":%ld,\"max_improper_by_level\":[",
-               tuples, killed, survived, overflow);
+        printf("],\"tuples\":%ld,\"killed\":%ld,\"survived\":%ld,\"overflow\":%ld,\"cascade_cut\":%d,"
+               "\"max_improper_by_level\":[", tuples, killed, survived, overflow, cut);
         for (int j = 0; j < nlev; j++) printf("%s%ld", j ? "," : "", maxcount[j]);
+        printf("],\"sum_improper_by_level\":[");
+        for (int j = 0; j < nlev; j++) printf("%s%ld", j ? "," : "", sumcount[j]);
         printf("],\"small_orbits_unhandled\":%ld,\"complete\":%d,\"total_seconds\":%.3f}\n",
                small_orbits, complete && overflow == 0, now() - t0);
         return 0;

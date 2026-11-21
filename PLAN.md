@@ -27,9 +27,10 @@ independently reimplemented.
 2. **Pilot (k = 15).** `job.py pilot`. This measures tau(p), level-one orbit counts,
    cascade survivors and run time at ten primes from 251 to 809. It decides
    which primes can be gates, and the total cost.
-3. **Bound for n = 15.** `bounds.py` gives the exact K_15 and A_15 and a numerical
-   shape bound r_15. Before r_15 is used in a proof, the paper's Lemma 3.7
-   reduction must be re-derived in writing for n = 15.
+3. **Bound for n = 15.** Done on paper 2026-11-21 (run 2): `THEORY.md` re-derives
+   the paper's Lemma 3.7 for n = 15 and gets R_15 < 49/100, a product bound of
+   496.727 and a required gate log-sum of 483.239. It still needs an independent
+   check (second reader or formalisation) before a proof relies on it.
 4. **Persistent orbits for k = 15.** Survivors at level 32, probably the orbit of
    (1..15) and tight Goddyn-Wong-type tuples, need an argument. Candidates are
    level 16 lifts plus the gcd clause, a shift lemma for d = 3, 5, 7, or
@@ -37,6 +38,18 @@ independently reimplemented.
 5. **Full gates.** Only after steps 1-4: run every gate prime, archive certificates,
    write an audit script, and ask a second, independent implementation to
    re-verify.
+
+## Addendum (2026-11-21, run 2, before any result): engine 2
+
+`job.py engine2` (job `lrc16-engine2-v1`) first runs 12 small gates (k = 8 to 14,
+p = 61 to 241) with both engines. **Agreement** means: on every gate where both
+finish, identical tau, orbit counts by size, number of tuples, killed, survived,
+overflow, completeness, per-level maximum and total improper counts, and the
+same survivor set. Any disagreement is a bug in at least one engine; it is
+reported, and no gate result from either engine is used until it is explained.
+It then reruns the repro and pilot gates with engine 2. Its results on gates
+that `lrc-repro-k14-v1` and `lrc16-pilot-v1` also finish must match theirs in the
+same way; the same rule applies.
 
 ## Honesty rules
 

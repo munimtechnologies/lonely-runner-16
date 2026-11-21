@@ -45,20 +45,38 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
+## The bound for 16 runners (worked out in `THEORY.md`)
+
+We carried the paper's shape lemma (its Lemma 3.7, proved there for 14 and 15
+runners) to 16 runners. It gives **R_15 < 49/100**, so a primitive counterexample
+with 15 speeds has `log(v_1...v_15) < 496.727`. After the forced divisor
+720720 = lcm(2..16), **prime gates with log-sum above 483.239** prove the 16-runner
+case: roughly 80 primes, against 71 used for 15 runners. Every inequality in the
+note is re-checked in exact rational arithmetic by `test_bounds.py`.
+
 For 16 runners, `k+1 = 16 = 2^4` is a prime power, so the binary lifting levels
-already reach the natural level 16. Our first estimate (see `bounds.py`; to be
-confirmed by the pilot job) puts the needed prime gates at roughly every prime
-from about 280 to about 800.
+already reach the natural level 16.
+
+## Two engines
+
+`lrc.c` has two independent ways of doing each step, so every gate can be checked
+both ways:
+
+| step | engine 1 | engine 2 |
+|---|---|---|
+| orbit normalisation of covers | any class moved to 1; lexicographic minimum | Lemma 4.1: the class with the most private times moved to 1 (prunes the search) |
+| lifting to the next level | all c^k lifts, each tested by a full scan of times | branch and bound over coordinates on the new times only |
 
 ## What is here
 
 | file | what it does |
 |---|---|
-| `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade |
+| `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade (both engines) |
 | `lrc_ref.py` | brute-force reference used to test the engine on small cases |
-| `bounds.py` | exact flag bound (rational arithmetic), shape bound sweep, gate-set planning |
-| `job.py` | the pilot runs (`repro`: k = 13, 14 re-check; `pilot`: k = 15 survey) |
-| `test_*.py` | tests: reproduce the paper's constants and cross-check C against Python |
+| `bounds.py` | exact flag bound (rational arithmetic), shape bound sweep, exact n = 15 shape checks, gate-set planning |
+| `job.py` | `repro` (k = 13, 14 re-check), `pilot` (k = 15 survey), `engine2` (cross-check, then both with engine 2) |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2 |
+| `THEORY.md` | the 16-runner bound, derived step by step |
 | `PLAN.md` | the pre-registered plan and what counts as success |
 
 Build and test:
@@ -67,7 +85,7 @@ Build and test:
 cc -O3 -o lrc lrc.c
 python -m unittest -v
 python bounds.py 13 14 15
-./lrc gate 15 401 2,2,2,2,2 1500 1000000
+./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1
 ```
 
 ## Credit
