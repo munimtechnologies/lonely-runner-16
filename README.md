@@ -56,6 +56,22 @@ note is re-checked in exact rational arithmetic by `test_bounds.py`. A second,
 independent pass over the derivation (run 3) agreed, apart from one rounded
 constant that nothing depends on (erratum in `THEORY.md`).
 
+## What it would cost (`COST.md`)
+
+The 15-runner proof's own audit file (Zenodo 10.5281/zenodo.22667683, CC BY 4.0)
+shows where its roughly 2,140 CPU-hours went. 19 small primes (89 to 233, and 241)
+left thousands to millions of orbits to lift and kill; p = 181 alone left
+8,235,157 orbits, and its kill stage took about 140 CPU-hours. The other 52 gates
+(every prime from 239 to 569 except 241) left only the tight orbit. Level-one
+generation grows roughly as p^6 (arXiv:2609.02604). For 16 runners the gates sit
+higher (about 80 primes from 251 up to about 800), so the deciding number is the
+level-one generation cost at k = 15 for those primes. Nobody has published it.
+Job `lrc16-allik-probe-v1` (`probe.py`) measures it with Allikvere's own
+generator built for 15 speeds. It also first checks that the build reproduces his
+published regression, and extracts the stage-by-stage costs from his logs. The
+decision rule for what to do with the number is pre-registered in `COST.md`,
+Section 4.
+
 ## Surviving orbits (`THEORY.md`, Section 5)
 
 For 14 and 15 runners, the tight vectors (1..13), (1..11,13,24) and (1..14) survive
@@ -169,9 +185,11 @@ or the `shift` argument of `gate`) and the general completion (`ext` argument).
 | `job_shift.py` | k = 15 orbit probe (prediction P1) and shift-filtered pilot gates |
 | `job_tau.py` | tau(p) scans: the paper's k = 14 table (R1) and k = 15 up to p = 1000 (P3) |
 | `job_uniform.py` | Lemma U cascades for (1..15), (1..13,15,28) and the 14/15-runner sanity orbits (P5, P6, S1) |
-| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`) |
+| `probe.py` | cost probe: downloads Allikvere's public pipeline from Zenodo, checks hashes, extracts his per-gate costs, builds his generator for K = 14 and 15, times it (`COST.md`) |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`), the probe's parsers (`test_probe.py`) |
 | `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p |
 | `THEORY_9.md` | Section 9: grid-point witnesses, Lemma G2, Lemma U at any level |
+| `COST.md` | the published cost of the 15-runner proof, what it implies for 16 runners, and the pre-registered decision rule for the probe |
 | `PLAN.md`, `PLAN_addendum6.md` | the pre-registered plan and what counts as success |
 
 Build and test:
@@ -181,6 +199,7 @@ cc -O3 -o lrc lrc.c
 python -m unittest -v
 python bounds.py 13 14 15
 python job_uniform.py --out-dir out --only e7
+python -I probe.py --data-dir data --out-dir out --budget-min 60
 ./lrc tau 15 401 13 600
 ./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1 1 1
 ./lrc scascadebb 15 401 2,2,2,2,2,2 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
@@ -192,4 +211,6 @@ All the mathematics this builds on belongs to the authors cited above. This
 repository only reimplements their published definitions so the computation can
 be checked by an independent route and, if it holds, pushed one runner further.
 The tight-set classification used in `THEORY.md` Section 7 is Yuhan Zhang's
-(arXiv:2608.13599) and Goddyn and Wong's.
+(arXiv:2608.13599) and Goddyn and Wong's. The pipeline that `probe.py` measures
+is Jaan Allikvere's (Zenodo 10.5281/zenodo.22667683 and 10.5281/zenodo.22066772,
+CC BY 4.0); it is downloaded, not copied into this repository.
