@@ -35,6 +35,8 @@ independently reimplemented.
    (1..15) and tight Goddyn-Wong-type tuples, need an argument. Candidates are
    level 16 lifts plus the gcd clause, a shift lemma for d = 3, 5, 7, or
    Lemma 2.2(ii). This is written up before any gate is counted.
+   (Note, run 5: there are no tight Goddyn-Wong-type tuples for 16 runners;
+   see addendum 4 and `THEORY.md` Section 7.)
 5. **Full gates.** Only after steps 1-4: run every gate prime, archive certificates,
    write an audit script, and ask a second, independent implementation to
    re-verify.
@@ -117,6 +119,56 @@ largest prime with tau_15(p) <= 13; the smallest P0 above which every scanned
 prime has tau_15(p) >= 14; and the smallest set of primes with tau_15(p) >= 14
 whose log-sum passes 483.239. Together with the pilot's cost per gate, these
 fix the prime list for the full 16-runner computation.
+
+## Addendum 4 (2026-11-21, run 5, before any k = 15 lifting result): no survivors
+
+Written at about 16:45 UTC on 2026-11-21. All five jobs (`lrc-repro-k14-v1`,
+`lrc16-pilot-v1`, `lrc16-engine2-v1`, `lrc16-shift-v1`, `lrc16-tau-v1`) are still
+queued; no k = 15 result of any kind exists.
+
+**Background (`THEORY.md` Section 7).** The published binary-lifting survivors for
+14 and 15 runners are exactly the tight sets near [k]. By Zhang's classification
+(arXiv:2608.13599, Thm 1.2) and Lemma N (n + 1 = 17 is prime), 16 runners has no
+tight one-entry modification of [15], and Zhang's census finds no tight
+two-entry modification with inserted speeds up to 128. The only known tight
+15-speed set is (1..15), whose witnesses a/16 are on the grid from level 16 on.
+Also, (1..13,15,28) is not tight (strict witness 993/2800).
+
+**P4 (primary, new).** At every k = 15 pilot gate that is *tested*, binary lifting
+through level 32 leaves **no surviving level-one tuple** (`survived` = 0), even
+without the shift filter. Read separately in three places, each with its own
+count of primes that hold / falsify / are untested:
+
+- P4a: `lrc16-pilot-v1`, `summary_pilot.json` (engine 1, no shift, levels to 32);
+- P4b: `lrc16-engine2-v1`, the k = 15 entries of `summary_engine2.json` "gates"
+  (engine 2, no shift, levels to 32);
+- P4c: `lrc16-shift-v1`, `summary_gates_shift.json` (engine 2, shift filter on,
+  levels to 32).
+
+A gate is **tested** when it has no error, `cover_timed_out` = 0, `overflow` = 0
+and the cascade was not cut (`cascade_cut` = 0 in its `gates/*.json` file). It
+**holds** if `survived` = 0 and is **falsified** if `survived` > 0. A gate that
+is not tested but already shows `survived` > 0 also counts as falsified (a
+survivor is a survivor). Gates flagged incomplete only because of small covers
+(`small_orbits_unhandled` > 0) are still tested for P4: the prediction is about
+the tuples that were lifted.
+
+**P4d (secondary).** If any survivor appears, it is not in the orbit of (1..15):
+its tuple is not a unit multiple of (1..15) mod p, folded. (This is what would
+happen if a tight set unknown to us, or a non-tight residue class with no grid
+witness, persists.)
+
+**What each outcome means.**
+- P4 holds at every tested gate: at the pilot primes, 16 runners needs no
+  fibre search at all. The full computation is "only" the gates, and the cost
+  is the cover enumeration and lifting time the pilot measures.
+- P4 fails: the survivors are listed and checked against (1..15) (P4d). A
+  survivor outside the orbit of (1..15) would point to a tight 15-speed set
+  not in the literature, or to a gap in the heuristic of `THEORY.md` 7.1, and we
+  would look at it closely: an unknown tight set for 16 runners would be a
+  finding in its own right.
+- Untested everywhere (cover searches time out at 1500 s or 600 s): the pilot
+  costs are too high at these caps, and P4 waits for longer gate runs.
 
 ## Honesty rules
 

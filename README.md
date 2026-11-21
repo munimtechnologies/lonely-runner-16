@@ -72,6 +72,27 @@ witness 1/16 directly:
 empty at level 16 at all ten pilot primes; job `lrc16-shift-v1` tests it. A third
 reading of Section 5, written to find errors, found none (`THEORY.md` 5.5).
 
+## Tight sets for 16 runners (`THEORY.md`, Section 7)
+
+The orbits that survived binary lifting for 14 and 15 runners are exactly the
+tight sets near [k]. Which tight sets exist for 16 runners?
+
+- By Zhang's classification of tight one-entry modifications of [n-1]
+  (arXiv:2608.13599, building on Goddyn and Wong), a short argument (**Lemma N**)
+  shows there are none when n + 1 is prime. For 16 runners n + 1 = 17, so
+  **(1..15) is the only tight set among [15] and its one-entry modifications**.
+  The same criterion gives exactly the published survivors for 14 runners
+  ((1..11,13,24)) and 15 runners (none besides (1..14)).
+- Zhang's census finds no tight two-entry modification for 16 runners with
+  inserted speeds up to 128.
+- **Erratum:** run 3 called (1..13,15,28) tight. It is not: t = 993/2800 is a
+  strict witness, and so is every t in an open interval of length 1/1344.
+
+`PLAN.md` (addendum 4) pre-registers the consequence: binary lifting to level 32
+should leave **no survivors at all** at the 16-runner pilot gates (prediction P4),
+which would make 16 runners simpler than 14 and 15 at this step. `test_tight.py`
+checks all of this in exact arithmetic.
+
 ## Small covers and the gate primes (`THEORY.md`, Section 6)
 
 At primes where the folded times can be covered by at most k - 2 speed classes
@@ -111,8 +132,8 @@ or the `shift` argument of `gate`) and the general completion (`ext` argument).
 | `job.py` | `repro` (k = 13, 14 re-check), `pilot` (k = 15 survey), `engine2` (cross-check, then both with engine 2) |
 | `job_shift.py` | k = 15 orbit probe (prediction P1) and shift-filtered pilot gates |
 | `job_tau.py` | tau(p) scans: the paper's k = 14 table (R1) and k = 15 up to p = 1000 (P3) |
-| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion |
-| `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`) |
+| `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers, tight sets |
 | `PLAN.md` | the pre-registered plan and what counts as success |
 
 Build and test:
@@ -131,3 +152,5 @@ python bounds.py 13 14 15
 All the mathematics this builds on belongs to the authors cited above. This
 repository only reimplements their published definitions so the computation can
 be checked by an independent route and, if it holds, pushed one runner further.
+The tight-set classification used in `THEORY.md` Section 7 is Yuhan Zhang's
+(arXiv:2608.13599) and Goddyn and Wong's.

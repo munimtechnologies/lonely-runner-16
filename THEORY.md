@@ -5,7 +5,7 @@ MV2's name. **No human expert has checked this yet.** Every inequality in
 Sections 1-3 is re-checked in exact rational arithmetic by
 `bounds.shape_n15_exact()` and `bounds.check_quartic_factor_n15()` (tests in
 `test_bounds.py`); Section 5 is checked by `test_shift.py` and `test_c.py`;
-Section 6 by `test_ext.py`.
+Section 6 by `test_ext.py`; Section 7 by `test_tight.py`.
 
 Sections 1-3 carry Section 3 of J. Allikvere, *Fourteen and fifteen lonely runners*,
 arXiv:2609.02604 v2 (the "flag bound") from n = 14 to n = 15 speeds, i.e. from 15 to
@@ -13,7 +13,9 @@ arXiv:2609.02604 v2 (the "flag bound") from n = 14 to n = 15 speeds, i.e. from 1
 n = 15 case of the shape lemma (the paper's Lemma 3.7 is stated and proved only for
 n = 13, 14) and the resulting constants. Section 5 (added in run 3) prepares the
 argument for the orbits that survive binary lifting. Section 6 (run 4) closes the
-gap left by primes whose level-one covers can be small.
+gap left by primes whose level-one covers can be small. Section 7 (run 5) asks
+which tight sets exist for 16 runners, since tight sets are what survived binary
+lifting for 14 and 15 runners.
 
 Notation as in the paper: n speeds, v positive and primitive, S = sum v_i,
 x_i = v_i/S, u_i = v_i / max_j v_j, q_i = q(u_i) with q(u) = 1 + 2u - u^2,
@@ -136,7 +138,8 @@ formal (Lean or interval-arithmetic) check is still needed.
    (the tight orbit's linear lifts die at level 16), Lemma S (a shift lemma for
    composite d, including d = 4, 8, 16, 32) and the chained form of
    Lemma 2.2(ii) that lets the cascade drop what Lemma S certifies. What survives
-   all of them is measured by `lrc16-shift-v1`.
+   all of them is measured by `lrc16-shift-v1`. Section 7 explains why we expect
+   nothing to survive.
 3. Primes where tau_15(p) <= 13 (covers on at most 13 classes exist). Section 6
    makes their gates complete, at a cost, and job `lrc16-tau-v1` finds which
    primes they are.
@@ -164,8 +167,14 @@ t = b/(lp) satisfies ||t w_i|| = ||j s_i / D|| >= 1/(k+1) for every i. []
 For 16 runners take s = (1, ..., 15), t* = 1/16, D = 16: **at level 16, and at
 every level divisible by 16, every lift of the orbit of (1,...,15) that is
 congruent to a multiple of (1,...,15) mod 16p is proper.** The same holds for any
-tight vector whose tight witness has denominator 16, for example (1,...,13,15,28)
+vector with an LR witness of denominator 16, for example (1,...,13,15,28)
 (at t = a/16 with a odd, 28a/16 is 1/4 or 3/4 mod 1).
+
+*Erratum (run 5):* the run-3 text called (1,...,13,15,28) "tight", by analogy with
+the 14-runner orbit (1,...,11,13,24). It is not tight: Section 7.3 gives an open
+interval of strict witnesses. Lemma L never used tightness, so nothing in this
+section changes; the label "gw_15" and the word "tight" in `job_shift.py` (already
+queued, so left as it is) refer to this vector.
 
 This is the structural difference from 14 and 15 runners. There the natural
 denominators are 14 = 2 * 7 and 15 = 3 * 5, which binary lifting never reaches, so the
@@ -369,3 +378,93 @@ pruning rule), and so gives tau exactly when it is <= maxsize. The job runs it
   primes whose log-sum passes 483.239, and the primes that need Section 6.2.
 
 The pre-registered readings are in `PLAN.md`, addendum 3.
+
+## 7. Tight sets for 16 runners (run 5)
+
+### 7.1 Why tight sets matter for the gates
+
+A set V of k speeds is **tight** if its best loneliness is exactly 1/(k+1): some t
+has ||t v|| >= 1/(k+1) for all v in V, but no t does so with strict inequality.
+In the published computations, the level-one orbits that survived every binary
+lifting level were exactly reductions of tight sets: (1..13) and (1..11,13,24) for
+14 runners, (1..14) for 15 runners (arXiv:2609.02604, Sec. 4). The reason is
+simple. If V is not tight, its strict witnesses form a non-empty open set, which
+contains an interval of some length delta > 0, and as soon as the grid spacing
+1/(lp) is below delta, the reduction of V itself mod lp has a grid witness. A tight
+set has no such interval. Its witnesses are isolated points, and its reduction
+survives every level whose grid misses them.
+
+So the question for 16 runners is: **which 15-speed sets are tight, and where
+are their witnesses?** (This is a heuristic for which orbits persist, not a
+theorem: the cascade follows residue classes, and a class contains many integer
+vectors. It is the heuristic the published survivor lists fit.)
+
+### 7.2 One-entry modifications: none when n + 1 is prime
+
+Write [n-1] = {1, ..., n-1} (n runners, k = n - 1 speeds). Zhang
+(arXiv:2608.13599 v3, Thm 1.2) classifies the tight sets of the form
+([n-1] \ {r}) U {w} with w >= n and n >= 4: they are tight exactly when
+(i) r | w and, with m = w/r and s = n - r, **gcd(r, b) > 1 for every integer b
+with s <= b <= ms - 1** (the criterion of Goddyn and Wong, Thm 2.3 of their 2006
+paper), or (ii) the set is one of Wills' two sporadic sets, at n = 5 and n = 6.
+
+**Lemma N.** If n + 1 is prime, no one-entry modification of [n-1] (n >= 7) is
+tight.
+
+*Proof.* Case (ii) needs n in {5, 6}. In case (i), w >= n > r gives m >= 2. If
+s = 1, then b = 1 is in [s, ms - 1] and gcd(r, 1) = 1. If s >= 2, then
+b = s + 1 <= ms - 1 and gcd(r, s + 1) = gcd(r, n + 1 - r) = gcd(r, n + 1) = 1,
+because 1 <= r < n + 1 and n + 1 is prime. []
+
+For 16 runners n + 1 = 17 is prime, so **(1..15) is the only tight set among
+[15] and all its one-entry modifications.** The same criterion, applied without
+Lemma N, gives exactly the published survivors one and two runners earlier:
+
+| runners n | tight one-entry modifications (r, m) | set | published binary survivors |
+|---|---|---|---|
+| 14 | (12, 2) only | (1..11,13,24) | (1..13), (1..11,13,24) |
+| 15 | none | | (1..14) |
+| 16 | none (Lemma N) | | to be measured (`lrc16-shift-v1`) |
+
+`test_tight.py` checks the table by brute force over r < n and 2 <= m <= 60, and
+Lemma N for every n < 200 with n + 1 prime.
+
+**Two-entry modifications.** Zhang's census (Thm 6.10: 8 <= n <= 140, inserted
+speeds n <= w_1 < w_2 <= 8n, 447,545 cases, exact arithmetic) found tight sets only
+at n = 8 ({1,4,5,6,7,11,13}) and n = 74 (Goddyn and Wong's example). So for 16
+runners there is none with inserted speeds up to 128 either. We know of no tight
+15-speed set other than (1..15). We do not claim there is none.
+
+The witnesses of (1..15) include t = a/16 (a odd), which lie on the grid from
+level 16 on. That is the content of Lemma L.
+
+### 7.3 (1..13,15,28) is not tight
+
+This is the 16-runner analogue of the 14-runner survivor (1..11,13,24) (replace
+k - 1 by 2(k - 1)), and run 3 wrongly called it tight. In Zhang's terms it is
+n = 16, r = 14, m = 2, s = 2, and b = 3 is coprime to 14. An explicit strict
+witness: **t = 993/2800**. With 2800 t v mod 2800 folded to [0, 1400], the
+distances are 993, 814, 179, 1172, 635, 358, 1351, 456, 537, 1270, 277, 716, 1091,
+895 (speeds 1-13 and 15) and 196 (speed 28), all above 2800/16 = 175.
+
+More is true: **every t in the open interval (5/14 - 1/336, 5/14 - 1/448)**, of
+length 1/1344, is a strict witness. Write t = 5/14 - e. Then 5v mod 14 is +-1
+only for v = 3 (distance 1/14 - 3e, above 1/16 iff e < 1/336) and v = 11 (distance
+1/14 + 11e). Speed 28 has 28t = 10 - 28e, at distance 28e, above 1/16 iff
+e > 1/448. Every other speed has 5v mod 14 at distance at least 2/14 from 0 and
+moves by at most 15e < 15/336, which leaves it above 2/14 - 15/336 > 1/16.
+`test_tight.py` checks the witness, 199 interior points and both endpoints in
+exact arithmetic.
+
+So the reduction of this vector itself mod lp has a grid witness as soon as
+1/(lp) < 1/1344. At level 16 that is every p > 84, which includes every planned
+gate prime. Prediction P2 (`PLAN.md`, addendum 2) stands, now for two reasons.
+
+### 7.4 What this predicts
+
+If the heuristic of 7.1 holds, and (1..15) is the only tight 15-speed set that
+reduces to a level-one improper orbit at the gate primes, then binary lifting to
+level 32 should leave **no survivors at all** at the 16-runner gates. That
+would make 16 runners structurally simpler than 14 and 15, which both needed
+separate fibre searches. `PLAN.md` addendum 4 pre-registers this as P4, before
+any 16-runner lifting result exists.
