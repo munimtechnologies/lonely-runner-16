@@ -3,7 +3,14 @@
 """Cross-check the C engine (lrc.c) against the brute-force reference, and its
 two cover normalisations and two lifting methods against each other; and the
 optional shift filter (THEORY.md Sec. 5) against the Python reference.
-Skipped when no C compiler is available."""
+Skipped when no C compiler is available.
+
+2026-11-22 fix: test_shiftok_matches_reference drew e = randint(1, 8)
+exceptional coordinates, so for k = 7 it could build a vector of length 8.
+The C engine reads exactly K values and the Python reference read all of them,
+so the two disagreed on the vector, not on Lemma S (job lrc16-tau-v1: C 2 on
+the first seven entries, which is correct for them; Python 0 on all eight).
+e is now at most k and the length is asserted."""
 import json
 import os
 import random
@@ -49,7 +56,41 @@ def c_shift_removed(mode, k, p, mults, v):
     return [int(ln.split()[2]) for ln in lines if ln.startswith("X ")]
 
 
-@unittest.skipUnless(CC, "no C compiler")
+def shiftok_vector(rng, k, p, l):
+    """a random test vector of length exactly k (THEORY.md Sec. 5 shapes)"""
+    L = l * p
+    if rng.random() < 0.5:
+        # mostly multiples of a divisor of l, a few exceptions
+        d = rng.choice([x for x in range(2, l + 1) if l % x == 0])
+        e = rng.randint(1, min(8, k))
+        w = [(d * rng.randint(1, 3 * p)) % L for _ in range(k - e)] + \
+            [rng.randrange(1, L) for _ in range(e)]
+    else:
+        w = [rng.randrange(1, L) for _ in range(k)]
+    return w
+
+
+class VectorShape(unittest.TestCase):
+    """runs without a compiler: the generator never builds a wrong-length vector"""
+
+    def test_shiftok_vectors_have_length_k(self):
+        rng = random.Random(17)
+        for k in (3, 7, 14, 15):
+            for _ in range(500):
+                l = rng.choice([2, 4, 8, 16, 32, 48, 64, 6, 12, 15, 30])
+                self.assertEqual(len(shiftok_vector(rng, k, 101, l)), k)
+
+    def test_old_failure_is_a_length_effect(self):
+        # the vector reported by lrc16-tau-v1 (k = 7, l = 16) has 8 entries;
+        # Lemma S on its first 7 gives d = 2 (one odd entry, cost 1 < 2), which is
+        # what the C engine printed; on all 8 the reference gives 0
+        w8 = [594, 1500, 1593, 1436, 1354, 1350, 414, 1045]
+        self.assertEqual(R.shift_ok(w8[:7], 7, 16), 2)
+        self.assertEqual(R.shift_ok(w8, 7, 16), 0)
+
+
+@unittest.skipUnless(CC and os.path.exists(os.path.join(HERE, "lrc.c")),
+                     "no C compiler or no lrc.c (run fetch_pinned.py first)")
 class CEngine(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -130,16 +171,8 @@ class CEngine(unittest.TestCase):
             p = 101
             for _ in range(400):
                 l = rng.choice([2, 4, 8, 16, 32, 48, 64, 6, 12, 15, 30])
-                L = l * p
-                style = rng.random()
-                if style < 0.5:
-                    # mostly multiples of a divisor of l, a few exceptions
-                    d = rng.choice([x for x in range(2, l + 1) if l % x == 0])
-                    e = rng.randint(1, 8)
-                    w = [(d * rng.randint(1, 3 * p)) % L for _ in range(k - e)] + \
-                        [rng.randrange(1, L) for _ in range(e)]
-                else:
-                    w = [rng.randrange(1, L) for _ in range(k)]
+                w = shiftok_vector(rng, k, p, l)
+                self.assertEqual(len(w), k)
                 got = int(run("shiftok", k, p, l, *w)[0].split()[1])
                 self.assertEqual(got, R.shift_ok(w, k, l), (k, l, w))
 

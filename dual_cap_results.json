@@ -1,0 +1,40 @@
+{
+ "about": "The dual cap (THEORY_10.md, Prop. 10.2 and Cor. 10.3) and its re-check (THEORY_11.md). Every value is recomputed from capped.py by test_theory11.py. Made with AI agents working in MV2's name; not yet checked by a human expert. CC BY 4.0.",
+ "cases": [
+  {
+   "runners": 15,
+   "n": 14,
+   "old_t_d": "7/15",
+   "argmin_tail": ["37/105", "37/140"],
+   "kappa": "1369/1029",
+   "kappa_float": 1.330418,
+   "gain_nats": 1.9985,
+   "target_before": 401.9846,
+   "target_before_source": "Allikvere, arXiv:2609.02604, Cor. 3.11",
+   "target_after": 399.986
+  },
+  {
+   "runners": 16,
+   "n": 15,
+   "old_t_d": "17/36",
+   "argmin_tail": ["5/14", "15/56"],
+   "kappa": "12150/9163",
+   "kappa_float": 1.325985,
+   "gain_nats": 2.1162,
+   "target_before": 483.239,
+   "target_before_source": "THEORY.md Sec. 3",
+   "target_after": 481.123
+  }
+ ],
+ "scale": {
+  "ln_800": 6.6846,
+  "gain_16_runners_in_gate_primes_near_800": 0.3166
+ },
+ "negative_results": {
+  "rank2_cap": "1/8",
+  "tail_product_t13_t14_n15": "75/784",
+  "rank2_cap_binds": false,
+  "hyperplane_coupling_gain_nats": 0.0,
+  "sum_relation_speed_threshold_u_star_n15": 0.204178
+ }
+}

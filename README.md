@@ -56,7 +56,7 @@ note is re-checked in exact rational arithmetic by `test_bounds.py`. A second,
 independent pass over the derivation (run 3) agreed, apart from one rounded
 constant that nothing depends on (erratum in `THEORY.md`).
 
-## A sharper flag bound: the dual cap (`THEORY_10.md`)
+## A sharper flag bound: the dual cap (`THEORY_10.md`, re-checked in `THEORY_11.md`)
 
 The flag bound minimises the product of the Gram-Schmidt lengths t_1, ..., t_d of a
 KZ basis of the lattice Lambda = P Z^n. `COST_addendum1.md` showed that no further
@@ -75,11 +75,27 @@ dimensions):
 | 16 | 12150/9163 = 1.3260 | 2.1162 nats | 483.239 -> 481.123 |
 
 This is a small saving (about a third of one gate prime near p = 800). It costs no
-computation, and it is, as far as we know, the first improvement of the flag bound
-from the arithmetic of the speeds. Section 10.4 also gives the exact loneliness
-constant for hyperplanes (1/2 - 1/(2||h||_1) for odd ||h||_1), and shows that it adds
-nothing more at the capped minimiser. Not yet checked by a human: `COST.md` keeps
-483.239 until it is.
+computation, and as far as we know it is the first improvement of the flag bound
+that uses the arithmetic of the speeds. The numbers are in `dual_cap_results.json`,
+and `test_theory11.py` recomputes every one of them from `capped.py`.
+
+**Re-check and limits (`THEORY_11.md`).** A deliberate attempt to break Section 10
+found no error. It also checked the step from the covolume to the speed product
+against Allikvere's Theorem 3.8. It then closed the two natural extensions:
+
+- **The same relation runs both bounds.** The hyperplane in Allikvere's prefix
+  bound at r = d-1 is exactly h^perp for the same relation h (Lemma 11.1). Using
+  the exact hyperplane constant together with the cap gains nothing: the binding
+  case is a 3-term sum relation v_c = v_a + v_b, where both constants stay at 1/3
+  (Prop. 11.2).
+- **A rank-2 cap does not bind.** t_{d-1} t_d < 1/8, since two independent
+  relations have Gram determinant >= 8 (Lemma 11.4). At the minimiser the product
+  is only 75/784.
+
+The remaining obstruction is a counterexample whose last dual relation is a sum
+relation among speeds below about a fifth of the fastest (Remark 11.3). Not yet
+checked by a human. The 481.123 target is used for planning only, conditional on
+Section 10.
 
 ## What it would cost (`COST.md`, `COST_addendum1.md`)
 
@@ -124,8 +140,9 @@ witness 1/16 directly:
 - **Lemma C:** the lifting cascade may drop every lift that Lemma S certifies.
 
 `PLAN.md` (addendum 2) pre-registers the prediction that the orbit of (1..15) is
-empty at level 16 at all ten pilot primes; job `lrc16-shift-v1` tests it. A third
-reading of Section 5, written to find errors, found none (`THEORY.md` 5.5).
+empty at level 16 at all ten pilot primes. Job `lrc16-shift-v2` tests it (v1 was
+withdrawn because of a test bug, see below). A third reading of Section 5,
+written to find errors, found none (`THEORY.md` 5.5).
 
 ## Tight sets for 16 runners (`THEORY.md`, Section 7)
 
@@ -194,9 +211,19 @@ The paper handled 19 such primes for 15 runners with a general enumeration.
   primes where tau(p) <= k - 2;
 - **`tau`**: decides whether a cover on at most a given number of classes exists.
 
-Job `lrc16-tau-v1` re-checks the paper's tau table for 15 runners (71 primes) and
+Job `lrc16-tau-v2` re-checks the paper's tau table for 15 runners (71 primes) and
 maps tau_15(p) for every prime up to 1000, which fixes the gate primes for 16
 runners. Its readings are pre-registered in `PLAN.md` (addendum 3).
+
+**The v1 failure (2026-11-22).** `lrc16-tau-v1` ran, and 14 of its 15 engine
+tests passed: the C engine agreed with the reference on covers, cascades, both
+lifting methods, gates and the shift cascade. The one failure was a bug in the
+test, not the engine. `test_shiftok_matches_reference` drew up to 8 exceptional
+coordinates, so for k = 7 it built an 8-entry vector. The C engine reads exactly
+K = 7 values, and on those it was right (d = 2). The Python reference read all 8
+(answer 0). The test now builds vectors of length k and asserts it.
+`fetch_pinned.py` lets the v2 jobs run the engine exactly as published at commit
+c5cfb60, together with the fixed test.
 
 ## Two engines
 
@@ -221,15 +248,18 @@ or the `shift` argument of `gate`) and the general completion (`ext` argument).
 | `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test, exact at D = 2Q; near-grid masks for Lemma G2 |
 | `bounds.py` | exact flag bound (rational arithmetic), shape bound sweep, exact n = 15 shape checks, gate-set planning |
 | `capped.py` | the flag bound with the dual cap t_d <= 1/3 (Proposition 10.2), solved exactly by vertex enumeration, with a brute-force cross-check; the Lemma 10.1 identity on explicit lattices; Lemma 10.4 |
+| `dual_cap_results.json` | the dual-cap numbers for 15 and 16 runners and the THEORY_11 negative results, each recomputed by `test_theory11.py` |
 | `job.py` | `repro` (k = 13, 14 re-check), `pilot` (k = 15 survey), `engine2` (cross-check, then both with engine 2) |
 | `job_shift.py` | k = 15 orbit probe (prediction P1) and shift-filtered pilot gates |
 | `job_tau.py` | tau(p) scans: the paper's k = 14 table (R1) and k = 15 up to p = 1000 (P3) |
 | `job_uniform.py` | Lemma U cascades for (1..15), (1..13,15,28) and the 14/15-runner sanity orbits (P5, P6, S1) |
+| `fetch_pinned.py` | fetches the engine files at a pinned commit for a compete job and records their SHA-256 |
 | `probe.py` | cost probe: downloads Allikvere's public pipeline from Zenodo, checks hashes, extracts his per-gate costs, builds his generator for K = 14 and 15, times it (`COST.md`) |
-| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`), the probe's parsers (`test_probe.py`), the Minkowski and flag-sensitivity facts (`test_cost_addendum1.py`), the dual cap (`test_capped.py`) |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`), the probe's parsers (`test_probe.py`), the Minkowski and flag-sensitivity facts (`test_cost_addendum1.py`), the dual cap (`test_capped.py`), its re-check and limits (`test_theory11.py`) |
 | `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p |
 | `THEORY_9.md` | Section 9: grid-point witnesses, Lemma G2, Lemma U at any level |
 | `THEORY_10.md` | Section 10: the dual cap t_d < 1/3 and the sharper flag bound for 15 and 16 runners; exact hyperplane loneliness |
+| `THEORY_11.md` | Section 11: adversarial re-check of Section 10; the prefix bound at r = d-1 and the cap share one relation; why coupling them and rank-2 caps gain nothing |
 | `COST.md` | the published cost of the 15-runner proof, what it implies for 16 runners, and the pre-registered decision rule for the probe |
 | `COST_addendum1.md` | two cost-reduction ideas checked and closed (Beck-Everett relations; KZ constraints in the flag bound) |
 | `PLAN.md`, `PLAN_addendum6.md` | the pre-registered plan and what counts as success |
@@ -253,10 +283,10 @@ python -I probe.py --data-dir data --out-dir out --budget-min 60
 All the mathematics this builds on belongs to the authors cited above. This
 repository only reimplements their published definitions so the computation can
 be checked by an independent route and, if it holds, pushed one runner further.
-The flag bound that Section 10 sharpens is Jaan Allikvere's (arXiv:2609.02604).
-The tight-set classification used in `THEORY.md` Section 7 is Yuhan Zhang's
-(arXiv:2608.13599) and Goddyn and Wong's. The relation theorem discussed in
-`COST_addendum1.md` is Beck and Everett's (arXiv:2609.06259). The pipeline that
-`probe.py` measures is Jaan Allikvere's (Zenodo 10.5281/zenodo.22667683 and
-10.5281/zenodo.22066772, CC BY 4.0); it is downloaded, not copied into this
-repository.
+The flag bound that Sections 10 and 11 sharpen and re-check is Jaan Allikvere's
+(arXiv:2609.02604). The tight-set classification used in `THEORY.md` Section 7 is
+Yuhan Zhang's (arXiv:2608.13599) and Goddyn and Wong's. The relation theorem
+discussed in `COST_addendum1.md` is Beck and Everett's (arXiv:2609.06259). The
+pipeline that `probe.py` measures is Jaan Allikvere's (Zenodo
+10.5281/zenodo.22667683 and 10.5281/zenodo.22066772, CC BY 4.0); it is downloaded,
+not copied into this repository.
