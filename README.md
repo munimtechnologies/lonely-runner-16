@@ -77,6 +77,20 @@ all four settings. Set `LRC_PRUNE=3` to use them. Job `lrc16-engine3-v1` measure
 the speed-up and spends it on the undecided tau primes. Its readings (including a
 speed prediction that may fail) are pre-registered in `PLAN_addendum7.md`.
 
+## Engine 4: early orbit pruning (`THEORY_14.md`)
+
+The search fixes class 1 and keeps only the member of each orbit in which class 1
+has the most private times, but it used to check that only at the leaf. **Lemma M:**
+a private time of a chosen class v that no allowed class covers stays private to v
+in every completion, so if v already has more such "locked" times than class 1 has
+private times, nothing below the node can be reported, and every class that would
+push class 1 below that count can be dropped. The rule never cuts the member in
+which class 1 is the largest, so covers, tau and gate results are unchanged.
+`test_orbit.py` checks it by brute force, with a second implementation of the whole
+search in Python, and (with a compiler) the C engine with `LRC_PRUNE=4` and `7`.
+Job `lrc16-orbit-v1` measures what it saves on top of engine 3; its readings
+(two predictions that may fail) are pre-registered in `PLAN_addendum8.md`.
+
 ## The bound for 16 runners (worked out in `THEORY.md`, Sections 1-3)
 
 We carried the paper's shape lemma (its Lemma 3.7, proved there for 14 and 15
@@ -174,7 +188,7 @@ decides whether such a cover exists. Results: see "Latest results" above.
 
 | file | what it does |
 |---|---|
-| `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade (both engines), shift filter, general completion, engine-3 pruning (`LRC_PRUNE`) |
+| `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade (both engines), shift filter, general completion, engine-3 and engine-4 pruning (`LRC_PRUNE` bits 1, 2, 4) |
 | `lrc_ref.py` | brute-force reference used to test the engine on small cases; exact loneliness; Lemma S |
 | `uniform.py` | prime-free lifting of one orbit (Lemma U): U_inf and U_P cascades in exact arithmetic |
 | `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test |
@@ -185,14 +199,15 @@ decides whether such a cover exists. Results: see "Latest results" above.
 | `job_shift.py` | k = 15 orbit probe (prediction P1) and shift-filtered pilot gates |
 | `job_tau.py` | tau(p) scans: the paper's k = 14 table (R1) and k = 15 up to p = 1000 (P3) |
 | `job_engine3.py` | engine-3 cross-check (A1), consistency (A2), speed (S1), the undecided tau primes (P3, R1) |
+| `job_orbit.py` | engine-4 checks: same answers (M1), work (M2), speed over engine 3 (S2) |
 | `job_uniform.py` | Lemma U cascades for (1..15), (1..13,15,28) and the 14/15-runner sanity orbits |
 | `fetch_pinned.py` | fetches the engine files at a pinned commit for a compete job and records their SHA-256 |
 | `probe.py` | cost probe: downloads Allikvere's public pipeline from Zenodo, checks hashes, extracts his per-gate costs, builds his generator for K = 14 and 15, times it (`COST.md`) |
 | `results/` | raw outputs of finished jobs, copied unchanged |
-| `test_*.py` | tests: the paper's constants, C against Python, engine 1 against engine 2, engine 3 against engine 2 and its two lemmas by brute force (`test_prune.py`), Lemmas S, L, U, G, tight sets, the probe's parsers, the dual cap and its re-checks |
-| `THEORY.md`, `THEORY_9.md` ... `THEORY_13.md` | the 16-runner bound, surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p, the dual cap and its limits, engine-3 prunings |
+| `test_*.py` | tests: the paper's constants, C against Python, engine 1 against engine 2, engine 3 against engine 2 and its two lemmas by brute force (`test_prune.py`), engine 4 and Lemma M by brute force and a second Python search (`test_orbit.py`), Lemmas S, L, U, G, tight sets, the probe's parsers, the dual cap and its re-checks |
+| `THEORY.md`, `THEORY_9.md` ... `THEORY_14.md` | the 16-runner bound, surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p, the dual cap and its limits, engine-3 prunings, engine-4 orbit pruning |
 | `COST.md`, `COST_addendum1.md`, `SHARD_PLAN.md` | the cost of the 15-runner proof, what it implies for 16, and how the gates would be sharded |
-| `PLAN.md`, `PLAN_addendum6.md`, `PLAN_addendum7.md` | the pre-registered plan and what counts as success |
+| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum8.md` | the pre-registered plan and what counts as success |
 | `RESULTS_run14.md` | graded results of `lrc16-engine2-v1` and `lrc16-tau-v2` |
 
 Build and test:
@@ -201,8 +216,8 @@ Build and test:
 cc -O3 -o lrc lrc.c
 python -m unittest -v
 python bounds.py 13 14 15
-LRC_PRUNE=3 ./lrc tau 15 401 13 600
-LRC_PRUNE=3 ./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1 1 1
+LRC_PRUNE=7 ./lrc tau 15 401 13 600
+LRC_PRUNE=7 ./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1 1 1
 ./lrc scascadebb 15 401 2,2,2,2,2,2 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 ```
 
@@ -211,6 +226,8 @@ LRC_PRUNE=3 ./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1 1 1
 All the mathematics this builds on belongs to the authors cited above. This
 repository only reimplements their published definitions so the computation can
 be checked by an independent route and, if it holds, pushed one runner further.
+The normalisation that engines 3 and 4 prune against is Lemma 4.1 of Jaan
+Allikvere's paper (arXiv:2609.02604).
 The flag bound that Sections 10 to 12 sharpen, re-check and bound is Jaan
 Allikvere's (arXiv:2609.02604), including the Lemma 3.3 and Proposition 3.4 that
 Section 12 examines, and the tau table that `job_tau.py` re-checks. The

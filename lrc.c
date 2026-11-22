@@ -40,11 +40,12 @@
  *                                divisible by c; the others are level-l times,
  *                                already covered), and the gcd clause fails.
  *
- * Engine 3 (2026-11-22): two optional pruning rules for the cover search,
+ * Engine 3 (2026-11-22): optional pruning rules for the cover search,
  * switched on by the environment variable LRC_PRUNE (a bit mask; default 0,
- * which is exactly the engine-2 search).  Both only remove search nodes below
- * which no reportable cover exists, so every mode prints the same covers, tau
- * and gate results with any LRC_PRUNE value (THEORY_13.md; test_prune.py):
+ * which is exactly the engine-2 search).  All of them only remove search nodes
+ * below which no reportable cover exists, so every mode prints the same covers,
+ * tau and gate results with any LRC_PRUNE value (THEORY_13.md, THEORY_14.md;
+ * test_prune.py, test_orbit.py):
  *   bit 1  fractional set-cover bound.  With g(v) = number of uncovered times
  *          class v covers and G(a) = max g(v) over allowed classes v covering
  *          the uncovered time a, any completion needs at least
@@ -57,6 +58,14 @@
  *          can a class that would leave class 1 with fewer than q_s private
  *          times.  Such classes are removed from the allowed set of the
  *          subtree.
+ *   bit 4  early orbit pruning (engine 4, THEORY_14.md, norm=1 only).  A
+ *          private time of a chosen class v that no allowed class covers stays
+ *          private to v in every completion, so L(v) = number of such
+ *          "locked" times is a lower bound for v's final private count, while
+ *          pc[1] is an upper bound for class 1's.  If some L(v) > pc[1], class
+ *          1 cannot end with the most private times, so the cover would be
+ *          rejected at the leaf: prune.  Otherwise, with T = max(q_s, max L),
+ *          remove every allowed class u with |cov(u) & Priv(1)| > pc[1] - T.
  *
  * Optional shift filter (shift=1; THEORY.md Sec. 5, "Lemma S"): an improper
  * lift w at level l is also dropped when some d | l, d >= 2, has
@@ -120,7 +129,7 @@ static long long nodes;
 static double tstart, timecap;
 static int timed_out;
 
-/* engine 3 pruning (LRC_PRUNE bit mask, see the header) */
+/* engine 3/4 pruning (LRC_PRUNE bit mask, see the header) */
 static int PRUNE = 0;
 static int gainv[MAXN + 1];
 
@@ -175,6 +184,11 @@ static inline int bs_pop_and(const bset *a, const bset *b) {
     int c = 0;
     for (int j = 0; j < NW; j++) c += __builtin_popcountll(a->w[j] & b->w[j]);
     return c;
+}
+static inline int bs_and_any(const bset *a, const bset *b) {
+    for (int j = 0; j < NW; j++)
+        if (a->w[j] & b->w[j]) return 1;
+    return 0;
 }
 
 static void setup(int k, int p) {
@@ -319,14 +333,18 @@ static void report(void) {
     nfound++;
 }
 
-/* LRC_PRUNE bit 2: remove from `allowed` every class u whose addition would
- * leave some chosen class v without a private time (u covers every private
- * time of v), and, with NORM, every class u that would leave class 1 with
- * fewer than QS private times.  Private sets only shrink as classes are
- * added, so no cover through this node that contains u can be reported
- * (search() rejects it through npriv0 or the QS test before or at the leaf).
+/* LRC_PRUNE bits 2 and 4.  Bit 2: remove from `allowed` every class u whose
+ * addition would leave some chosen class v without a private time (u covers
+ * every private time of v).  Bit 4 (norm=1 only): L(v) = private times of v
+ * that no allowed class covers (they stay private to v in every completion);
+ * if some L(v) exceeds pc[1] the node is pruned (return 1).  With norm=1 and
+ * either bit, every class u that would leave class 1 with fewer than
+ * T = max(QS, max L) private times is removed (T = QS without bit 4).
+ * Private sets only shrink and `allowed` only shrinks as the search goes
+ * deeper, so no cover through this node that contains a removed u, and no
+ * cover through a pruned node, can be reported (THEORY_13.md, THEORY_14.md).
  * Uses the symmetry "u covers a iff a covers u", i.e. who[a] == cov[a]. */
-static void forbid_classes(void) {
+static int forbid_classes(void) {
     bset x, p1;
     int have_p1 = 0;
     memset(&p1, 0, sizeof p1);
@@ -339,14 +357,33 @@ static void forbid_classes(void) {
             if (cnt[a] != 1) continue; /* a is private to v */
             any = 1;
             if (NORM && v == 1) bs_set(&p1, a);
-            for (int w = 0; w < NW; w++) x.w[w] &= who[a].w[w];
+            if (PRUNE & 2)
+                for (int w = 0; w < NW; w++) x.w[w] &= who[a].w[w];
         }
         if (!any) continue; /* cannot happen when npriv0 == 0 */
-        for (int w = 0; w < NW; w++) allowed.w[w] &= ~x.w[w];
+        if (PRUNE & 2)
+            for (int w = 0; w < NW; w++) allowed.w[w] &= ~x.w[w];
         if (NORM && v == 1) have_p1 = 1;
     }
-    if (have_p1 && QS > 0) {
-        int lim = pc[1] - QS; /* u may stay only if |cov[u] & P1| <= lim */
+    int T = QS;
+    if ((PRUNE & 4) && NORM) {
+        int lmax = 0;
+        for (int i = 0; i < nch; i++) {
+            int v = chosen[i];
+            if (v == 1) continue;
+            int L = 0;
+            for (int j = 0; j < M; j++) {
+                int a = covlist[v * M + j];
+                if (cnt[a] != 1) continue; /* a is private to v */
+                if (!bs_and_any(&who[a], &allowed)) L++;
+            }
+            if (L > lmax) lmax = L;
+        }
+        if (lmax > pc[1]) return 1;
+        if (lmax > T) T = lmax;
+    }
+    if (have_p1 && T > 0) {
+        int lim = pc[1] - T; /* u may stay only if |cov[u] & P1| <= lim */
         if (lim < M) {
             for (int u = 1; u <= N; u++) {
                 if (!bs_get(&allowed, u)) continue;
@@ -354,6 +391,7 @@ static void forbid_classes(void) {
             }
         }
     }
+    return 0;
 }
 
 static void search(void);
@@ -430,10 +468,9 @@ static void search(void) {
     int b = MAXSIZE - nch;
     if (b <= 0) return;
     if ((long long)b * M < U) return;
-    if (PRUNE & 2) {
+    if (PRUNE & 6) {
         bset saved = allowed;
-        forbid_classes();
-        search_body(U, b);
+        if (!forbid_classes()) search_body(U, b);
         allowed = saved;
     } else {
         search_body(U, b);
@@ -833,7 +870,7 @@ int main(int argc, char **argv) {
                         "cascade|cascadebb|scascade|scascadebb K P levels v.. | "
                         "gate K P levels timecap liftcap [norm] [bb] [shift] [ext] | "
                         "tuples K P [ext] [norm] | "
-                        "shiftok K P l w..   (environment: LRC_PRUNE=0..3)\n");
+                        "shiftok K P l w..   (environment: LRC_PRUNE=0..7)\n");
         return 1;
     }
     {
