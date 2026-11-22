@@ -56,7 +56,7 @@ note is re-checked in exact rational arithmetic by `test_bounds.py`. A second,
 independent pass over the derivation (run 3) agreed, apart from one rounded
 constant that nothing depends on (erratum in `THEORY.md`).
 
-## What it would cost (`COST.md`)
+## What it would cost (`COST.md`, `COST_addendum1.md`)
 
 The 15-runner proof's own audit file (Zenodo 10.5281/zenodo.22667683, CC BY 4.0)
 shows where its roughly 2,140 CPU-hours went. 19 small primes (89 to 233, and 241)
@@ -71,6 +71,18 @@ generator built for 15 speeds. It also first checks that the build reproduces hi
 published regression, and extracts the stage-by-stage costs from his logs. The
 decision rule for what to do with the number is pre-registered in `COST.md`,
 Section 4.
+
+`COST_addendum1.md` closes two ideas that might have lowered the cost without any
+new computation:
+
+- **Beck-Everett relations** (arXiv:2609.06259) say a counterexample satisfies an
+  integer relation with l1-norm at most 33. By Minkowski's theorem, every residue
+  vector modulo any level up to 39,142 already satisfies a relation with l1-norm
+  at most 13, so the condition prunes nothing inside the gates.
+- **Stronger Korkine-Zolotarev facts** cannot sharpen the flag bound. An orthogonal
+  lattice with the optimal profile is itself a KZ basis, so the minimum prod c_r
+  stands. Only a stronger prefix inequality (Proposition 3.4) would help: scaling
+  every B_r by f lowers the gate target by 105 ln f nats.
 
 ## Surviving orbits (`THEORY.md`, Section 5)
 
@@ -186,10 +198,11 @@ or the `shift` argument of `gate`) and the general completion (`ext` argument).
 | `job_tau.py` | tau(p) scans: the paper's k = 14 table (R1) and k = 15 up to p = 1000 (P3) |
 | `job_uniform.py` | Lemma U cascades for (1..15), (1..13,15,28) and the 14/15-runner sanity orbits (P5, P6, S1) |
 | `probe.py` | cost probe: downloads Allikvere's public pipeline from Zenodo, checks hashes, extracts his per-gate costs, builds his generator for K = 14 and 15, times it (`COST.md`) |
-| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`), the probe's parsers (`test_probe.py`) |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`), the probe's parsers (`test_probe.py`), the Minkowski and flag-sensitivity facts (`test_cost_addendum1.py`) |
 | `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p |
 | `THEORY_9.md` | Section 9: grid-point witnesses, Lemma G2, Lemma U at any level |
 | `COST.md` | the published cost of the 15-runner proof, what it implies for 16 runners, and the pre-registered decision rule for the probe |
+| `COST_addendum1.md` | two cost-reduction ideas checked and closed (Beck-Everett relations; KZ constraints in the flag bound) |
 | `PLAN.md`, `PLAN_addendum6.md` | the pre-registered plan and what counts as success |
 
 Build and test:
@@ -211,6 +224,8 @@ All the mathematics this builds on belongs to the authors cited above. This
 repository only reimplements their published definitions so the computation can
 be checked by an independent route and, if it holds, pushed one runner further.
 The tight-set classification used in `THEORY.md` Section 7 is Yuhan Zhang's
-(arXiv:2608.13599) and Goddyn and Wong's. The pipeline that `probe.py` measures
-is Jaan Allikvere's (Zenodo 10.5281/zenodo.22667683 and 10.5281/zenodo.22066772,
-CC BY 4.0); it is downloaded, not copied into this repository.
+(arXiv:2608.13599) and Goddyn and Wong's. The relation theorem discussed in
+`COST_addendum1.md` is Beck and Everett's (arXiv:2609.06259). The pipeline that
+`probe.py` measures is Jaan Allikvere's (Zenodo 10.5281/zenodo.22667683 and
+10.5281/zenodo.22066772, CC BY 4.0); it is downloaded, not copied into this
+repository.
