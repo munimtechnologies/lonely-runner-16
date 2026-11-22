@@ -40,6 +40,24 @@
  *                                divisible by c; the others are level-l times,
  *                                already covered), and the gcd clause fails.
  *
+ * Engine 3 (2026-11-22): two optional pruning rules for the cover search,
+ * switched on by the environment variable LRC_PRUNE (a bit mask; default 0,
+ * which is exactly the engine-2 search).  Both only remove search nodes below
+ * which no reportable cover exists, so every mode prints the same covers, tau
+ * and gate results with any LRC_PRUNE value (THEORY_13.md; test_prune.py):
+ *   bit 1  fractional set-cover bound.  With g(v) = number of uncovered times
+ *          class v covers and G(a) = max g(v) over allowed classes v covering
+ *          the uncovered time a, any completion needs at least
+ *          sum_a 1/G(a) more classes (LP duality: y_a = 1/G(a) is feasible
+ *          for the dual of the covering LP).  Prune when this exceeds the
+ *          number of classes still allowed.
+ *   bit 2  forbidden classes.  A class that covers every private time of an
+ *          already chosen class can never be added (private sets only
+ *          shrink, so the cover could not be irredundant); with norm=1, nor
+ *          can a class that would leave class 1 with fewer than q_s private
+ *          times.  Such classes are removed from the allowed set of the
+ *          subtree.
+ *
  * Optional shift filter (shift=1; THEORY.md Sec. 5, "Lemma S"): an improper
  * lift w at level l is also dropped when some d | l, d >= 2, has
  *   E = {i : d does not divide w_i} non-empty and
@@ -101,6 +119,10 @@ static bset uncov, allowed;
 static long long nodes;
 static double tstart, timecap;
 static int timed_out;
+
+/* engine 3 pruning (LRC_PRUNE bit mask, see the header) */
+static int PRUNE = 0;
+static int gainv[MAXN + 1];
 
 /* stop-at-first-cover mode (tau) */
 static int STOPFIRST = 0, stopnow = 0;
@@ -297,23 +319,55 @@ static void report(void) {
     nfound++;
 }
 
-static void search(void) {
-    nodes++;
-    if ((nodes & 0xFFFF) == 0 && timecap > 0 && now() - tstart > timecap) timed_out = 1;
-    if (timed_out || stopnow) return;
-    if (npriv0) return;
-    if (NORM && pc[1] < QS) return; /* private counts only fall as classes are added */
-    int U = bs_pop(&uncov);
-    if (U == 0) { report(); return; }
-    int b = MAXSIZE - nch;
-    if (b <= 0) return;
-    if ((long long)b * M < U) return;
+/* LRC_PRUNE bit 2: remove from `allowed` every class u whose addition would
+ * leave some chosen class v without a private time (u covers every private
+ * time of v), and, with NORM, every class u that would leave class 1 with
+ * fewer than QS private times.  Private sets only shrink as classes are
+ * added, so no cover through this node that contains u can be reported
+ * (search() rejects it through npriv0 or the QS test before or at the leaf).
+ * Uses the symmetry "u covers a iff a covers u", i.e. who[a] == cov[a]. */
+static void forbid_classes(void) {
+    bset x, p1;
+    int have_p1 = 0;
+    memset(&p1, 0, sizeof p1);
+    for (int i = 0; i < nch; i++) {
+        int v = chosen[i];
+        int any = 0;
+        x = allowed;
+        for (int j = 0; j < M; j++) {
+            int a = covlist[v * M + j];
+            if (cnt[a] != 1) continue; /* a is private to v */
+            any = 1;
+            if (NORM && v == 1) bs_set(&p1, a);
+            for (int w = 0; w < NW; w++) x.w[w] &= who[a].w[w];
+        }
+        if (!any) continue; /* cannot happen when npriv0 == 0 */
+        for (int w = 0; w < NW; w++) allowed.w[w] &= ~x.w[w];
+        if (NORM && v == 1) have_p1 = 1;
+    }
+    if (have_p1 && QS > 0) {
+        int lim = pc[1] - QS; /* u may stay only if |cov[u] & P1| <= lim */
+        if (lim < M) {
+            for (int u = 1; u <= N; u++) {
+                if (!bs_get(&allowed, u)) continue;
+                if (bs_pop_and(&cov[u], &p1) > lim) bs_clr(&allowed, u);
+            }
+        }
+    }
+}
+
+static void search(void);
+
+/* bounds and branching at a node with U > 0 uncovered times and b > 0 free
+ * slots; `allowed` is already final for this node */
+static void search_body(int U, int b) {
     /* bound: sum of the b largest gains among allowed classes must reach U */
     int top[MAXK + 1];
     int nt = 0;
     for (int v = 1; v <= N; v++) {
-        if (!bs_get(&allowed, v)) continue;
+        if (!bs_get(&allowed, v)) { gainv[v] = 0; continue; }
         int g = bs_pop_and(&cov[v], &uncov);
+        gainv[v] = g;
         if (g == 0) continue;
         if (nt < b) {
             int i = nt++;
@@ -328,6 +382,19 @@ static void search(void) {
     int sum = 0;
     for (int i = 0; i < nt; i++) sum += top[i];
     if (sum < U) return;
+    if (PRUNE & 1) {
+        /* fractional set-cover bound: need >= sum over uncovered a of 1/G(a) */
+        double need = 0.0;
+        for (int a = 1; a <= N; a++) {
+            if (!bs_get(&uncov, a)) continue;
+            const int *cl = covlist + (size_t)a * M; /* classes covering a */
+            int mg = 0;
+            for (int j = 0; j < M; j++) if (gainv[cl[j]] > mg) mg = gainv[cl[j]];
+            if (mg == 0) return;
+            need += 1.0 / mg;
+        }
+        if (need > (double)b + 1e-9) return;
+    }
     /* branch on the uncovered time with the fewest allowed candidates */
     int best = -1, bestc = 1 << 30;
     for (int a = 1; a <= N; a++) {
@@ -350,6 +417,27 @@ static void search(void) {
         if (timed_out || stopnow) break;
     }
     for (int i = 0; i < nc; i++) bs_set(&allowed, cands[i]);
+}
+
+static void search(void) {
+    nodes++;
+    if ((nodes & 0xFFFF) == 0 && timecap > 0 && now() - tstart > timecap) timed_out = 1;
+    if (timed_out || stopnow) return;
+    if (npriv0) return;
+    if (NORM && pc[1] < QS) return; /* private counts only fall as classes are added */
+    int U = bs_pop(&uncov);
+    if (U == 0) { report(); return; }
+    int b = MAXSIZE - nch;
+    if (b <= 0) return;
+    if ((long long)b * M < U) return;
+    if (PRUNE & 2) {
+        bset saved = allowed;
+        forbid_classes();
+        search_body(U, b);
+        allowed = saved;
+    } else {
+        search_body(U, b);
+    }
 }
 
 static void run_covers(int maxsize, double cap, int norm) {
@@ -745,8 +833,12 @@ int main(int argc, char **argv) {
                         "cascade|cascadebb|scascade|scascadebb K P levels v.. | "
                         "gate K P levels timecap liftcap [norm] [bb] [shift] [ext] | "
                         "tuples K P [ext] [norm] | "
-                        "shiftok K P l w..\n");
+                        "shiftok K P l w..   (environment: LRC_PRUNE=0..3)\n");
         return 1;
+    }
+    {
+        const char *pe = getenv("LRC_PRUNE");
+        PRUNE = pe ? atoi(pe) : 0;
     }
     const char *mode = argv[1];
     int k = atoi(argv[2]);
@@ -773,8 +865,10 @@ int main(int argc, char **argv) {
         }
         int tau = 0;
         for (int s = 1; s <= maxsize; s++) if (count_by_size[s]) { tau = s; break; }
-        printf("S k=%d p=%d n=%d m=%d norm=%d qs=%d nodes=%lld timed_out=%d tau=%d orbits=%ld seconds=%.3f\n",
-               K, P, N, M, NORM, QS, nodes, timed_out, tau, nfound, now() - tstart);
+        long raw = 0;
+        for (int s = 1; s <= maxsize; s++) raw += raw_by_size[s];
+        printf("S k=%d p=%d n=%d m=%d norm=%d qs=%d nodes=%lld timed_out=%d tau=%d orbits=%ld seconds=%.3f prune=%d raw=%ld\n",
+               K, P, N, M, NORM, QS, nodes, timed_out, tau, nfound, now() - tstart, PRUNE, raw);
         return 0;
     }
     if (!strcmp(mode, "tau")) {
@@ -800,8 +894,8 @@ int main(int argc, char **argv) {
             none_upto = s;
         }
         STOPFIRST = 0;
-        printf("T k=%d p=%d n=%d m=%d maxsize=%d tau=%d none_upto=%d unknown=%d nodes=%lld seconds=%.3f\n",
-               K, P, N, M, maxsize, tau, none_upto, unknown, totnodes, now() - t0);
+        printf("T k=%d p=%d n=%d m=%d maxsize=%d tau=%d none_upto=%d unknown=%d nodes=%lld seconds=%.3f prune=%d\n",
+               K, P, N, M, maxsize, tau, none_upto, unknown, totnodes, now() - t0, PRUNE);
         if (tau) {
             printf("F");
             for (int i = 0; i < nfirst; i++) printf(" %d", firstcov[i]);
@@ -872,9 +966,9 @@ int main(int argc, char **argv) {
         int tau = 0;
         for (int s = 1; s <= k; s++) if (count_by_size[s]) { tau = s; break; }
         printf("{\"k\":%d,\"p\":%d,\"n\":%d,\"m\":%d,\"norm\":%d,\"bb\":%d,\"shift\":%d,\"ext\":%d,\"qs\":%d,"
-               "\"cover_nodes\":%lld,\"cover_timed_out\":%d,"
+               "\"prune\":%d,\"cover_nodes\":%lld,\"cover_timed_out\":%d,"
                "\"cover_seconds\":%.3f,\"tau\":%d,\"orbits_by_size\":{",
-               K, P, N, M, NORM, g_bb, SHIFT, ext, QS, nodes, timed_out, tcov, tau);
+               K, P, N, M, NORM, g_bb, SHIFT, ext, QS, PRUNE, nodes, timed_out, tcov, tau);
         int first = 1;
         for (int s = 1; s <= k; s++) if (count_by_size[s]) {
             printf("%s\"%d\":%ld", first ? "" : ",", s, count_by_size[s]);
