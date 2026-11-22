@@ -45,21 +45,42 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest results (2026-11-22, `RESULTS_run14.md`)
+## Latest results (2026-11-22, `RESULTS_run16.md`)
 
-- **Engine cross-check:** our two independent engines agree on all 8 small gates
-  that both finished (k = 8 to 11).
-- **Re-check of the 15-runner proof's tau table:** at 24 of the 71 primes of
-  Table 2 of arXiv:2609.02604 v2 our search agrees with the paper (all 19
-  small-cover primes, and 5 of the "no small cover" primes); no disagreement; 47
-  primes hit the time cap.
-- **16 runners, small covers:** every prime from 17 to 277 except 29, 31 and 239
-  has a cover of the folded times by at most 13 speed classes (269 and 271
-  undecided). Small covers therefore persist beyond the 15-runner case's last one
-  (241), and the gates at those primes need the general completion.
-- **Negative:** with engine 2, none of the 20 gates for 14 to 16 runners at
-  primes 239 to 809 got through the level-one cover search in 800 s. The cover
-  search, not the lifting, is our bottleneck.
+- **One computation for every prime, graded:** the prime-free lower cascade for
+  the tight orbit (1..15) is empty at level 16 (prediction P5b held), but the
+  upper cascade U_251 keeps 9 lifts at level 16 and 2 at level 32 (prediction P5
+  **failed**). So Lemma U alone cannot show that (1..15) dies at every gate prime.
+  The external check against Rosenfeld's 8-runner proof (X2), the hand check
+  against Lemma G2 (X3) and the sanity checks (S1) all held.
+- **Pilot, negative:** engine 1 finished none of the ten k = 15 cover searches
+  (p = 251 to 809) within 1,500 s, confirming the engine-2 result below with a
+  second engine and a longer cap.
+- Earlier (`RESULTS_run14.md`): the two engines agree on all 8 small gates both
+  finished; our tau search agrees with Table 2 of arXiv:2609.02604 v2 at 24 of
+  its 71 primes, with no disagreement; every prime from 17 to 277 except 29, 31
+  and 239 has a cover on at most 13 classes for 16 runners (269 and 271
+  undecided).
+
+## From the uniform cascade to every prime (`THEORY_15.md`, new)
+
+Every lift that U_251 keeps does have strict witness intervals, only shorter than
+1/251. `thresh.py` lists those intervals exactly, which gives:
+
+- **Lemma E:** an exact test of one lift at one prime p (does some point j/p fall
+  in a witness interval?), one integer comparison per interval;
+- **Lemma T:** a kill threshold P*(z) = 1/(longest interval): the lift is proper
+  at every prime above it;
+- **Lemma R:** at every prime p >= 251 the true cascade is exactly the part of
+  U_251 that is improper at p.
+
+Job `lrc16-uniform-v2` applies them to (1..15) and (1..13,15,28): U_251 to level
+128, P*_L per level, and the exact cascade at every prime from 251 to at least
+3,000. If the orbit dies by a fixed level at every scanned prime and P*_L falls
+inside the scanned range, then the tight orbit (1..15) dies at every prime >= 251,
+and 16 runners needs no fibre search for it, unlike 14 and 15 runners. The
+predictions, including ones that may fail, are pre-registered in
+`PLAN_addendum9.md`; `test_thresh.py` checks all three lemmas against brute force.
 
 ## Engine 3: two safe prunings of the cover search (`THEORY_13.md`)
 
@@ -158,7 +179,8 @@ witness 1/16 directly:
 - **Lemma C:** the lifting cascade may drop every lift that Lemma S certifies.
 
 `PLAN.md` (addendum 2) pre-registers the prediction that the orbit of (1..15) is
-empty at level 16 at all ten pilot primes. Job `lrc16-shift-v2` tests it.
+empty at level 16 at all ten pilot primes. Job `lrc16-shift-v2` tests it, and
+`lrc16-uniform-v2` re-reads it with the independent method of `THEORY_15.md`.
 
 ## Tight sets for 16 runners (`THEORY.md`, Section 7)
 
@@ -171,11 +193,10 @@ survivors at all at the 16-runner pilot gates (prediction P4).
 ## One computation for every prime (`THEORY.md` Section 8, `THEORY_9.md`)
 
 **Lemma U** separates the prime from the lifting problem: two prime-free cascades
-sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P. If
-U_251(16) is empty for s = (1..15), the orbit of (1..15) dies by level 16 at every
-planned gate in one computation. `uniform.py` and the independent `grid.py`
-(Lemma G) compute it; job `lrc16-uniform-v1` runs it (`PLAN.md` addendum 5,
-`PLAN_addendum6.md`).
+sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
+`uniform.py` and the independent `grid.py` (Lemma G) compute it. Job
+`lrc16-uniform-v1` ran it (graded in `RESULTS_run16.md`): U_inf(16) is empty for
+(1..15), U_251(16) is not. `THEORY_15.md` closes the gap prime by prime.
 
 ## Small covers and the gate primes (`THEORY.md`, Section 6)
 
@@ -191,6 +212,7 @@ decides whether such a cover exists. Results: see "Latest results" above.
 | `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade (both engines), shift filter, general completion, engine-3 and engine-4 pruning (`LRC_PRUNE` bits 1, 2, 4) |
 | `lrc_ref.py` | brute-force reference used to test the engine on small cases; exact loneliness; Lemma S |
 | `uniform.py` | prime-free lifting of one orbit (Lemma U): U_inf and U_P cascades in exact arithmetic |
+| `thresh.py` | exact per-prime test, kill thresholds and the exact cascade inside U_P (Lemmas E, T, R of `THEORY_15.md`) |
 | `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test |
 | `bounds.py` | exact flag bound (rational arithmetic), shape bound sweep, exact n = 15 shape checks, gate-set planning |
 | `capped.py` | the flag bound with the dual cap t_d <= 1/3 (Proposition 10.2), solved exactly |
@@ -201,14 +223,15 @@ decides whether such a cover exists. Results: see "Latest results" above.
 | `job_engine3.py` | engine-3 cross-check (A1), consistency (A2), speed (S1), the undecided tau primes (P3, R1) |
 | `job_orbit.py` | engine-4 checks: same answers (M1), work (M2), speed over engine 3 (S2) |
 | `job_uniform.py` | Lemma U cascades for (1..15), (1..13,15,28) and the 14/15-runner sanity orbits |
-| `fetch_pinned.py` | fetches the engine files at a pinned commit for a compete job and records their SHA-256 |
+| `job_uniform2.py` | U_251 to level 128, thresholds, and the exact cascade at every prime from 251 (T1-T4) |
+| `fetch_pinned.py`, `fetch_uniform.py` | fetch published files at a pinned commit for a compete job and record their SHA-256 |
 | `probe.py` | cost probe: downloads Allikvere's public pipeline from Zenodo, checks hashes, extracts his per-gate costs, builds his generator for K = 14 and 15, times it (`COST.md`) |
 | `results/` | raw outputs of finished jobs, copied unchanged |
-| `test_*.py` | tests: the paper's constants, C against Python, engine 1 against engine 2, engine 3 against engine 2 and its two lemmas by brute force (`test_prune.py`), engine 4 and Lemma M by brute force and a second Python search (`test_orbit.py`), Lemmas S, L, U, G, tight sets, the probe's parsers, the dual cap and its re-checks |
-| `THEORY.md`, `THEORY_9.md` ... `THEORY_14.md` | the 16-runner bound, surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p, the dual cap and its limits, engine-3 prunings, engine-4 orbit pruning |
+| `test_*.py` | tests: the paper's constants, C against Python, engine 1 against engine 2, engine 3 against engine 2 and its two lemmas by brute force (`test_prune.py`), engine 4 and Lemma M by brute force and a second Python search (`test_orbit.py`), Lemmas S, L, U, G, E, T, R, tight sets, the probe's parsers, the dual cap and its re-checks |
+| `THEORY.md`, `THEORY_9.md` ... `THEORY_15.md` | the 16-runner bound, surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p, the dual cap and its limits, engine-3 prunings, engine-4 orbit pruning, the exact per-prime cascade |
 | `COST.md`, `COST_addendum1.md`, `SHARD_PLAN.md` | the cost of the 15-runner proof, what it implies for 16, and how the gates would be sharded |
-| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum8.md` | the pre-registered plan and what counts as success |
-| `RESULTS_run14.md` | graded results of `lrc16-engine2-v1` and `lrc16-tau-v2` |
+| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum9.md` | the pre-registered plan and what counts as success |
+| `RESULTS_run14.md`, `RESULTS_run16.md` | graded results of `lrc16-engine2-v1` and `lrc16-tau-v2`; of `lrc16-uniform-v1` and `lrc16-pilot-v1` |
 
 Build and test:
 
@@ -216,6 +239,7 @@ Build and test:
 cc -O3 -o lrc lrc.c
 python -m unittest -v
 python bounds.py 13 14 15
+python job_uniform2.py --out-dir out --only e15
 LRC_PRUNE=7 ./lrc tau 15 401 13 600
 LRC_PRUNE=7 ./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1 1 1
 ./lrc scascadebb 15 401 2,2,2,2,2,2 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
@@ -233,7 +257,8 @@ Allikvere's (arXiv:2609.02604), including the Lemma 3.3 and Proposition 3.4 that
 Section 12 examines, and the tau table that `job_tau.py` re-checks. The
 tight-set classification used in `THEORY.md` Section 7 is Yuhan Zhang's
 (arXiv:2608.13599) and Goddyn and Wong's. The relation theorem discussed in
-`COST_addendum1.md` is Beck and Everett's (arXiv:2609.06259). The pipeline that
+`COST_addendum1.md` is Beck and Everett's (arXiv:2609.06259). The 8-runner check
+X2 uses Matthieu Rosenfeld's Lemma 6 (arXiv:2509.14111). The pipeline that
 `probe.py` measures is Jaan Allikvere's (Zenodo 10.5281/zenodo.22667683 and
 10.5281/zenodo.22066772, CC BY 4.0); it is downloaded, not copied into this
 repository.
