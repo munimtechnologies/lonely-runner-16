@@ -56,6 +56,31 @@ note is re-checked in exact rational arithmetic by `test_bounds.py`. A second,
 independent pass over the derivation (run 3) agreed, apart from one rounded
 constant that nothing depends on (erratum in `THEORY.md`).
 
+## A sharper flag bound: the dual cap (`THEORY_10.md`)
+
+The flag bound minimises the product of the Gram-Schmidt lengths t_1, ..., t_d of a
+KZ basis of the lattice Lambda = P Z^n. `COST_addendum1.md` showed that no further
+KZ fact can raise that minimum. Section 10 uses an arithmetic fact instead. The
+dual of Lambda is the lattice of **integer relations** of the speeds, and the last
+Gram-Schmidt length is exactly t_d = 1 / (sum_k q_k h_k^2) for an integer relation
+h. Since a counterexample's speeds are distinct and positive, every relation has
+sum h_k^2 >= 3, so **t_d < 1/3** (Lemma 10.1). The old minimiser has t_d = c_d =
+17/36 for 16 runners, so the cap bites. Solving the capped problem exactly
+(`capped.py`, a vertex enumeration cross-checked by brute force in small
+dimensions):
+
+| runners | min prod t_i, as a multiple of Allikvere's K_n | drop in the log speed-product bound | gate target |
+|---|---|---|---|
+| 15 | 1369/1029 = 1.3304 | 1.9985 nats | 401.9846 -> 399.986 |
+| 16 | 12150/9163 = 1.3260 | 2.1162 nats | 483.239 -> 481.123 |
+
+This is a small saving (about a third of one gate prime near p = 800). It costs no
+computation, and it is, as far as we know, the first improvement of the flag bound
+from the arithmetic of the speeds. Section 10.4 also gives the exact loneliness
+constant for hyperplanes (1/2 - 1/(2||h||_1) for odd ||h||_1), and shows that it adds
+nothing more at the capped minimiser. Not yet checked by a human: `COST.md` keeps
+483.239 until it is.
+
 ## What it would cost (`COST.md`, `COST_addendum1.md`)
 
 The 15-runner proof's own audit file (Zenodo 10.5281/zenodo.22667683, CC BY 4.0)
@@ -82,7 +107,9 @@ new computation:
 - **Stronger Korkine-Zolotarev facts** cannot sharpen the flag bound. An orthogonal
   lattice with the optimal profile is itself a KZ basis, so the minimum prod c_r
   stands. Only a stronger prefix inequality (Proposition 3.4) would help: scaling
-  every B_r by f lowers the gate target by 105 ln f nats.
+  every B_r by f lowers the gate target by 105 ln f nats. (Section 10 above gets
+  around this a different way: that orthogonal lattice is not the lattice of any
+  vector with distinct speeds.)
 
 ## Surviving orbits (`THEORY.md`, Section 5)
 
@@ -193,14 +220,16 @@ or the `shift` argument of `gate`) and the general completion (`ext` argument).
 | `uniform.py` | prime-free lifting of one orbit (Lemma U): U_inf and U_P cascades in exact arithmetic |
 | `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test, exact at D = 2Q; near-grid masks for Lemma G2 |
 | `bounds.py` | exact flag bound (rational arithmetic), shape bound sweep, exact n = 15 shape checks, gate-set planning |
+| `capped.py` | the flag bound with the dual cap t_d <= 1/3 (Proposition 10.2), solved exactly by vertex enumeration, with a brute-force cross-check; the Lemma 10.1 identity on explicit lattices; Lemma 10.4 |
 | `job.py` | `repro` (k = 13, 14 re-check), `pilot` (k = 15 survey), `engine2` (cross-check, then both with engine 2) |
 | `job_shift.py` | k = 15 orbit probe (prediction P1) and shift-filtered pilot gates |
 | `job_tau.py` | tau(p) scans: the paper's k = 14 table (R1) and k = 15 up to p = 1000 (P3) |
 | `job_uniform.py` | Lemma U cascades for (1..15), (1..13,15,28) and the 14/15-runner sanity orbits (P5, P6, S1) |
 | `probe.py` | cost probe: downloads Allikvere's public pipeline from Zenodo, checks hashes, extracts his per-gate costs, builds his generator for K = 14 and 15, times it (`COST.md`) |
-| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`), the probe's parsers (`test_probe.py`), the Minkowski and flag-sensitivity facts (`test_cost_addendum1.py`) |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`), the probe's parsers (`test_probe.py`), the Minkowski and flag-sensitivity facts (`test_cost_addendum1.py`), the dual cap (`test_capped.py`) |
 | `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p |
 | `THEORY_9.md` | Section 9: grid-point witnesses, Lemma G2, Lemma U at any level |
+| `THEORY_10.md` | Section 10: the dual cap t_d < 1/3 and the sharper flag bound for 15 and 16 runners; exact hyperplane loneliness |
 | `COST.md` | the published cost of the 15-runner proof, what it implies for 16 runners, and the pre-registered decision rule for the probe |
 | `COST_addendum1.md` | two cost-reduction ideas checked and closed (Beck-Everett relations; KZ constraints in the flag bound) |
 | `PLAN.md`, `PLAN_addendum6.md` | the pre-registered plan and what counts as success |
@@ -211,6 +240,7 @@ Build and test:
 cc -O3 -o lrc lrc.c
 python -m unittest -v
 python bounds.py 13 14 15
+python capped.py
 python job_uniform.py --out-dir out --only e7
 python -I probe.py --data-dir data --out-dir out --budget-min 60
 ./lrc tau 15 401 13 600
@@ -223,6 +253,7 @@ python -I probe.py --data-dir data --out-dir out --budget-min 60
 All the mathematics this builds on belongs to the authors cited above. This
 repository only reimplements their published definitions so the computation can
 be checked by an independent route and, if it holds, pushed one runner further.
+The flag bound that Section 10 sharpens is Jaan Allikvere's (arXiv:2609.02604).
 The tight-set classification used in `THEORY.md` Section 7 is Yuhan Zhang's
 (arXiv:2608.13599) and Goddyn and Wong's. The relation theorem discussed in
 `COST_addendum1.md` is Beck and Everett's (arXiv:2609.06259). The pipeline that
