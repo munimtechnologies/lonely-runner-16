@@ -1,0 +1,329 @@
+{
+ "mode": "pilot",
+ "config": {
+  "gates": [
+   [
+    15,
+    809
+   ],
+   [
+    15,
+    701
+   ],
+   [
+    15,
+    601
+   ],
+   [
+    15,
+    503
+   ],
+   [
+    15,
+    449
+   ],
+   [
+    15,
+    401
+   ],
+   [
+    15,
+    353
+   ],
+   [
+    15,
+    307
+   ],
+   [
+    15,
+    283
+   ],
+   [
+    15,
+    251
+   ]
+  ],
+  "levels": "2,2,2,2,2",
+  "timecap": 1500,
+  "liftcap": 1000000
+ },
+ "bounds_n15": {
+  "H_lower_bound": 944.8395618905731,
+  "r_n_used": "61/125",
+  "log_product_bound": "496.665422181958916078061760055369718832568824572902391236792",
+  "required_gate_logsum": "483.177416190633594497780797999492145877182182037267868114830",
+  "example_gate_set": {
+   "from": 251,
+   "to": 751,
+   "count": 80,
+   "logsum": 492.59270404124806
+  }
+ },
+ "gates": [
+  {
+   "k": 15,
+   "p": 809,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 1
+   },
+   "cover_seconds": 1500.345,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wall_seconds": 1506.6,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 701,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 1
+   },
+   "cover_seconds": 1500.108,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wall_seconds": 1506.3,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 601,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 1
+   },
+   "cover_seconds": 1500.221,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wall_seconds": 1506.4,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 503,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 1
+   },
+   "cover_seconds": 1500.103,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wall_seconds": 1506.3,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 449,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 8
+   },
+   "cover_seconds": 1500.02,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wall_seconds": 1506.2,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 401,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 63
+   },
+   "cover_seconds": 1500.01,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wall_seconds": 1506.2,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 353,
+   "tau": 14,
+   "orbits_by_size": {
+    "14": 5,
+    "15": 6082
+   },
+   "cover_seconds": 1500.011,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wall_seconds": 1506.2,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 307,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 1930
+   },
+   "cover_seconds": 1500.014,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wall_seconds": 1506.2,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 283,
+   "tau": 14,
+   "orbits_by_size": {
+    "14": 2,
+    "15": 10807
+   },
+   "cover_seconds": 1500.053,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wall_seconds": 1505.3,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 251,
+   "tau": 14,
+   "orbits_by_size": {
+    "14": 53,
+    "15": 99011
+   },
+   "cover_seconds": 1500.041,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "wall_seconds": 1505.3,
+   "error": null
+  }
+ ],
+ "survivor_examples": {
+  "k15_p809": [],
+  "k15_p701": [],
+  "k15_p601": [],
+  "k15_p503": [],
+  "k15_p449": [],
+  "k15_p401": [],
+  "k15_p353": [],
+  "k15_p307": [],
+  "k15_p283": [],
+  "k15_p251": []
+ }
+}
