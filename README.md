@@ -92,10 +92,20 @@ against Allikvere's Theorem 3.8. It then closed the two natural extensions:
   relations have Gram determinant >= 8 (Lemma 11.4). At the minimiser the product
   is only 75/784.
 
-The remaining obstruction is a counterexample whose last dual relation is a sum
-relation among speeds below about a fifth of the fastest (Remark 11.3). Not yet
-checked by a human. The 481.123 target is used for planning only, conditional on
-Section 10.
+**Every codimension at once (`THEORY_12.md`).** Allikvere's prefix inequality at
+level r uses his Lemma 3.3 on a subspace of codimension c = d - r, with constant
+1/(c+2). Replacing it by the exact loneliness constant of that particular
+subspace, and adding the dual caps of every rank, still gives exactly the
+Section 10 bound (Proposition 12.1). The worst case is a flag built on the tight
+speed sets (1, 2, 3), (1, 2, 3, 4), ...: at every level its exact constant equals
+the Lemma 3.3 constant (for codimension 2 this is Lemma 12.2, the forms
+(x, y, x+y, 2x+y) are never all lonelier than 1/4), and all its caps are slack at
+the Section 10 minimiser. So any further gain must use the speed ratios. One
+candidate is noted there and left unquantified: the shape bound's extremal case
+(all but one speed close together) admits no 3-term sum relation.
+
+Not yet checked by a human. The 481.123 target is used for planning only,
+conditional on Section 10.
 
 ## What it would cost (`COST.md`, `COST_addendum1.md`)
 
@@ -125,7 +135,8 @@ new computation:
   stands. Only a stronger prefix inequality (Proposition 3.4) would help: scaling
   every B_r by f lowers the gate target by 105 ln f nats. (Section 10 above gets
   around this a different way: that orthogonal lattice is not the lattice of any
-  vector with distinct speeds.)
+  vector with distinct speeds. Section 12 shows the exact constants of Proposition
+  3.4's own subspaces do not give such a scaling.)
 
 ## Surviving orbits (`THEORY.md`, Section 5)
 
@@ -255,11 +266,12 @@ or the `shift` argument of `gate`) and the general completion (`ext` argument).
 | `job_uniform.py` | Lemma U cascades for (1..15), (1..13,15,28) and the 14/15-runner sanity orbits (P5, P6, S1) |
 | `fetch_pinned.py` | fetches the engine files at a pinned commit for a compete job and records their SHA-256 |
 | `probe.py` | cost probe: downloads Allikvere's public pipeline from Zenodo, checks hashes, extracts his per-gate costs, builds his generator for K = 14 and 15, times it (`COST.md`) |
-| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`), the probe's parsers (`test_probe.py`), the Minkowski and flag-sensitivity facts (`test_cost_addendum1.py`), the dual cap (`test_capped.py`), its re-check and limits (`test_theory11.py`) |
+| `test_*.py` | tests: the paper's constants, the n = 15 constants, C against Python, engine 1 against engine 2, Lemmas S and L, tau and the general completion, tight sets (`test_tight.py`), the Lemma U sandwich (`test_uniform.py`), `grid.py` against `uniform.py` and Lemma G2 (`test_grid.py`), the probe's parsers (`test_probe.py`), the Minkowski and flag-sensitivity facts (`test_cost_addendum1.py`), the dual cap (`test_capped.py`), its re-check and limits (`test_theory11.py`), the all-codimension flag F* (`test_theory12.py`) |
 | `THEORY.md` | the 16-runner bound, derived step by step, the surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p |
 | `THEORY_9.md` | Section 9: grid-point witnesses, Lemma G2, Lemma U at any level |
 | `THEORY_10.md` | Section 10: the dual cap t_d < 1/3 and the sharper flag bound for 15 and 16 runners; exact hyperplane loneliness |
 | `THEORY_11.md` | Section 11: adversarial re-check of Section 10; the prefix bound at r = d-1 and the cap share one relation; why coupling them and rank-2 caps gain nothing |
+| `THEORY_12.md` | Section 12: exact loneliness constants at every codimension plus dual caps of every rank reproduce the Section 10 bound and no more (Prop. 12.1, Lemma 12.2) |
 | `COST.md` | the published cost of the 15-runner proof, what it implies for 16 runners, and the pre-registered decision rule for the probe |
 | `COST_addendum1.md` | two cost-reduction ideas checked and closed (Beck-Everett relations; KZ constraints in the flag bound) |
 | `PLAN.md`, `PLAN_addendum6.md` | the pre-registered plan and what counts as success |
@@ -283,8 +295,9 @@ python -I probe.py --data-dir data --out-dir out --budget-min 60
 All the mathematics this builds on belongs to the authors cited above. This
 repository only reimplements their published definitions so the computation can
 be checked by an independent route and, if it holds, pushed one runner further.
-The flag bound that Sections 10 and 11 sharpen and re-check is Jaan Allikvere's
-(arXiv:2609.02604). The tight-set classification used in `THEORY.md` Section 7 is
+The flag bound that Sections 10 to 12 sharpen, re-check and bound is Jaan
+Allikvere's (arXiv:2609.02604), including the Lemma 3.3 and Proposition 3.4 that
+Section 12 examines. The tight-set classification used in `THEORY.md` Section 7 is
 Yuhan Zhang's (arXiv:2608.13599) and Goddyn and Wong's. The relation theorem
 discussed in `COST_addendum1.md` is Beck and Everett's (arXiv:2609.06259). The
 pipeline that `probe.py` measures is Jaan Allikvere's (Zenodo
