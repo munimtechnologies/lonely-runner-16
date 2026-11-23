@@ -67,6 +67,23 @@ This is the finite-checking framework from those papers:
   from 17 to 277 except 29, 31 and 239 has a cover on at most 13 classes for 16
   runners (269 and 271 undecided).
 
+## Non-binary levels: re-checking the 14- and 15-runner fibre searches (`THEORY_16.md`)
+
+The published 14- and 15-runner proofs run two extra searches at **every** gate
+prime. They lift the tight orbits (1..13) and (1..11,13,24) to level 14, and
+(1..14) to level 15, because those orbits survive every binary level (THEORY.md
+8.5 proves they must when k + 1 is not a power of 2). `uniform_nb.py` carries the
+prime-free cascade (Lemma U, and Lemmas E, T, R of `THEORY_15.md`) to any level.
+It uses the general gcd clause over the primes dividing the level, and it computes
+each level two ways: as a chain of divisors, and by a CRT combination of coprime
+levels (the uniform form of the paper's Lemma 4.5). Job `lrc-nb` (filed as
+`lrc16-engine2-v2`) asks whether one computation can replace those per-prime
+searches at every prime from 239 (k = 14) or 199 (k = 13) upward. It also
+re-checks the paper's outcome at its gate primes. The predictions, including the
+consistency condition the paper's own result forces (U_inf(L) must be empty), are
+pre-registered in `PLAN_addendum10.md`. `test_uniform_nb.py` checks everything
+against a brute force over all times at levels 3, 5, 6, 14 and 15.
+
 ## From the uniform cascade to every prime (`THEORY_15.md`)
 
 Every lift that U_251 keeps does have strict witness intervals, only shorter than
@@ -202,7 +219,8 @@ survivors at all at the 16-runner pilot gates (prediction P4).
 sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
 `uniform.py` and the independent `grid.py` (Lemma G) compute it. Job
 `lrc16-uniform-v1` ran it (graded in `RESULTS_run16.md`): U_inf(16) is empty for
-(1..15), U_251(16) is not. `THEORY_15.md` closes the gap prime by prime.
+(1..15), U_251(16) is not. `THEORY_15.md` closes the gap prime by prime, and
+`THEORY_16.md` extends all of it to non-binary levels.
 
 ## Small covers and the gate primes (`THEORY.md`, Section 6)
 
@@ -219,6 +237,7 @@ decides whether such a cover exists. Results: see "Latest results" above.
 | `lrc_ref.py` | brute-force reference used to test the engine on small cases; exact loneliness; Lemma S |
 | `uniform.py` | prime-free lifting of one orbit (Lemma U): U_inf and U_P cascades in exact arithmetic |
 | `thresh.py` | exact per-prime test, kill thresholds and the exact cascade inside U_P (Lemmas E, T, R of `THEORY_15.md`) |
+| `uniform_nb.py` | the same at any level (14 = 2*7, 15 = 3*5, ...): general gcd clause, divisor chains, CRT combination (`THEORY_16.md`) |
 | `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test |
 | `bounds.py` | exact flag bound (rational arithmetic), shape bound sweep, exact n = 15 shape checks, gate-set planning |
 | `capped.py` | the flag bound with the dual cap t_d <= 1/3 (Proposition 10.2), solved exactly |
@@ -230,13 +249,14 @@ decides whether such a cover exists. Results: see "Latest results" above.
 | `job_orbit.py` | engine-4 checks: same answers (M1), work (M2), speed over engine 3 (S2) |
 | `job_uniform.py` | Lemma U cascades for (1..15), (1..13,15,28) and the 14/15-runner sanity orbits |
 | `job_uniform2.py` | U_251 to level 128, thresholds, and the exact cascade at every prime from 251 (T1-T4) |
-| `fetch_pinned.py`, `fetch_uniform.py` | fetch published files at a pinned commit for a compete job and record their SHA-256 |
+| `job_nb.py` | the tight orbits of the 14/15-runner proofs at levels 14 and 15, for every prime from 199/239 (N1-N4, X1) |
+| `fetch_pinned.py`, `fetch_uniform.py`, `fetch_nb.py` | fetch published files at a pinned commit for a compete job and record their SHA-256 |
 | `probe.py` | cost probe: downloads Allikvere's public pipeline from Zenodo, checks hashes, extracts his per-gate costs, builds his generator for K = 14 and 15, times it (`COST.md`) |
 | `results/` | raw outputs of finished jobs, copied unchanged |
-| `test_*.py` | tests: the paper's constants, C against Python, engine 1 against engine 2, engine 3 against engine 2 and its two lemmas by brute force (`test_prune.py`), engine 4 and Lemma M by brute force and a second Python search (`test_orbit.py`), Lemmas S, L, U, G, E, T, R, tight sets, the probe's parsers, the dual cap and its re-checks |
-| `THEORY.md`, `THEORY_9.md` ... `THEORY_15.md` | the 16-runner bound, surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p, the dual cap and its limits, engine-3 prunings, engine-4 orbit pruning, the exact per-prime cascade |
+| `test_*.py` | tests: the paper's constants, C against Python, engine 1 against engine 2, engine 3 against engine 2 and its two lemmas by brute force (`test_prune.py`), engine 4 and Lemma M by brute force and a second Python search (`test_orbit.py`), Lemmas S, L, U, G, E, T, R, tight sets, non-binary levels (`test_uniform_nb.py`), the probe's parsers, the dual cap and its re-checks |
+| `THEORY.md`, `THEORY_9.md` ... `THEORY_16.md` | the 16-runner bound, surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p, the dual cap and its limits, engine-3 prunings, engine-4 orbit pruning, the exact per-prime cascade, non-binary levels |
 | `COST.md`, `COST_addendum1.md`, `SHARD_PLAN.md` | the cost of the 15-runner proof, what it implies for 16, and how the gates would be sharded |
-| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum9.md` | the pre-registered plan and what counts as success |
+| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum10.md` | the pre-registered plan and what counts as success |
 | `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md` | graded results of `lrc16-engine2-v1` and `lrc16-tau-v2`; of `lrc16-uniform-v1` and `lrc16-pilot-v1`; of `lrc16-shift-v2` |
 
 Build and test:
@@ -246,6 +266,7 @@ cc -O3 -o lrc lrc.c
 python -m unittest -v
 python bounds.py 13 14 15
 python job_uniform2.py --out-dir out --only e15
+python job_nb.py --out-dir out --only a14
 LRC_PRUNE=7 ./lrc tau 15 401 13 600
 LRC_PRUNE=7 ./lrc gate 15 401 2,2,2,2,2 1500 1000000 1 1 1 1
 ./lrc scascadebb 15 401 2,2,2,2,2,2 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
@@ -257,7 +278,9 @@ All the mathematics this builds on belongs to the authors cited above. This
 repository only reimplements their published definitions so the computation can
 be checked by an independent route and, if it holds, pushed one runner further.
 The normalisation that engines 3 and 4 prune against is Lemma 4.1 of Jaan
-Allikvere's paper (arXiv:2609.02604).
+Allikvere's paper (arXiv:2609.02604). The level-14 and level-15 fibre searches that
+`THEORY_16.md` recasts, the gcd condition (Definition 2.1(a)) and the 3 x 5 split
+(Lemma 4.5) are also his.
 The flag bound that Sections 10 to 12 sharpen, re-check and bound is Jaan
 Allikvere's (arXiv:2609.02604), including the Lemma 3.3 and Proposition 3.4 that
 Section 12 examines, and the tau table that `job_tau.py` re-checks. The
