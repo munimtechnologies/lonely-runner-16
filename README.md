@@ -45,24 +45,29 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest results (2026-11-22, `RESULTS_run16.md`)
+## Latest results (2026-11-23, `RESULTS_run17.md`)
 
-- **One computation for every prime, graded:** the prime-free lower cascade for
-  the tight orbit (1..15) is empty at level 16 (prediction P5b held), but the
-  upper cascade U_251 keeps 9 lifts at level 16 and 2 at level 32 (prediction P5
-  **failed**). So Lemma U alone cannot show that (1..15) dies at every gate prime.
-  The external check against Rosenfeld's 8-runner proof (X2), the hand check
-  against Lemma G2 (X3) and the sanity checks (S1) all held.
-- **Pilot, negative:** engine 1 finished none of the ten k = 15 cover searches
-  (p = 251 to 809) within 1,500 s, confirming the engine-2 result below with a
-  second engine and a longer cap.
-- Earlier (`RESULTS_run14.md`): the two engines agree on all 8 small gates both
-  finished; our tau search agrees with Table 2 of arXiv:2609.02604 v2 at 24 of
-  its 71 primes, with no disagreement; every prime from 17 to 277 except 29, 31
-  and 239 has a cover on at most 13 classes for 16 runners (269 and 271
-  undecided).
+- **The tight orbit dies by level 16 at all ten pilot primes (prediction P1 held).**
+  For the tight speed vector (1..15), the binary lifting cascade keeps 1, 2 and 4
+  lifts at levels 2, 4 and 8 and **none at level 16** at each of p = 251, 283, 307,
+  353, 401, 449, 503, 601, 701 and 809, with and without the shift filter. For 14
+  and 15 runners the tight vectors survive every binary level and need separate
+  fibre searches (arXiv:2609.02604). At these primes, 16 runners needs none. The
+  vector (1..13, 15, 28) dies by level 4 everywhere (P2 held). Whether this holds
+  at *every* prime >= 251 is the question of the queued job `lrc16-uniform-v2`.
+- **Cover search, negative again:** the shift-filtered pilot gates (engine 2, 600 s)
+  finished none of the ten k = 15 cover searches, so P4 stays untested through all
+  three engines. New measurement: tau_15(307) <= 14.
+- Earlier (`RESULTS_run16.md`): the prime-free lower cascade for (1..15) is empty
+  at level 16 (P5b held), but the upper cascade U_251 keeps 9 lifts at level 16
+  and 2 at level 32 (P5 **failed**); engine 1 finished none of the ten cover
+  searches within 1,500 s. (`RESULTS_run14.md`): the two engines agree on all 8
+  small gates both finished; our tau search agrees with Table 2 of
+  arXiv:2609.02604 v2 at 24 of its 71 primes, with no disagreement; every prime
+  from 17 to 277 except 29, 31 and 239 has a cover on at most 13 classes for 16
+  runners (269 and 271 undecided).
 
-## From the uniform cascade to every prime (`THEORY_15.md`, new)
+## From the uniform cascade to every prime (`THEORY_15.md`)
 
 Every lift that U_251 keeps does have strict witness intervals, only shorter than
 1/251. `thresh.py` lists those intervals exactly, which gives:
@@ -178,9 +183,10 @@ witness 1/16 directly:
   substitute for the paper's Lemma 4.6, which is useless at d = 2.
 - **Lemma C:** the lifting cascade may drop every lift that Lemma S certifies.
 
-`PLAN.md` (addendum 2) pre-registers the prediction that the orbit of (1..15) is
-empty at level 16 at all ten pilot primes. Job `lrc16-shift-v2` tests it, and
-`lrc16-uniform-v2` re-reads it with the independent method of `THEORY_15.md`.
+`PLAN.md` (addendum 2) pre-registered the prediction that the orbit of (1..15) is
+empty at level 16 at all ten pilot primes. Job `lrc16-shift-v2` confirmed it
+(`RESULTS_run17.md`); `lrc16-uniform-v2` re-reads it with the independent method
+of `THEORY_15.md` and extends it to every prime from 251 upward.
 
 ## Tight sets for 16 runners (`THEORY.md`, Section 7)
 
@@ -231,7 +237,7 @@ decides whether such a cover exists. Results: see "Latest results" above.
 | `THEORY.md`, `THEORY_9.md` ... `THEORY_15.md` | the 16-runner bound, surviving-orbit lemmas, small covers, tight sets, lifting uniformly in p, the dual cap and its limits, engine-3 prunings, engine-4 orbit pruning, the exact per-prime cascade |
 | `COST.md`, `COST_addendum1.md`, `SHARD_PLAN.md` | the cost of the 15-runner proof, what it implies for 16, and how the gates would be sharded |
 | `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum9.md` | the pre-registered plan and what counts as success |
-| `RESULTS_run14.md`, `RESULTS_run16.md` | graded results of `lrc16-engine2-v1` and `lrc16-tau-v2`; of `lrc16-uniform-v1` and `lrc16-pilot-v1` |
+| `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md` | graded results of `lrc16-engine2-v1` and `lrc16-tau-v2`; of `lrc16-uniform-v1` and `lrc16-pilot-v1`; of `lrc16-shift-v2` |
 
 Build and test:
 

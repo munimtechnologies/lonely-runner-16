@@ -1,0 +1,427 @@
+{
+ "part": "B",
+ "gates": [
+  {
+   "k": 15,
+   "p": 251,
+   "tau": 14,
+   "orbits_by_size": {
+    "14": 10,
+    "15": 35328
+   },
+   "cover_seconds": 600.081,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sum_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "shift_removed_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tuples_using_shift": 0,
+   "total_seconds": 600.081,
+   "wall_seconds": 601.6,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 283,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 5725
+   },
+   "cover_seconds": 600.009,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sum_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "shift_removed_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tuples_using_shift": 0,
+   "total_seconds": 600.009,
+   "wall_seconds": 601.5,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 307,
+   "tau": 14,
+   "orbits_by_size": {
+    "14": 2,
+    "15": 8924
+   },
+   "cover_seconds": 600.095,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sum_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "shift_removed_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tuples_using_shift": 0,
+   "total_seconds": 600.095,
+   "wall_seconds": 601.6,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 353,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 2407
+   },
+   "cover_seconds": 600.183,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sum_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "shift_removed_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tuples_using_shift": 0,
+   "total_seconds": 600.183,
+   "wall_seconds": 601.7,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 401,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 26
+   },
+   "cover_seconds": 600.073,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sum_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "shift_removed_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tuples_using_shift": 0,
+   "total_seconds": 600.074,
+   "wall_seconds": 601.5,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 449,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 4
+   },
+   "cover_seconds": 600.024,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sum_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "shift_removed_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tuples_using_shift": 0,
+   "total_seconds": 600.024,
+   "wall_seconds": 601.5,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 503,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 1
+   },
+   "cover_seconds": 600.217,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sum_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "shift_removed_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tuples_using_shift": 0,
+   "total_seconds": 600.217,
+   "wall_seconds": 601.7,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 601,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 1
+   },
+   "cover_seconds": 600.097,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sum_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "shift_removed_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tuples_using_shift": 0,
+   "total_seconds": 600.098,
+   "wall_seconds": 601.5,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 701,
+   "tau": 0,
+   "orbits_by_size": {},
+   "cover_seconds": 600.064,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sum_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "shift_removed_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tuples_using_shift": 0,
+   "total_seconds": 600.064,
+   "wall_seconds": 601.3,
+   "error": null
+  },
+  {
+   "k": 15,
+   "p": 809,
+   "tau": 15,
+   "orbits_by_size": {
+    "15": 1
+   },
+   "cover_seconds": 600.026,
+   "cover_timed_out": 1,
+   "tuples": 0,
+   "killed": 0,
+   "survived": 0,
+   "overflow": 0,
+   "complete": 0,
+   "small_orbits_unhandled": 0,
+   "max_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "sum_improper_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "shift_removed_by_level": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "tuples_using_shift": 0,
+   "total_seconds": 600.026,
+   "wall_seconds": 601.3,
+   "error": null
+  }
+ ],
+ "survivor_examples": {
+  "p251": [],
+  "p283": [],
+  "p307": [],
+  "p353": [],
+  "p401": [],
+  "p449": [],
+  "p503": [],
+  "p601": [],
+  "p701": [],
+  "p809": []
+ }
+}

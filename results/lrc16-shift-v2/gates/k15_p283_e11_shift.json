@@ -1,0 +1,59 @@
+{
+ "k": 15,
+ "p": 283,
+ "n": 141,
+ "m": 17,
+ "norm": 1,
+ "bb": 1,
+ "shift": 1,
+ "ext": 0,
+ "qs": 2,
+ "cover_nodes": 222035968,
+ "cover_timed_out": 1,
+ "cover_seconds": 600.009,
+ "tau": 15,
+ "orbits_by_size": {
+  "15": 5725
+ },
+ "levels": [
+  2,
+  2,
+  2,
+  2,
+  2
+ ],
+ "survivors": [],
+ "tuples": 0,
+ "killed": 0,
+ "survived": 0,
+ "overflow": 0,
+ "cascade_cut": 0,
+ "max_improper_by_level": [
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "sum_improper_by_level": [
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "shift_removed_by_level": [
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "tuples_using_shift": 0,
+ "small_orbits": 0,
+ "small_orbits_unhandled": 0,
+ "complete": 0,
+ "total_seconds": 600.009,
+ "returncode": 0,
+ "wall_seconds": 601.5
+}

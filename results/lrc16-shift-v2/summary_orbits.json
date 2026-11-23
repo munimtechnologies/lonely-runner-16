@@ -1,0 +1,3136 @@
+{
+ "part": "A",
+ "primes": [
+  251,
+  283,
+  307,
+  353,
+  401,
+  449,
+  503,
+  601,
+  701,
+  809
+ ],
+ "tuples": {
+  "one_to_15": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15
+  ],
+  "gw_15": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   15,
+   28
+  ]
+ },
+ "levels": {
+  "bin64": "2,2,2,2,2,2",
+  "l48": "2,2,2,2,3"
+ },
+ "liftcap": 400000,
+ "orbits": [
+  {
+   "p": 251,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 251,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 283,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 283,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 307,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 307,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 353,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 353,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 401,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 401,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 449,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 449,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 503,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 503,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 601,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 601,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 701,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.04,
+   "empty_at_level": 16
+  },
+  {
+   "p": 701,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.05,
+   "empty_at_level": 16
+  },
+  {
+   "p": 809,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.05,
+   "empty_at_level": 16
+  },
+  {
+   "p": 809,
+   "tuple": "one_to_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.04,
+   "empty_at_level": 16
+  },
+  {
+   "p": 251,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 2
+  },
+  {
+   "p": 251,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 2
+  },
+  {
+   "p": 283,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 4
+  },
+  {
+   "p": 283,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 4
+  },
+  {
+   "p": 307,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 4
+  },
+  {
+   "p": 307,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 4
+  },
+  {
+   "p": 353,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 4
+  },
+  {
+   "p": 353,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 4
+  },
+  {
+   "p": 401,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 4
+  },
+  {
+   "p": 401,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 4
+  },
+  {
+   "p": 449,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 4
+  },
+  {
+   "p": 449,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 4
+  },
+  {
+   "p": 503,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 2
+  },
+  {
+   "p": 503,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 2
+  },
+  {
+   "p": 601,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 2
+  },
+  {
+   "p": 601,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 2
+  },
+  {
+   "p": 701,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 2
+  },
+  {
+   "p": 701,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 2
+  },
+  {
+   "p": 809,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "cascadebb",
+   "kept_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 2
+  },
+  {
+   "p": 809,
+   "tuple": "gw_15",
+   "levels": "bin64",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     32,
+     0
+    ],
+    [
+     64,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.0,
+   "empty_at_level": 2
+  },
+  {
+   "p": 251,
+   "tuple": "one_to_15",
+   "levels": "l48",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 283,
+   "tuple": "one_to_15",
+   "levels": "l48",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 307,
+   "tuple": "one_to_15",
+   "levels": "l48",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 353,
+   "tuple": "one_to_15",
+   "levels": "l48",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 401,
+   "tuple": "one_to_15",
+   "levels": "l48",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.06,
+   "empty_at_level": 16
+  },
+  {
+   "p": 449,
+   "tuple": "one_to_15",
+   "levels": "l48",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.06,
+   "empty_at_level": 16
+  },
+  {
+   "p": 503,
+   "tuple": "one_to_15",
+   "levels": "l48",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.01,
+   "empty_at_level": 16
+  },
+  {
+   "p": 601,
+   "tuple": "one_to_15",
+   "levels": "l48",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.06,
+   "empty_at_level": 16
+  },
+  {
+   "p": 701,
+   "tuple": "one_to_15",
+   "levels": "l48",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.05,
+   "empty_at_level": 16
+  },
+  {
+   "p": 809,
+   "tuple": "one_to_15",
+   "levels": "l48",
+   "mode": "scascadebb",
+   "kept_by_level": [
+    [
+     2,
+     1
+    ],
+    [
+     4,
+     2
+    ],
+    [
+     8,
+     4
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "shift_removed_by_level": [
+    [
+     2,
+     0
+    ],
+    [
+     4,
+     0
+    ],
+    [
+     8,
+     0
+    ],
+    [
+     16,
+     0
+    ],
+    [
+     48,
+     0
+    ]
+   ],
+   "status": 0,
+   "survivor_examples": [],
+   "returncode": 0,
+   "seconds": 0.02,
+   "empty_at_level": 16
+  }
+ ],
+ "one_to_15_bin64_plain": {
+  "primes": 10,
+  "empty_by_16": 10,
+  "empty_by_32": 10,
+  "empty_by_64": 10,
+  "survives_64": 0,
+  "overflow_or_error": 0
+ }
+}
