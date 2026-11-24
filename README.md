@@ -68,9 +68,27 @@ lrc-nb was reproduced member for member.
   direction, and the 14-runner gates below 199 (83 to 191) are not covered
   (`REVIEW_16.md`).
 
+The paper itself runs these searches prime by prime and says (its Section 7) that
+its observations are not an assertion about all primes. A separate public spot check
+(jerryckim16/Math-Research, pull request 5, 2026-11-23) reproduced the (1..14)
+level-15 kill at 4 gate primes, one prime at a time.
+
 Still waiting for compute: `lrc16-uniform-v2` (the same method for the 16-runner
-tight orbit (1..15) at binary levels), `lrc16-engine3-v1`, `lrc16-orbit-v1`,
-`lrc16-allik-probe-v1`. No 16-runner preprint has appeared (checked 2026-11-24).
+tight orbit (1..15) at binary levels), `lrc16-engine2-v5`, `lrc16-engine3-v1`
+(running since 2026-11-24), `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner
+preprint has appeared (checked 2026-11-24).
+
+## Every THEORY section has now had an adversarial pass (`REVIEW_THEORY_2_7.md`)
+
+`REVIEW_THEORY_2_7.md` (2026-11-24) re-derives THEORY.md Sections 1-3 and 5-8 by hand:
+the flag-bound constants, the n = 15 shape lemma (all polynomial identities, the
+quartic factorisation, the brackets and the thin but exact 942.53 > 942.5 margin),
+Lemmas L, S and C, the small-cover completion, Lemma N and the 1/1344 witness
+interval, and Lemmas D and U at binary levels. **No error that changes a claim**; one
+cosmetic rounding ((15/0.49)^2 = 937.1095, written 937.11) and four dependencies a
+human must check against the cited papers. `test_review_theory.py` asserts every
+number it uses in exact arithmetic, with the standard library only. This is still an
+AI review, not a human one.
 
 Earlier: `REVIEW_9.md` (grid-point witnesses: no error found; `test_review9.py`
 imports no repository code). `RESULTS_run22.md` (`lrc-repro-k14-v1`'s cover search
@@ -149,7 +167,8 @@ runners) to 16 runners. It gives **R_15 < 49/100**, so a primitive counterexampl
 with 15 speeds has `log(v_1...v_15) < 496.727`. After the forced divisor
 720720 = lcm(2..16), **prime gates with log-sum above 483.239** prove the 16-runner
 case: roughly 80 primes, against 71 used for 15 runners. Every inequality in the
-note is re-checked in exact rational arithmetic by `test_bounds.py`.
+note is re-checked in exact rational arithmetic by `test_bounds.py`, and again,
+independently, by `test_review_theory.py`.
 
 ## A sharper flag bound: the dual cap (`THEORY_10.md` to `THEORY_12.md`)
 
@@ -203,9 +222,9 @@ sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
 | `run_tests_c.py` | runs `test_nbc` and `test_uniform_nb` with the C tests required (no skips) |
 | `probe.py` | cost probe of Allikvere's public pipeline (`COST.md`) |
 | `results/` | raw outputs of finished jobs, copied unchanged (`results/lrc-nb2/graded_nb2.json` is the grading table of run 24) |
-| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py` imports no repository code) |
+| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py` and `test_review_theory.py` import no repository code) |
 | `THEORY.md`, `THEORY_9.md` ... `THEORY_17.md` | the mathematics, written before each job ran |
-| `REVIEW_9.md`, `REVIEW_13_14.md`, `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md` | adversarial reviews: a second agent told to break Sections 9 and 13 to 17 against the code |
+| `REVIEW_9.md`, `REVIEW_13_14.md`, `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md`, `REVIEW_THEORY_2_7.md` | adversarial reviews: a second agent told to break each section against the code or by re-derivation |
 | `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum13.md` | the pre-registered plan and what counts as success |
 | `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md`, `RESULTS_run22.md`, `RESULTS_run24.md` | graded results and job reports |
 
