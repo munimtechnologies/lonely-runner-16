@@ -45,30 +45,33 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest (2026-11-24, `RESULTS_run22.md`, `REVIEW_13_14.md`)
+## Latest (2026-11-24, `REVIEW_9.md`)
 
-- **RESULTS_run22.md:** the first pre-registered job (`lrc-repro-k14-v1`, step 1 of
-  `PLAN.md`) finally ran. Its cover search hit the 1,500 s cap at all ten gate
-  primes of the 14/15-runner proof, so no tuple was lifted and step 1 is
-  **untested**. Combined with `lrc16-tau-v2`, our code alone gives
-  **tau_14(239) = 13** exactly, in line with the paper's tau >= 13. No other number
-  in it decides anything, and the job will not be re-run with a longer cap.
-- **REVIEW_13_14.md:** an adversarial read of the cover-search prunings (Lemmas F, P
-  and M of `THEORY_13.md` and `THEORY_14.md`) against `lrc.c`. All three are correct
-  as written and as implemented, including in tau mode. One process finding: the C
-  half of `test_prune.py` and `test_orbit.py` has never run (no C compiler in the
-  publish test gate, and no finished job ran those files). So `LRC_PRUNE != 0` stays
-  unused until `lrc16-engine3-v1` or `lrc16-orbit-v1` passes its test step on Linux.
+- **REVIEW_9.md:** an adversarial read of the grid-point witnesses (`THEORY_9.md`,
+  Lemmas G and G2) against `grid.py`. No error was found. Lemma G is exact with
+  D = 2Q, and at any coarser grid it can only kill a lift that the exact test also
+  kills. Lemma G2's closed form and its counts (1,024 and 12,030 blocked level-2
+  lifts of (1..15)) are re-derived by hand. The worked example (dR = 1/320,
+  dL = 3/1040) is recomputed. Three scope remarks: speeds must be positive (true
+  for every vector used); "> 1/P" versus ">= 1/P" can never matter at the
+  thresholds used; the 1/240 coarse-grid shortcut holds only for levels dividing
+  16. `test_review9.py` repeats the 2^15 scan through a second route that imports
+  no repository code.
 - Still waiting for compute: `lrc16-engine2-v4` (lrc-nb2), `lrc16-uniform-v2`,
   `lrc16-engine3-v1`, `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner
   preprint has appeared (checked 2026-11-24).
-- Earlier: `REVIEW_15.md` and `REVIEW_16.md` (Lemmas A, E, T, R and N1-N4 are
-  correct), `PLAN_addendum12.md` (how X5 is read), `RESULTS_run20.md` (lrc-nb2's
-  first try stopped at its test gate and was re-filed), `RESULTS_run19.md`
-  (U_inf(15) is empty for (1..14); N1 held), `RESULTS_run17.md` (the tight orbit
-  (1..15) dies by level 16 at all ten pilot primes; P1 held), `RESULTS_run16.md`
-  (P5b held, P5 **failed**), `RESULTS_run14.md` (our tau search agrees with Table 2
-  of arXiv:2609.02604 v2 at 24 of its 71 primes, with no disagreement).
+- Earlier: `RESULTS_run22.md` (`lrc-repro-k14-v1`'s cover search was capped at all
+  ten gates, so step 1 is untested; tau_14(239) = 13). `REVIEW_13_14.md` (Lemmas F,
+  P and M are correct; the C half of `test_prune.py` and `test_orbit.py` has never
+  run, so `LRC_PRUNE != 0` stays unused until `lrc16-engine3-v1` or
+  `lrc16-orbit-v1` passes on Linux). `REVIEW_15.md` and `REVIEW_16.md` (Lemmas A,
+  E, T, R and N1-N4 are correct). `PLAN_addendum12.md` (how X5 is read).
+  `RESULTS_run20.md` (lrc-nb2's first try stopped at its test gate and was
+  re-filed). `RESULTS_run19.md` (U_inf(15) is empty for (1..14); N1 held).
+  `RESULTS_run17.md` (the tight orbit (1..15) dies by level 16 at all ten pilot
+  primes; P1 held). `RESULTS_run16.md` (P5b held, P5 **failed**).
+  `RESULTS_run14.md` (our tau search agrees with Table 2 of arXiv:2609.02604 v2 at
+  24 of its 71 primes, with no disagreement).
 
 ## A faster non-binary lift (`THEORY_17.md`, `REVIEW_17.md`)
 
@@ -164,7 +167,7 @@ reach the tight witness 1/16 directly (Lemmas L, S, C). By Zhang's classificatio
 (arXiv:2608.13599, building on Goddyn and Wong), (1..15) is the only tight set
 among [15] and its one-entry modifications (Lemma N).
 
-## One computation for every prime (`THEORY.md` Section 8, `THEORY_9.md`)
+## One computation for every prime (`THEORY.md` Section 8, `THEORY_9.md`, `REVIEW_9.md`)
 
 **Lemma U** separates the prime from the lifting problem: two prime-free cascades
 sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
@@ -187,9 +190,9 @@ sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
 | `run_tests_c.py` | runs `test_nbc` and `test_uniform_nb` with the C tests required (no skips) |
 | `probe.py` | cost probe of Allikvere's public pipeline (`COST.md`) |
 | `results/` | raw outputs of finished jobs, copied unchanged |
-| `test_*.py` | tests against brute force and between independent implementations |
+| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py` imports no repository code) |
 | `THEORY.md`, `THEORY_9.md` ... `THEORY_17.md` | the mathematics, written before each job ran |
-| `REVIEW_13_14.md`, `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md` | adversarial reviews: a second agent told to break Sections 13 to 17 against the code |
+| `REVIEW_9.md`, `REVIEW_13_14.md`, `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md` | adversarial reviews: a second agent told to break Sections 9 and 13 to 17 against the code |
 | `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum12.md` | the pre-registered plan and what counts as success |
 | `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md`, `RESULTS_run22.md` | graded results and job reports |
 
