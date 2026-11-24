@@ -45,7 +45,45 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest (2026-11-24, run 28)
+## Latest (2026-11-24, run 29)
+
+### `RESULTS_run29.md`: the third tight orbit of the 14-runner proof, at every prime from 199
+
+Job `lrc16-engine2-v5` graded against `PLAN_addendum13.md`; every sanity check passed
+(22 tests, 0 skipped; the earlier sets reproduced member by member; two independent
+routes agree).
+
+- **(1..11, 13, 24), level 14: every lift is proper at every prime p >= 199.**
+  U_199(14) has 3 classes with kill thresholds 2352/11, 245 and 231; the exact test
+  finds no improper lift at any of the 385 primes from 199 to 2,999, including all 56
+  gate primes of the 14-runner proof in that range (prediction N4b and X1b hold).
+- With `RESULTS_run24.md`, **all three tight orbits that arXiv:2609.02604 searches
+  separately at each gate prime now reduce to one prime-free computation each**:
+  (1..14) from 239, (1..13) and (1..11, 13, 24) from 199. This re-checks one step of a
+  published proof; **it proves no new case**, and gates below 199 are not covered.
+- The level-7 step needed 6,632 s at P = 199 (18,839,529,813 nodes); the one-hour cap
+  of the first run was simply too short.
+
+### `REVIEW_19.md`: THEORY_19 survives an adversarial pass
+
+- An agent told to break `THEORY_19.md` re-derived the lift form by CRT, the odd-time
+  reduction, the residue rule and all four windows coordinate by coordinate, and the
+  step-of-2 lemma for class g1. **No error found that changes a claim.**
+- It closed one gap: the commit that added THEORY_19 did not include the raw job
+  output, so the class-list comparison in `test_level16_gw.py` was skipped. The 5
+  classes were compared by hand with `results/lrc16-uniform-v1/summary_uniform.json`
+  (identical), and that file now ships with `test_review19.py`, which checks it.
+- `test_review19.py` (standard library, no shared code) checks every window as the
+  image of a linear map, its tightness at both ends, and **every** odd time in each
+  window against the actual integer lift at every prime from 251 to 1,500.
+- Still conditional on Lemma U and the `lrc16-uniform-v1` list; the brute-force job
+  `lrc16-indep-v1` (queued) tests both orbits from the bare definition.
+
+Still waiting for compute: `lrc16-indep-v1`, `lrc16-uniform-v2`, `lrc16-orbit-v1`,
+`lrc16-allik-probe-v1`. No 16-runner preprint has appeared (checked 2026-11-24, about
+16:20 UTC).
+
+## Earlier (2026-11-24, run 28)
 
 ### `THEORY_19.md`: the second 16-runner orbit, (1..13, 15, 28), also dies at level 16 at every prime p >= 251
 
@@ -57,98 +95,43 @@ This is the finite-checking framework from those papers:
 - How: the prime-free cascade keeps 5 classes. Four have every coordinate s or
   s + 8 mod 16; for odd times their witness condition does not depend on the prime,
   and one explicit window per class (length 1/576 or 5/1344, next to 1/8 or 3/8)
-  catches a point of the grid of spacing 1/(8p). A simple residue rule (19.2) picks
-  the window. The fifth class is off by 4 in the speed-28 coordinate only; moving
-  the time b by 2 moves that coordinate by 1/2 + 7/(2p), so of b and b + 2 one works
-  inside the 1/780-long interval of Lemma 18.2.
-- `test_level16_gw.py` (standard library, no repository code) checks the residue
-  rule, confirms by an exact sweep that each window is a whole component of the good
-  set, re-checks the witness against the actual integer lifts at every prime from 251
-  to 1,500, and runs a plain search over all times at the first five primes.
-- Conditional, like Theorem 18, on Lemma U and the `lrc16-uniform-v1` class list.
-  `PLAN_addendum16.md` adds prediction I6 to the queued brute-force job
-  `lrc16-indep-v1` (written before it reports): gw15 must have no improper level-16
-  lift at any prime it scans. For p > 1344 the orbit is already proper at level 1
-  (`THEORY.md` 7.3), so the theorem's content is the primes 251 to 1,327. It proves
-  no case of the conjecture: the level-one cover search is untouched.
+  catches a point of the grid of spacing 1/(8p). The fifth class is off by 4 in the
+  speed-28 coordinate only; moving the time b by 2 moves that coordinate by
+  1/2 + 7/(2p), so of b and b + 2 one works inside the 1/780-long interval of
+  Lemma 18.2.
+- For p > 1344 the orbit is already proper at level 1 (`THEORY.md` 7.3), so the
+  theorem's content is the primes 251 to 1,327. It proves no case of the conjecture:
+  the level-one cover search is untouched.
 
 ### `RESULTS_run28.md`: engine 3 is correct but not faster
 
 Job `lrc16-engine3-v1` graded against `PLAN_addendum7.md`. The C halves of
 `test_prune.py` and `test_c.py` ran for the first time (19 tests, all OK). A1 and
-A2 **hold** (0 disagreements at 8 gates and 24 slow rows; every cover certificate
-passes an independent check), so the pruning lemmas F, P and M are safe. The speed
-prediction S1 is **falsified**: the median speed-up was 0.98, not 3 (the pruning
-cuts nodes by 1.4-2.3x, but each node costs more). New 16-runner measurements:
-tau_15(269) >= 14 and tau_15(271) >= 14; all primes 281-997 hit the 400 s cap. 13
-more primes of Table 2 of arXiv:2609.02604 agree with the paper (37 of 71 in all),
-none disagrees.
+A2 **hold**, so the pruning lemmas F, P and M are safe. The speed prediction S1 is
+**falsified**: the median speed-up was 0.98, not 3. New 16-runner measurements:
+tau_15(269) >= 14 and tau_15(271) >= 14. 13 more primes of Table 2 of
+arXiv:2609.02604 agree with the paper (37 of 71 in all), none disagrees.
 
-Still waiting for compute: `lrc16-indep-v1`, `lrc16-uniform-v2`,
-`lrc16-engine2-v5`, `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner preprint
-has appeared (checked 2026-11-24, about 15:00 UTC).
-
-## Earlier (2026-11-24, `REVIEW_18.md`): THEORY_18 survives an adversarial pass; a brute-force check of its input is queued
-
-- An agent told to break `THEORY_18.md` re-derived every window coordinate by
-  coordinate, the lift form w_i = i + 8p[i in D], the class-1 parity step
-  (4 w_14 = 56 + 8p mod 16p) and the assembly of the proof. **No error found.**
-  `test_review18.py` (standard library, no repository code, no data file) starts from
-  the 9 residue vectors alone, finds every component of the good set by an exact
-  sweep over the bad arcs, and confirms that each hand window is a whole component,
-  long enough at every prime from 251; it also re-checks a witness against the
-  actual lifts at every prime from 251 to 1,500.
-- The weakest premise is THEORY_18's input (ii), the computer list U_251(16): a
-  wrong kill in `uniform.py` would hide a class. `indep.py` and `indep_brute.c`
-  compute the cascade J_p(L) for (1..15) and (1..13,15,28) from the bare definition
-  (every lift, every time, no shortcuts) and compare it with U_251 level by level, at
-  every prime from 251 up. Job `lrc16-indep-v1` is queued; its predictions (I0-I5,
-  and I6 from addendum 16) are fixed before it runs.
-
-## Earlier (2026-11-24, `THEORY_18.md`): the 16-runner tight orbit dies at level 16 at every prime p >= 251
+## Earlier (2026-11-24, `THEORY_18.md` and `REVIEW_18.md`): the 16-runner tight orbit dies at level 16 at every prime p >= 251
 
 - **Theorem 18.** At every prime p >= 251, no lift of the orbit of (1..15) to
-  level 16 is improper. So the 16-runner computation needs **no fibre search for
-  the tight orbit at any prime from 251 on.**
-- How: the prime-free cascade (`lrc16-uniform-v1`) leaves 9 classes at level 16.
-  For 8 of them every coordinate is i or i + 8 mod 16, so for odd b the witness
-  condition no longer depends on the prime; one explicit window of times per class
-  (length 1/576 to 5/1344) then catches a point of the grid of spacing 1/(8p). The
-  ninth class falls to a parity step: moving b by 4 moves its one odd coordinate
-  by 1/2 + 7/(2p).
-- `test_level16.py` checks every window in exact arithmetic and the predicted
-  witness of each class against the actual integer vectors at every prime from
-  251 to 3,000 (data in `level16_certificate.json`).
-- Conditional on Lemma U (`THEORY.md` 8.2) and the `lrc16-uniform-v1` computation.
-  A public per-prime check (jerryckim16/Math-Research pull request 5) reported the
+  level 16 is improper, so the 16-runner computation needs **no fibre search for
+  the tight orbit at any prime from 251 on.** The prime-free cascade leaves 9
+  classes; 8 fall to one explicit window of odd times each, the ninth to a parity
+  step. `test_level16.py` checks it at every prime from 251 to 3,000.
+- `REVIEW_18.md`: an adversarial pass found no error; `test_review18.py` re-checks it
+  from the 9 residue vectors alone.
+- A public per-prime check (jerryckim16/Math-Research pull request 5) reported the
   same at the 79 candidate gates 251..743, one prime at a time; this covers every
   prime from 251 on.
-
-## Earlier (2026-11-24, `RESULTS_run24.md`): two per-prime searches become one computation each
-
-Job lrc-nb2 (`lrc16-engine2-v4`) was graded against its pre-registered plan
-(`PLAN_addendum11.md`). Every sanity check passed.
-
-- **(1..14), level 15 (the 15-runner proof):** every lift is proper at **every
-  prime p >= 239** (kill threshold 1980/7; no improper lift at any of the 379 primes
-  from 239 to 2,999).
-- **(1..13), level 14 (the 14-runner proof):** every lift is proper at **every
-  prime p >= 199** (largest threshold 1848/5; no improper lift at any of the 385
-  primes from 199 to 2,999).
-- **(1..11,13,24), level 14:** the level-7 search at P = 199 hit its one-hour cap;
-  `PLAN_addendum13.md` re-runs it alone (job `lrc16-engine2-v5`).
-- At all 52 + 56 gate primes of the 15- and 14-runner proofs that are at least 199,
-  the result agrees with the published outcome. This re-checks one step of a
-  published proof. **It proves no new case** (`REVIEW_16.md` for scope).
 
 ## Every THEORY section has had an adversarial pass
 
 `REVIEW_THEORY_2_7.md` re-derives THEORY.md Sections 1-3 and 5-8 by hand (no error
-that changes a claim; `test_review_theory.py`). `REVIEW_18.md` does the same for
-`THEORY_18.md`. Earlier: `REVIEW_9.md`, `REVIEW_13_14.md`, `REVIEW_15.md`,
-`REVIEW_16.md`, `REVIEW_17.md`. These are AI reviews, not human ones. `THEORY_19.md`
-has not had its own adversarial pass yet. Graded results: `RESULTS_run14.md`, 16
-(P5 **failed**), 17, 19, 20, 22, 24, 28.
+that changes a claim; `test_review_theory.py`). Also: `REVIEW_9.md`, `REVIEW_13_14.md`,
+`REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md`, `REVIEW_18.md`, `REVIEW_19.md`. These
+are AI reviews, not human ones. Graded results: `RESULTS_run14.md`, 16 (P5
+**failed**), 17, 19, 20, 22, 24, 28, 29.
 
 ## Other parts
 
@@ -184,7 +167,7 @@ has not had its own adversarial pass yet. Graded results: `RESULTS_run14.md`, 16
 | `level16_certificate.json` | the windows and step data of `THEORY_18.md` |
 | `job*.py`, `fetch_*.py`, `run_tests_c.py`, `run_tests_indep.py`, `probe.py` | compete jobs, pinned fetches, C-required test runners, cost probe |
 | `results/` | raw outputs of finished jobs, copied unchanged |
-| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py`, `test_review_theory.py`, `test_level16.py`, `test_review18.py` and `test_level16_gw.py` import no repository code) |
+| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py`, `test_review_theory.py`, `test_level16.py`, `test_review18.py`, `test_level16_gw.py` and `test_review19.py` import no repository code) |
 | `THEORY.md`, `THEORY_9.md` ... `THEORY_19.md` | the mathematics, written before each job ran |
 | `REVIEW_*.md` | adversarial reviews: a second agent told to break each section |
 | `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum16.md` | the pre-registered plan and what counts as success |
@@ -200,6 +183,7 @@ python run_tests_indep.py        # the brute-force cascade, C engine required
 python test_level16.py           # THEORY_18, standard library only
 python test_review18.py          # REVIEW_18, standard library only
 python test_level16_gw.py        # THEORY_19, standard library only
+python test_review19.py          # REVIEW_19, standard library only
 ```
 
 ## Credit
