@@ -45,7 +45,50 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest (2026-11-24, `REVIEW_18.md`): THEORY_18 survives an adversarial pass; a brute-force check of its input is queued
+## Latest (2026-11-24, run 28)
+
+### `THEORY_19.md`: the second 16-runner orbit, (1..13, 15, 28), also dies at level 16 at every prime p >= 251
+
+- **Theorem 19.** At every prime p >= 251, no lift of the orbit of
+  (1, ..., 13, 15, 28) to level 16 is improper. With Theorem 18, **both level-one
+  orbits singled out by the tight-set analysis, (1..15) and (1..13, 15, 28), are
+  removed by binary lifting alone by level 16 at every prime from 251**, so a
+  16-runner computation needs no fibre search for either.
+- How: the prime-free cascade keeps 5 classes. Four have every coordinate s or
+  s + 8 mod 16; for odd times their witness condition does not depend on the prime,
+  and one explicit window per class (length 1/576 or 5/1344, next to 1/8 or 3/8)
+  catches a point of the grid of spacing 1/(8p). A simple residue rule (19.2) picks
+  the window. The fifth class is off by 4 in the speed-28 coordinate only; moving
+  the time b by 2 moves that coordinate by 1/2 + 7/(2p), so of b and b + 2 one works
+  inside the 1/780-long interval of Lemma 18.2.
+- `test_level16_gw.py` (standard library, no repository code) checks the residue
+  rule, confirms by an exact sweep that each window is a whole component of the good
+  set, re-checks the witness against the actual integer lifts at every prime from 251
+  to 1,500, and runs a plain search over all times at the first five primes.
+- Conditional, like Theorem 18, on Lemma U and the `lrc16-uniform-v1` class list.
+  `PLAN_addendum16.md` adds prediction I6 to the queued brute-force job
+  `lrc16-indep-v1` (written before it reports): gw15 must have no improper level-16
+  lift at any prime it scans. For p > 1344 the orbit is already proper at level 1
+  (`THEORY.md` 7.3), so the theorem's content is the primes 251 to 1,327. It proves
+  no case of the conjecture: the level-one cover search is untouched.
+
+### `RESULTS_run28.md`: engine 3 is correct but not faster
+
+Job `lrc16-engine3-v1` graded against `PLAN_addendum7.md`. The C halves of
+`test_prune.py` and `test_c.py` ran for the first time (19 tests, all OK). A1 and
+A2 **hold** (0 disagreements at 8 gates and 24 slow rows; every cover certificate
+passes an independent check), so the pruning lemmas F, P and M are safe. The speed
+prediction S1 is **falsified**: the median speed-up was 0.98, not 3 (the pruning
+cuts nodes by 1.4-2.3x, but each node costs more). New 16-runner measurements:
+tau_15(269) >= 14 and tau_15(271) >= 14; all primes 281-997 hit the 400 s cap. 13
+more primes of Table 2 of arXiv:2609.02604 agree with the paper (37 of 71 in all),
+none disagrees.
+
+Still waiting for compute: `lrc16-indep-v1`, `lrc16-uniform-v2`,
+`lrc16-engine2-v5`, `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner preprint
+has appeared (checked 2026-11-24, about 15:00 UTC).
+
+## Earlier (2026-11-24, `REVIEW_18.md`): THEORY_18 survives an adversarial pass; a brute-force check of its input is queued
 
 - An agent told to break `THEORY_18.md` re-derived every window coordinate by
   coordinate, the lift form w_i = i + 8p[i in D], the class-1 parity step
@@ -56,20 +99,13 @@ This is the finite-checking framework from those papers:
   long enough at every prime from 251; it also re-checks a witness against the
   actual lifts at every prime from 251 to 1,500.
 - The weakest premise is THEORY_18's input (ii), the computer list U_251(16): a
-  wrong kill in `uniform.py` would hide a class. Until now it was checked against
-  brute force only for 3- to 7-speed sets. `indep.py` and `indep_brute.c` compute the
-  cascade J_p(L) for (1..15) and (1..13,15,28) from the bare definition (every
-  lift, every time, no shortcuts) and compare it with U_251 level by level, at
-  every prime from 251 up. Job `lrc16-indep-v1` is queued; its predictions (I0-I5)
-  are fixed in `PLAN_addendum15.md` before it runs.
-- Wording fix (R5d): T5 of `PLAN_addendum14.md` runs inside U_251, so it tests the
-  hand argument but not the list; `lrc16-indep-v1` tests both.
+  wrong kill in `uniform.py` would hide a class. `indep.py` and `indep_brute.c`
+  compute the cascade J_p(L) for (1..15) and (1..13,15,28) from the bare definition
+  (every lift, every time, no shortcuts) and compare it with U_251 level by level, at
+  every prime from 251 up. Job `lrc16-indep-v1` is queued; its predictions (I0-I5,
+  and I6 from addendum 16) are fixed before it runs.
 
 ## Earlier (2026-11-24, `THEORY_18.md`): the 16-runner tight orbit dies at level 16 at every prime p >= 251
-
-For 14 and 15 runners, the tight speed sets survive every binary lifting level, so
-the published proof runs an extra fibre search at each gate prime. For 16 runners
-the tight set is (1..15), and `THEORY_18.md` proves:
 
 - **Theorem 18.** At every prime p >= 251, no lift of the orbit of (1..15) to
   level 16 is improper. So the 16-runner computation needs **no fibre search for
@@ -86,198 +122,73 @@ the tight set is (1..15), and `THEORY_18.md` proves:
 - Conditional on Lemma U (`THEORY.md` 8.2) and the `lrc16-uniform-v1` computation.
   A public per-prime check (jerryckim16/Math-Research pull request 5) reported the
   same at the 79 candidate gates 251..743, one prime at a time; this covers every
-  prime from 251 on. It proves no case of the conjecture: the level-one cover
-  search, where nearly all the cost lies, is untouched.
-- `PLAN_addendum14.md` adds prediction T5 for the queued `lrc16-uniform-v2`: its
-  exact cascade must be empty at level 16 at every prime it scans.
+  prime from 251 on.
 
 ## Earlier (2026-11-24, `RESULTS_run24.md`): two per-prime searches become one computation each
 
 Job lrc-nb2 (`lrc16-engine2-v4`) was graded against its pre-registered plan
-(`PLAN_addendum11.md`). Every sanity check passed, and every set of the earlier job
-lrc-nb was reproduced member for member.
+(`PLAN_addendum11.md`). Every sanity check passed.
 
 - **(1..14), level 15 (the 15-runner proof):** every lift is proper at **every
-  prime p >= 239**. One class survives the prime-free cascade at P = 239. Its kill
-  threshold is 1980/7 (about 282.9), and the exact test finds no improper lift at
-  any of the 379 primes from 239 to 2,999.
+  prime p >= 239** (kill threshold 1980/7; no improper lift at any of the 379 primes
+  from 239 to 2,999).
 - **(1..13), level 14 (the 14-runner proof):** every lift is proper at **every
-  prime p >= 199** (five classes at P = 199, largest threshold 1848/5 = 369.6, no
-  improper lift at any of the 385 primes from 199 to 2,999).
-- **(1..11,13,24), level 14:** the prime-free core is empty, as the paper forces,
-  but the level-7 search at P = 199 hit its one-hour cap. `PLAN_addendum13.md`
-  re-runs this base alone (`job_b13.py`, job `lrc16-engine2-v5`).
-- At all 52 gate primes of the 15-runner proof and the 56 gate primes of the
-  14-runner proof that are at least 199, the result agrees with the published
-  outcome. This re-checks one step of a published proof. **It proves no new case.**
-  Scope: our pruning is weaker than or equal to the paper's, so "empty" is the strong
-  direction, and the 14-runner gates below 199 (83 to 191) are not covered
-  (`REVIEW_16.md`).
+  prime p >= 199** (largest threshold 1848/5; no improper lift at any of the 385
+  primes from 199 to 2,999).
+- **(1..11,13,24), level 14:** the level-7 search at P = 199 hit its one-hour cap;
+  `PLAN_addendum13.md` re-runs it alone (job `lrc16-engine2-v5`).
+- At all 52 + 56 gate primes of the 15- and 14-runner proofs that are at least 199,
+  the result agrees with the published outcome. This re-checks one step of a
+  published proof. **It proves no new case** (`REVIEW_16.md` for scope).
 
-The paper itself runs these searches prime by prime and says (its Section 7) that
-its observations are not an assertion about all primes. A separate public check
-(jerryckim16/Math-Research, pull requests 5-19, 2026-11-23/24) re-checked the
-15-runner gates one prime at a time.
+## Every THEORY section has had an adversarial pass
 
-Still waiting for compute: `lrc16-indep-v1` (new), `lrc16-uniform-v2`,
-`lrc16-engine2-v5`, `lrc16-engine3-v1` (running since 2026-11-24),
-`lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner preprint has appeared
-(checked 2026-11-24, about 14:00 UTC).
+`REVIEW_THEORY_2_7.md` re-derives THEORY.md Sections 1-3 and 5-8 by hand (no error
+that changes a claim; `test_review_theory.py`). `REVIEW_18.md` does the same for
+`THEORY_18.md`. Earlier: `REVIEW_9.md`, `REVIEW_13_14.md`, `REVIEW_15.md`,
+`REVIEW_16.md`, `REVIEW_17.md`. These are AI reviews, not human ones. `THEORY_19.md`
+has not had its own adversarial pass yet. Graded results: `RESULTS_run14.md`, 16
+(P5 **failed**), 17, 19, 20, 22, 24, 28.
 
-## Every THEORY section has now had an adversarial pass (`REVIEW_THEORY_2_7.md`, `REVIEW_18.md`)
+## Other parts
 
-`REVIEW_THEORY_2_7.md` (2026-11-24) re-derives THEORY.md Sections 1-3 and 5-8 by hand:
-the flag-bound constants, the n = 15 shape lemma (all polynomial identities, the
-quartic factorisation, the brackets and the thin but exact 942.53 > 942.5 margin),
-Lemmas L, S and C, the small-cover completion, Lemma N and the 1/1344 witness
-interval, and Lemmas D and U at binary levels. **No error that changes a claim**; one
-cosmetic rounding ((15/0.49)^2 = 937.1095, written 937.11) and four dependencies a
-human must check against the cited papers. `test_review_theory.py` asserts every
-number it uses in exact arithmetic, with the standard library only. `REVIEW_18.md`
-does the same for `THEORY_18.md`. These are AI reviews, not human ones.
-
-Earlier: `REVIEW_9.md` (grid-point witnesses: no error found; `test_review9.py`
-imports no repository code). `RESULTS_run22.md` (`lrc-repro-k14-v1`'s cover search
-was capped at all ten gates, so step 1 is untested; tau_14(239) = 13).
-`REVIEW_13_14.md` (Lemmas F, P and M are correct; the C half of `test_prune.py` and
-`test_orbit.py` has never run, so `LRC_PRUNE != 0` stays unused until
-`lrc16-engine3-v1` or `lrc16-orbit-v1` passes on Linux). `REVIEW_15.md` and
-`REVIEW_16.md` (Lemmas A, E, T, R and N1-N4 are correct). `PLAN_addendum12.md` (how
-X5 is read). `RESULTS_run20.md` (lrc-nb2's first try stopped at its test gate and
-was re-filed). `RESULTS_run19.md` (U_inf(15) is empty for (1..14); N1 held).
-`RESULTS_run17.md` (the tight orbit (1..15) dies by level 16 at all ten pilot
-primes; P1 held). `RESULTS_run16.md` (P5b held, P5 **failed**). `RESULTS_run14.md`
-(our tau search agrees with Table 2 of arXiv:2609.02604 v2 at 24 of its 71 primes,
-with no disagreement).
-
-## A faster non-binary lift (`THEORY_17.md`, `REVIEW_17.md`)
-
-- **Lemma S:** when c is an odd prime coprime to L, the units of Z_{cL} that are
-  1 mod L permute the children of a class, keep their canonical form, and keep
-  the kill test. So only children whose first nonzero residue mod c is 1 need to
-  be searched. The output is unchanged.
-- **C engine:** `nbc.c` is the Python reference search `nbc.dfs_py` written in C,
-  node for node. Python builds all the geometry (cells, arcs, masks), so the C
-  program only does bit operations.
-- `test_nbc.py` checks the reference against the published
-  `uniform_nb.lift_children` (with and without Lemma S, in three search orders),
-  and checks the C engine against the reference: same children, same node and
-  leaf counts.
-
-## Non-binary levels: re-checking the 14- and 15-runner fibre searches (`THEORY_16.md`, `REVIEW_16.md`)
-
-The published 14- and 15-runner proofs run two extra searches at **every** gate
-prime. They lift the tight orbits (1..13) and (1..11,13,24) to level 14, and
-(1..14) to level 15, because those orbits survive every binary level (THEORY.md
-8.5 proves they must when k + 1 is not a power of 2). `uniform_nb.py` carries the
-prime-free cascade (Lemma U, and Lemmas E, T, R of `THEORY_15.md`) to any level.
-It uses the general gcd clause over the primes dividing the level, and it computes
-each level two ways: as a chain of divisors, and by a CRT combination of coprime
-levels (the uniform form of the paper's Lemma 4.5). Jobs `lrc-nb` and `lrc-nb2`
-ask whether one computation can replace those per-prime searches at every prime
-from 239 (k = 14) or 199 (k = 13) upward. They also re-check the paper's outcome
-at its gate primes. Answer so far: yes for (1..14) and (1..13) (`RESULTS_run24.md`).
-
-## From the uniform cascade to every prime (`THEORY_15.md`, `REVIEW_15.md`)
-
-Every lift that U_251 keeps does have strict witness intervals, only shorter than
-1/251. `thresh.py` lists those intervals exactly, which gives:
-
-- **Lemma E:** an exact test of one lift at one prime p (does some point j/p fall
-  in a witness interval?), one integer comparison per interval;
-- **Lemma T:** a kill threshold P*(z) = 1/(longest interval): the lift is proper
-  at every prime above it;
-- **Lemma R:** at every prime p >= 251 the true cascade is exactly the part of
-  U_251 that is improper at p.
-
-Job `lrc16-uniform-v2` (queued) applies them to (1..15) and (1..13,15,28): U_251 to
-level 128, P*_L per level, and the exact cascade at every prime from 251 to at
-least 3,000. Its predictions are pre-registered in `PLAN_addendum9.md` (X5 read as
-in `PLAN_addendum12.md`; T5 added in `PLAN_addendum14.md`).
-
-## Engines 3 and 4: safe prunings of the cover search (`THEORY_13.md`, `THEORY_14.md`, `REVIEW_13_14.md`)
-
-- **Lemma F (fractional bound)** and **Lemma P (forbidden classes)** cut only
-  search nodes with no reportable cover below them (`LRC_PRUNE=3`).
-- **Lemma M (early orbit pruning)** stops a branch once class 1 can no longer end
-  up with the most private times (`LRC_PRUNE=4`).
-
-`test_prune.py` and `test_orbit.py` check them by brute force. Jobs
-`lrc16-engine3-v1` and `lrc16-orbit-v1` run the C half of those tests
-first, then measure the speed-up; see `PLAN_addendum7.md` and `PLAN_addendum8.md`.
-
-## The bound for 16 runners (worked out in `THEORY.md`, Sections 1-3)
-
-We carried the paper's shape lemma (its Lemma 3.7, proved there for 14 and 15
-runners) to 16 runners. It gives **R_15 < 49/100**, so a primitive counterexample
-with 15 speeds has `log(v_1...v_15) < 496.727`. After the forced divisor
-720720 = lcm(2..16), **prime gates with log-sum above 483.239** prove the 16-runner
-case: roughly 80 primes, against 71 used for 15 runners. Every inequality in the
-note is re-checked in exact rational arithmetic by `test_bounds.py`, and again,
-independently, by `test_review_theory.py`.
-
-## A sharper flag bound: the dual cap (`THEORY_10.md` to `THEORY_12.md`)
-
-Every integer relation h of a counterexample's speeds has sum h_k^2 >= 3, so the
-last Gram-Schmidt length of the flag-bound lattice is below 1/3. Solving the
-capped problem exactly (`capped.py`) lowers the 16-runner gate target from 483.239
-to 481.123 (2.1162 nats; 1.9985 nats for 15 runners). The numbers are in
-`dual_cap_results.json` and are recomputed by `test_theory11.py`. Not yet checked
-by a human. The 481.123 target is used for planning only.
-
-## What it would cost (`COST.md`, `COST_addendum1.md`, `SHARD_PLAN.md`)
-
-The 15-runner proof's own audit file (Zenodo 10.5281/zenodo.22667683, CC BY 4.0)
-shows where its roughly 2,140 CPU-hours went. 19 small primes (89 to 233, and 241)
-left thousands to millions of orbits to lift and kill. The other 52 gates (every
-prime from 239 to 569 except 241) left only the tight orbit. For 16 runners the
-gates sit higher (about 80 primes from 251 up to about 800), so the deciding
-number is the level-one generation cost at k = 15 for those primes. Job
-`lrc16-allik-probe-v1` (`probe.py`, queued) measures it with Allikvere's own
-generator built for 15 speeds; the decision rule is pre-registered in `COST.md`,
-Section 4. A public estimate (jerryckim16/Math-Research pull request 5) puts the
-16-runner gates at about 1.75e5 CPU-hours, far beyond this project's hardware.
-
-## Surviving orbits and tight sets (`THEORY.md`, Sections 5 and 7)
-
-For 14 and 15 runners, the tight vectors (1..13), (1..11,13,24) and (1..14) survive
-every binary lifting level. For 16 runners, k+1 = 16 = 2^4, so the binary levels
-reach the tight witness 1/16 directly (Lemmas L, S, C), and `THEORY_18.md` shows
-the orbit of (1..15) is gone by level 16 at every prime p >= 251. By Zhang's
-classification (arXiv:2608.13599, building on Goddyn and Wong), (1..15) is the only
-tight set among [15] and its one-entry modifications (Lemma N).
-
-## One computation for every prime (`THEORY.md` Section 8, `THEORY_9.md`, `REVIEW_9.md`)
-
-**Lemma U** separates the prime from the lifting problem: two prime-free cascades
-sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
-`uniform.py` and the independent `grid.py` (Lemma G) compute it. `indep.py` is a
-third, brute-force route at single primes (`REVIEW_18.md`).
+- **Non-binary levels** (`THEORY_16.md`, `THEORY_17.md`, `uniform_nb.py`, `nbc.py`,
+  `nbc.c`): the prime-free cascade at levels 14 and 15, used for the 14/15-runner
+  re-check above.
+- **From the uniform cascade to every prime** (`THEORY_15.md`, `thresh.py`): exact
+  per-prime test, kill thresholds, exact cascade inside U_P (Lemmas E, T, R). Job
+  `lrc16-uniform-v2` (queued; `PLAN_addendum9.md`, 12, 14).
+- **Engines 3 and 4** (`THEORY_13.md`, `THEORY_14.md`): safe prunings of the cover
+  search. Engine 3 is correct and no faster (`RESULTS_run28.md`); engine 4 is tested
+  by the queued `lrc16-orbit-v1`.
+- **The bound for 16 runners** (`THEORY.md` 1-3): R_15 < 49/100, so prime gates with
+  log-sum above 483.239 prove the 16-runner case (roughly 80 primes).
+- **A sharper flag bound: the dual cap** (`THEORY_10.md` to `THEORY_12.md`): target
+  481.123 (planning only; `dual_cap_results.json`).
+- **Cost** (`COST.md`, `COST_addendum1.md`, `SHARD_PLAN.md`): a public estimate puts
+  the 16-runner gates at about 1.75e5 CPU-hours, far beyond this project's hardware;
+  `lrc16-allik-probe-v1` (queued) measures it with Allikvere's generator.
+- **Lemma U** (`THEORY.md` 8, `THEORY_9.md`): two prime-free cascades sandwich the
+  true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P. `uniform.py` and
+  `grid.py` compute it; `indep.py` is a third, brute-force route at single primes.
 
 ## What is here
 
 | file | what it does |
 |---|---|
 | `lrc.c` | from-scratch C engine: canonical cover enumeration up to units, tau(p), lifting cascade, shift filter, general completion, engine-3 and engine-4 pruning (`LRC_PRUNE` bits 1, 2, 4) |
-| `lrc_ref.py` | brute-force reference used to test the engine on small cases; exact loneliness; Lemma S of `THEORY.md` |
-| `uniform.py` | prime-free lifting of one orbit (Lemma U): U_inf and U_P cascades in exact arithmetic |
-| `thresh.py` | exact per-prime test, kill thresholds and the exact cascade inside U_P (Lemmas E, T, R) |
-| `uniform_nb.py` | the same at any level (14 = 2*7, 15 = 3*5, ...): general gcd clause, divisor chains, CRT combination (`THEORY_16.md`) |
-| `nbc.py`, `nbc.c` | fast non-binary lifting: unit-symmetry reduction, search order, C engine (`THEORY_17.md`) |
-| `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test |
-| `indep.py`, `indep_brute.c` | brute-force binary cascade J_p(L) from the bare definition, imports nothing else (`REVIEW_18.md`); `indep_job.py` is job `lrc16-indep-v1` |
+| `lrc_ref.py` | brute-force reference used to test the engine on small cases |
+| `uniform.py`, `thresh.py`, `uniform_nb.py`, `nbc.py`, `nbc.c`, `grid.py` | prime-free cascades, exact per-prime tests, non-binary lifting, grid witnesses |
+| `indep.py`, `indep_brute.c` | brute-force binary cascade J_p(L) from the bare definition (`indep_job.py` is job `lrc16-indep-v1`) |
 | `bounds.py`, `capped.py` | exact flag bound, shape bound, gate planning; the dual-capped flag bound |
 | `level16_certificate.json` | the windows and step data of `THEORY_18.md` |
-| `job*.py` | compete jobs: `job.py`, `job_shift.py`, `job_tau.py`, `job_engine3.py`, `job_orbit.py`, `job_uniform.py`, `job_uniform2.py`, `job_nb.py`, `job_nb2.py`, `job_b13.py` (job_nb2 for one base with longer caps) |
-| `fetch_*.py` | fetch published files at a pinned commit for a compete job and record their SHA-256 (`fetch_nb3.py` fetches every file of job lrc-nb2; `fetch_indep.py` the U lists) |
-| `run_tests_c.py`, `run_tests_indep.py` | run the tests with the C engines required (no skips) |
-| `probe.py` | cost probe of Allikvere's public pipeline (`COST.md`) |
-| `results/` | raw outputs of finished jobs, copied unchanged (`results/lrc-nb2/graded_nb2.json` is the grading table of run 24) |
-| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py`, `test_review_theory.py`, `test_level16.py` and `test_review18.py` import no repository code) |
-| `THEORY.md`, `THEORY_9.md` ... `THEORY_18.md` | the mathematics, written before each job ran (`THEORY_18.md` is a hand proof checked by `test_level16.py` and `test_review18.py`) |
-| `REVIEW_9.md`, `REVIEW_13_14.md`, `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md`, `REVIEW_THEORY_2_7.md`, `REVIEW_18.md` | adversarial reviews: a second agent told to break each section against the code or by re-derivation |
-| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum15.md` | the pre-registered plan and what counts as success |
-| `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md`, `RESULTS_run22.md`, `RESULTS_run24.md` | graded results and job reports |
+| `job*.py`, `fetch_*.py`, `run_tests_c.py`, `run_tests_indep.py`, `probe.py` | compete jobs, pinned fetches, C-required test runners, cost probe |
+| `results/` | raw outputs of finished jobs, copied unchanged |
+| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py`, `test_review_theory.py`, `test_level16.py`, `test_review18.py` and `test_level16_gw.py` import no repository code) |
+| `THEORY.md`, `THEORY_9.md` ... `THEORY_19.md` | the mathematics, written before each job ran |
+| `REVIEW_*.md` | adversarial reviews: a second agent told to break each section |
+| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum16.md` | the pre-registered plan and what counts as success |
+| `RESULTS_run*.md` | graded results and job reports |
 
 Build and test:
 
@@ -288,7 +199,7 @@ python run_tests_c.py            # Linux/macOS with cc: the C tests may not skip
 python run_tests_indep.py        # the brute-force cascade, C engine required
 python test_level16.py           # THEORY_18, standard library only
 python test_review18.py          # REVIEW_18, standard library only
-python job_nb2.py --out-dir out --only a14 --workers 1
+python test_level16_gw.py        # THEORY_19, standard library only
 ```
 
 ## Credit
@@ -296,13 +207,13 @@ python job_nb2.py --out-dir out --only a14 --workers 1
 All the mathematics this builds on belongs to the authors cited above. This
 repository only reimplements their published definitions so the computation can
 be checked by an independent route and, if it holds, pushed one runner further.
-The level-14 and level-15 fibre searches that `THEORY_16.md` and `THEORY_17.md`
-recast, the gcd condition (Definition 2.1(a)), the 3 x 5 split (Lemma 4.5), the
-normalisation of Lemma 4.1, the flag bound and the tau table are Jaan Allikvere's
-(arXiv:2609.02604). The tight-set classification is Yuhan Zhang's
-(arXiv:2608.13599) and Goddyn and Wong's. The relation theorem discussed in
-`COST_addendum1.md` is Beck and Everett's (arXiv:2609.06259). The 8-runner check
-X2 uses Matthieu Rosenfeld's Lemma 6 (arXiv:2509.14111). The pipeline that
-`probe.py` measures is Jaan Allikvere's (Zenodo 10.5281/zenodo.22667683 and
+The level-14 and level-15 fibre searches, the gcd condition (Definition 2.1(a)), the
+3 x 5 split (Lemma 4.5), the normalisation of Lemma 4.1, the flag bound and the tau
+table are Jaan Allikvere's (arXiv:2609.02604). The lifting framework is Sungkawichai
+and Trakulthongchai's (arXiv:2604.23906). The tight-set classification is Yuhan
+Zhang's (arXiv:2608.13599) and Goddyn and Wong's. The relation theorem discussed in
+`COST_addendum1.md` is Beck and Everett's (arXiv:2609.06259). The 8-runner check X2
+uses Matthieu Rosenfeld's Lemma 6 (arXiv:2509.14111). The pipeline that `probe.py`
+measures is Jaan Allikvere's (Zenodo 10.5281/zenodo.22667683 and
 10.5281/zenodo.22066772, CC BY 4.0); it is downloaded, not copied into this
 repository.
