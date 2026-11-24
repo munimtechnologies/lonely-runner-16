@@ -45,33 +45,46 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest (2026-11-24, `REVIEW_9.md`)
+## Latest (2026-11-24, `RESULTS_run24.md`): two per-prime searches become one computation each
 
-- **REVIEW_9.md:** an adversarial read of the grid-point witnesses (`THEORY_9.md`,
-  Lemmas G and G2) against `grid.py`. No error was found. Lemma G is exact with
-  D = 2Q, and at any coarser grid it can only kill a lift that the exact test also
-  kills. Lemma G2's closed form and its counts (1,024 and 12,030 blocked level-2
-  lifts of (1..15)) are re-derived by hand. The worked example (dR = 1/320,
-  dL = 3/1040) is recomputed. Three scope remarks: speeds must be positive (true
-  for every vector used); "> 1/P" versus ">= 1/P" can never matter at the
-  thresholds used; the 1/240 coarse-grid shortcut holds only for levels dividing
-  16. `test_review9.py` repeats the 2^15 scan through a second route that imports
-  no repository code.
-- Still waiting for compute: `lrc16-engine2-v4` (lrc-nb2), `lrc16-uniform-v2`,
-  `lrc16-engine3-v1`, `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner
-  preprint has appeared (checked 2026-11-24).
-- Earlier: `RESULTS_run22.md` (`lrc-repro-k14-v1`'s cover search was capped at all
-  ten gates, so step 1 is untested; tau_14(239) = 13). `REVIEW_13_14.md` (Lemmas F,
-  P and M are correct; the C half of `test_prune.py` and `test_orbit.py` has never
-  run, so `LRC_PRUNE != 0` stays unused until `lrc16-engine3-v1` or
-  `lrc16-orbit-v1` passes on Linux). `REVIEW_15.md` and `REVIEW_16.md` (Lemmas A,
-  E, T, R and N1-N4 are correct). `PLAN_addendum12.md` (how X5 is read).
-  `RESULTS_run20.md` (lrc-nb2's first try stopped at its test gate and was
-  re-filed). `RESULTS_run19.md` (U_inf(15) is empty for (1..14); N1 held).
-  `RESULTS_run17.md` (the tight orbit (1..15) dies by level 16 at all ten pilot
-  primes; P1 held). `RESULTS_run16.md` (P5b held, P5 **failed**).
-  `RESULTS_run14.md` (our tau search agrees with Table 2 of arXiv:2609.02604 v2 at
-  24 of its 71 primes, with no disagreement).
+Job lrc-nb2 (`lrc16-engine2-v4`) was graded against its pre-registered plan
+(`PLAN_addendum11.md`). Every sanity check passed, and every set of the earlier job
+lrc-nb was reproduced member for member.
+
+- **(1..14), level 15 (the 15-runner proof):** every lift is proper at **every
+  prime p >= 239**. One class survives the prime-free cascade at P = 239. Its kill
+  threshold is 1980/7 (about 282.9), and the exact test finds no improper lift at
+  any of the 379 primes from 239 to 2,999.
+- **(1..13), level 14 (the 14-runner proof):** every lift is proper at **every
+  prime p >= 199** (five classes at P = 199, largest threshold 1848/5 = 369.6, no
+  improper lift at any of the 385 primes from 199 to 2,999).
+- **(1..11,13,24), level 14:** the prime-free core is empty, as the paper forces,
+  but the level-7 search at P = 199 hit its one-hour cap. `PLAN_addendum13.md`
+  re-runs this base alone (`job_b13.py`, job `lrc16-engine2-v5`).
+- At all 52 gate primes of the 15-runner proof and the 56 gate primes of the
+  14-runner proof that are at least 199, the result agrees with the published
+  outcome. This re-checks one step of a published proof. **It proves no new case.**
+  Scope: our pruning is weaker than or equal to the paper's, so "empty" is the strong
+  direction, and the 14-runner gates below 199 (83 to 191) are not covered
+  (`REVIEW_16.md`).
+
+Still waiting for compute: `lrc16-uniform-v2` (the same method for the 16-runner
+tight orbit (1..15) at binary levels), `lrc16-engine3-v1`, `lrc16-orbit-v1`,
+`lrc16-allik-probe-v1`. No 16-runner preprint has appeared (checked 2026-11-24).
+
+Earlier: `REVIEW_9.md` (grid-point witnesses: no error found; `test_review9.py`
+imports no repository code). `RESULTS_run22.md` (`lrc-repro-k14-v1`'s cover search
+was capped at all ten gates, so step 1 is untested; tau_14(239) = 13).
+`REVIEW_13_14.md` (Lemmas F, P and M are correct; the C half of `test_prune.py` and
+`test_orbit.py` has never run, so `LRC_PRUNE != 0` stays unused until
+`lrc16-engine3-v1` or `lrc16-orbit-v1` passes on Linux). `REVIEW_15.md` and
+`REVIEW_16.md` (Lemmas A, E, T, R and N1-N4 are correct). `PLAN_addendum12.md` (how
+X5 is read). `RESULTS_run20.md` (lrc-nb2's first try stopped at its test gate and
+was re-filed). `RESULTS_run19.md` (U_inf(15) is empty for (1..14); N1 held).
+`RESULTS_run17.md` (the tight orbit (1..15) dies by level 16 at all ten pilot
+primes; P1 held). `RESULTS_run16.md` (P5b held, P5 **failed**). `RESULTS_run14.md`
+(our tau search agrees with Table 2 of arXiv:2609.02604 v2 at 24 of its 71 primes,
+with no disagreement).
 
 ## A faster non-binary lift (`THEORY_17.md`, `REVIEW_17.md`)
 
@@ -99,7 +112,7 @@ each level two ways: as a chain of divisors, and by a CRT combination of coprime
 levels (the uniform form of the paper's Lemma 4.5). Jobs `lrc-nb` and `lrc-nb2`
 ask whether one computation can replace those per-prime searches at every prime
 from 239 (k = 14) or 199 (k = 13) upward. They also re-check the paper's outcome
-at its gate primes.
+at its gate primes. Answer so far: yes for (1..14) and (1..13) (`RESULTS_run24.md`).
 
 ## From the uniform cascade to every prime (`THEORY_15.md`, `REVIEW_15.md`)
 
@@ -185,16 +198,16 @@ sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
 | `nbc.py`, `nbc.c` | fast non-binary lifting: unit-symmetry reduction, search order, C engine (`THEORY_17.md`) |
 | `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test |
 | `bounds.py`, `capped.py` | exact flag bound, shape bound, gate planning; the dual-capped flag bound |
-| `job*.py` | compete jobs: `job.py`, `job_shift.py`, `job_tau.py`, `job_engine3.py`, `job_orbit.py`, `job_uniform.py`, `job_uniform2.py`, `job_nb.py`, `job_nb2.py` |
+| `job*.py` | compete jobs: `job.py`, `job_shift.py`, `job_tau.py`, `job_engine3.py`, `job_orbit.py`, `job_uniform.py`, `job_uniform2.py`, `job_nb.py`, `job_nb2.py`, `job_b13.py` (job_nb2 for one base with longer caps) |
 | `fetch_*.py` | fetch published files at a pinned commit for a compete job and record their SHA-256 (`fetch_nb3.py` fetches every file of job lrc-nb2) |
 | `run_tests_c.py` | runs `test_nbc` and `test_uniform_nb` with the C tests required (no skips) |
 | `probe.py` | cost probe of Allikvere's public pipeline (`COST.md`) |
-| `results/` | raw outputs of finished jobs, copied unchanged |
+| `results/` | raw outputs of finished jobs, copied unchanged (`results/lrc-nb2/graded_nb2.json` is the grading table of run 24) |
 | `test_*.py` | tests against brute force and between independent implementations (`test_review9.py` imports no repository code) |
 | `THEORY.md`, `THEORY_9.md` ... `THEORY_17.md` | the mathematics, written before each job ran |
 | `REVIEW_9.md`, `REVIEW_13_14.md`, `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md` | adversarial reviews: a second agent told to break Sections 9 and 13 to 17 against the code |
-| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum12.md` | the pre-registered plan and what counts as success |
-| `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md`, `RESULTS_run22.md` | graded results and job reports |
+| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum13.md` | the pre-registered plan and what counts as success |
+| `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md`, `RESULTS_run22.md`, `RESULTS_run24.md` | graded results and job reports |
 
 Build and test:
 
