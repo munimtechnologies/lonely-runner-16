@@ -1,0 +1,62 @@
+{
+ "contract": "mv2-compete-result-v1",
+ "name": "lrc16-engine2-v4",
+ "id": "992012839d24",
+ "field": "open-problems",
+ "run": "20261124T023332Z-open-problems",
+ "kind": "compete",
+ "status": "ok",
+ "reason": "",
+ "host": "dell",
+ "image": "python:3.12",
+ "started_at": "2026-11-24T02:58:02.355181+00:00",
+ "finished_at": "2026-11-24T07:03:16.870652+00:00",
+ "duration_seconds": 14714,
+ "limits": {
+  "cpu": 2,
+  "memory_gb": 1.0,
+  "timeout_minutes": 420.0
+ },
+ "peak_memory_gb": 0.04,
+ "network": {
+  "setup": null,
+  "run": true
+ },
+ "steps": [
+  {
+   "step": "run-01-python",
+   "cmd": "python fetch_nb3.py --out-dir /out",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "step": "run-02-python",
+   "cmd": "python run_tests_c.py",
+   "exit": 0,
+   "seconds": 29
+  },
+  {
+   "step": "run-03-python",
+   "cmd": "python job_nb2.py --out-dir /out --workers 3",
+   "exit": 0,
+   "seconds": 14565
+  }
+ ],
+ "out_files": [
+  "base_a13.json",
+  "base_a14.json",
+  "base_b13.json",
+  "pinned_sha256.txt",
+  "summary_nb2.json"
+ ],
+ "out_files_total": 5,
+ "out_skipped": [],
+ "upload_skipped": [],
+ "summary_tail": "[run-03-python stdout] alse}, \"B\": {\"parents\": 13, \"done\": 13, \"nodes\": 12159, \"leaves\": 130, \"seconds\": 0.129, \"cut\": false}}\n{\"base\": \"a13\", \"phase1\": true, \"N_inf_L_empty\": true, \"statement\": {\"holds\": true, \"text\": \"for every prime p >= 199, every lift of the orbit of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] to level 14 is proper (primes 199..2999 checked one by one; above 2999 by P*_14 = 1848/5)\"}, \"P_star_L\": \"1848/5\", \"scanned_to\": 2999}\n{\"base\": \"a13\", \"cross\": \"inf\", \"sizes\": {\"L_A\": 0, \"L_C\": 0}, \"C1_agree\": true}\n{\"base\": \"b13\", \"mode\": \"P0\", \"sizes\": {\"f1\": 5, \"f2\": null, \"L_B\": null}, \"f1\": {\"parents\": 1, \"done\": 1, \"nodes\": 2551, \"leaves\": 126, \"seconds\": 0.002, \"cut\": false}, \"f2\": {\"parents\": 1, \"done\": 0, \"nodes\": 0, \"leaves\": 0, \"seconds\": 3606.27, \"cut\": true}, \"B\": null}\n{\"base\": \"b13\", \"phase1\": true, \"N_inf_L_empty\": true, \"statement\": {\"holds\": false, \"reason\": \"U_P0(L) not computed (cut)\"}, \"P_star_L\": null, \"scanned_to\": null}\n{\"base\": \"b13\", \"cross\": \"inf\", \"sizes\": {\"L_A\": 0, \"L_C\": 0}, \"C1_agree\": true}\n{\"base\": \"a13\", \"cross\": \"P0\", \"sizes\": {\"L_A\": null, \"L_C\": 5}, \"C1_agree\": true}\n{\"base\": \"b13\", \"cross\": \"P0\", \"sizes\": {\"L_A\": null, \"L_C\": null}, \"C1_agree\": null}\ndone\n",
+ "paths": {
+  "workdir": "/work (copy of E:\\MV2-Pursuit\\work\\20261124T023332Z-open-problems\\lonely-runner-16)",
+  "out": "/out -> out/",
+  "data": "/data (docker volume mv2c-data-lrc-none, kept for later jobs)"
+ },
+ "note": ""
+}

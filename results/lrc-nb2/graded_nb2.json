@@ -1,0 +1,36 @@
+{
+ "job": "lrc16-engine2-v4 (lrc-nb2)",
+ "plan": ["PLAN_addendum10.md", "PLAN_addendum11.md", "PLAN_addendum12.md"],
+ "graded": "2026-11-24 (run 24), by hand from results/lrc-nb2/summary_nb2.json and results/lrc-nb2/run_tests_c.stderr.txt",
+ "note": "Every number below is copied from summary_nb2.json. Made with AI agents working in MV2's name; not yet checked by a human expert. CC BY 4.0.",
+ "sanity": {
+  "G0": {"result": "pass", "evidence": "22 tests ran, 0 skipped, including test_nbc.CMatchesPy (the C engine)"},
+  "R0": {"result": "pass", "evidence": "every set finished by lrc-nb is reproduced, sizes and member lists: a14 |U_inf(3)|=1, |U_inf(5)|=1, U_inf(15) empty, |U_239(3)|=3, gcd-free |U_inf(15)|=3; a13 |U_inf(2)|=1, |U_199(2)|=9; b13 |U_inf(2)|=1, |U_199(2)|=5"},
+  "S2": {"result": "pass", "bases": ["a14", "a13", "b13"]},
+  "S3": {"result": "pass", "evidence": "no violations at 3, 5, 15 (a14), 2, 7, 14 (a13), 2 (b13; the other levels of b13 at P0 were cut)"},
+  "S4": {"result": "pass", "evidence": "empty for a14 and a13; b13 untested"},
+  "S5": {"result": "pass", "evidence": "0 violations for a14 and a13; b13 untested"},
+  "S7": {"result": "pass for a14 (inf and P0)", "untested": "a13, b13 (gcd-free level-7 step cut at 1,200 s)"},
+  "C1": {"result": "pass", "evidence": "a14 inf: B=A=C=0; a14 P0: B=A=C=1; a13 inf: B=A=C=0; a13 P0: B=C=5 (A cut); b13 inf: B=A=C=0; b13 P0: no route finished"}
+ },
+ "predictions": {
+  "N1": {"result": "holds", "text": "U_inf(15) is empty for a14 (three routes)"},
+  "N2": {"result": "holds", "text": "for every prime p >= 239, every lift of the orbit of (1..14) to level 15 is proper", "U_239_15_size": 1, "P_star_15": "1980/7", "primes_checked_one_by_one": 379, "scanned_to": 2999, "primes_with_J_nonempty": 0},
+  "N3": {"result": "holds", "text": "U_inf(14) is empty for a13 and for b13 (three routes each)"},
+  "N4": {"result": "holds for a13, untested for b13",
+         "a13": {"text": "for every prime p >= 199, every lift of the orbit of (1..13) to level 14 is proper", "U_199_14_size": 5, "P_star_14": "1848/5", "thresholds": ["1848/5", "245", "231", "231", "245"], "primes_checked_one_by_one": 385, "scanned_to": 2999, "primes_with_J_nonempty": 0},
+         "b13": {"reason": "U_199(7) not computed: the level-7 step at P = 199 was cut at its 3,600 s cap (3,606.27 s)"}},
+  "X1": {"result": "holds where tested", "k14_paper_primes_scanned": 52, "k14_nonempty": 0, "k13_paper_primes_scanned_a13": 56, "k13_nonempty": 0, "not_covered": "the five P_13 primes below 199 (83, 139, 167, 181, 191) and all of b13 at P0"},
+  "S_speed": {"result": "holds (narrowly)", "evidence": "every phase-1 step at P = inf finished within its cap: a14 f2 39.1 s (cap 1,800), a13 f2 1,697.4 s (cap 1,800), b13 f2 1,705.0 s (cap 1,800)"}
+ },
+ "recorded": {
+  "I1_a14": "at each of the 52 k = 14 gate primes: 3 gcd-free witness-free classes (up to units of Z_15); all 3 meet the gcd clause (0 survive it)",
+  "I2": "untested (gcd-free U_inf(14) cut)",
+  "seconds": {
+   "a14": {"phase1": 86.8, "total": 476.4, "f2_inf": 39.118, "f2_P0": 46.877},
+   "a13": {"phase1": 3211.8, "total": 12158.6, "f2_inf": 1697.404, "f2_P0": 1514.17},
+   "b13": {"phase1": 5311.3, "total": 14564.4, "f2_inf": 1705.005, "f2_P0_cut_at": 3606.27}
+  },
+  "nodes": {"a14_f2_P0": 393879269, "a13_f2_P0": 18839529813, "a13_f2_inf": 18839529813, "b13_f2_inf": 18839529813}
+ }
+}

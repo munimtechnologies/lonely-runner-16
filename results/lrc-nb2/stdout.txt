@@ -1,0 +1,31 @@
+===== run-01-python: python fetch_nb3.py --out-dir /out
+0110b5586e323f9888958719d597ad732836dfe1ee730e099e6353f1a57fedc7  uniform.py  (026f1ee88edeaf1964b3126d47e2d049b1f1a68b)
+808d48944019b02a7e2d50992f6f9512d6b5b8fe6d3ca283bdb24dc13753680d  thresh.py  (c51d4fb33502ce39baf8820a6cd48871543e608e)
+70348744c6c03e0f7f57d42e7ea70f228c08e2207cfb17071ad09875355712ee  uniform_nb.py  (a138b85fd004f0d0ae95f28d7604667c74f0f137)
+dea4683e0080562bae8f38595e4fc370a19db508a4057b59a5b953fb9722b384  test_uniform_nb.py  (a138b85fd004f0d0ae95f28d7604667c74f0f137)
+992156c740cae2e806e0ab49000708b205a9e8073e362f92565f4f38d85053c3  nbc.py  (57f59b9b510bd8f74d2f85b64fbe1f155d0ebe49)
+1ac9e37b61b1c950dfc6f2fcd3d3d515bab6aa115e61997f243cc0797852db3f  nbc.c  (57f59b9b510bd8f74d2f85b64fbe1f155d0ebe49)
+217b93f0a763c2ef9752f3a0b6273b714f1345b76b1ffaa885ee1e8aaca3e649  test_nbc.py  (57f59b9b510bd8f74d2f85b64fbe1f155d0ebe49)
+87a059e722f1c71dd9511221a81b0ad1a3c7d898bf96390eab70db5158b3dbc8  run_tests_c.py  (57f59b9b510bd8f74d2f85b64fbe1f155d0ebe49)
+935a87c788770db8b9ebb167d5a4b54f521198691f14a96da4d5651f4c1948eb  job_nb2.py  (57f59b9b510bd8f74d2f85b64fbe1f155d0ebe49)
+
+===== run-02-python: python run_tests_c.py
+skipped: 0
+
+===== run-03-python: python job_nb2.py --out-dir /out --workers 3
+{"base": "a14", "mode": "inf", "sizes": {"f1": 1, "f2": 1, "L_B": 0}, "f1": {"parents": 1, "done": 1, "nodes": 144914, "leaves": 2, "seconds": 0.012, "cut": false}, "f2": {"parents": 1, "done": 1, "nodes": 381470519, "leaves": 2, "seconds": 39.118, "cut": false}, "B": {"parents": 1, "done": 1, "nodes": 100568, "leaves": 1, "seconds": 0.085, "cut": false}}
+{"base": "a14", "mode": "P0", "sizes": {"f1": 3, "f2": 5, "L_B": 1}, "f1": {"parents": 1, "done": 1, "nodes": 351959, "leaves": 23996, "seconds": 0.086, "cut": false}, "f2": {"parents": 1, "done": 1, "nodes": 393879269, "leaves": 516837, "seconds": 46.877, "cut": false}, "B": {"parents": 5, "done": 5, "nodes": 1068073, "leaves": 34166, "seconds": 0.595, "cut": false}}
+{"base": "a14", "phase1": true, "N_inf_L_empty": true, "statement": {"holds": true, "text": "for every prime p >= 239, every lift of the orbit of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] to level 15 is proper (primes 239..2999 checked one by one; above 2999 by P*_15 = 1980/7)"}, "P_star_L": "1980/7", "scanned_to": 2999}
+{"base": "a14", "cross": "inf", "sizes": {"L_A": 0, "L_C": 0}, "C1_agree": true}
+{"base": "a14", "cross": "P0", "sizes": {"L_A": 1, "L_C": 1}, "C1_agree": true}
+{"base": "a13", "mode": "inf", "sizes": {"f1": 1, "f2": 1, "L_B": 0}, "f1": {"parents": 1, "done": 1, "nodes": 1211, "leaves": 2, "seconds": 0.004, "cut": false}, "f2": {"parents": 1, "done": 1, "nodes": 18839529813, "leaves": 2, "seconds": 1697.404, "cut": false}, "B": {"parents": 1, "done": 1, "nodes": 733, "leaves": 1, "seconds": 0.011, "cut": false}}
+{"base": "b13", "mode": "inf", "sizes": {"f1": 1, "f2": 1, "L_B": 0}, "f1": {"parents": 1, "done": 1, "nodes": 1111, "leaves": 2, "seconds": 0.004, "cut": false}, "f2": {"parents": 1, "done": 1, "nodes": 18839529813, "leaves": 2, "seconds": 1705.005, "cut": false}, "B": {"parents": 1, "done": 1, "nodes": 683, "leaves": 1, "seconds": 0.011, "cut": false}}
+{"base": "a13", "mode": "P0", "sizes": {"f1": 9, "f2": 13, "L_B": 5}, "f1": {"parents": 1, "done": 1, "nodes": 2175, "leaves": 52, "seconds": 0.003, "cut": false}, "f2": {"parents": 1, "done": 1, "nodes": 18839529813, "leaves": 5395497, "seconds": 1514.17, "cut": false}, "B": {"parents": 13, "done": 13, "nodes": 12159, "leaves": 130, "seconds": 0.129, "cut": false}}
+{"base": "a13", "phase1": true, "N_inf_L_empty": true, "statement": {"holds": true, "text": "for every prime p >= 199, every lift of the orbit of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] to level 14 is proper (primes 199..2999 checked one by one; above 2999 by P*_14 = 1848/5)"}, "P_star_L": "1848/5", "scanned_to": 2999}
+{"base": "a13", "cross": "inf", "sizes": {"L_A": 0, "L_C": 0}, "C1_agree": true}
+{"base": "b13", "mode": "P0", "sizes": {"f1": 5, "f2": null, "L_B": null}, "f1": {"parents": 1, "done": 1, "nodes": 2551, "leaves": 126, "seconds": 0.002, "cut": false}, "f2": {"parents": 1, "done": 0, "nodes": 0, "leaves": 0, "seconds": 3606.27, "cut": true}, "B": null}
+{"base": "b13", "phase1": true, "N_inf_L_empty": true, "statement": {"holds": false, "reason": "U_P0(L) not computed (cut)"}, "P_star_L": null, "scanned_to": null}
+{"base": "b13", "cross": "inf", "sizes": {"L_A": 0, "L_C": 0}, "C1_agree": true}
+{"base": "a13", "cross": "P0", "sizes": {"L_A": null, "L_C": 5}, "C1_agree": true}
+{"base": "b13", "cross": "P0", "sizes": {"L_A": null, "L_C": null}, "C1_agree": null}
+done
