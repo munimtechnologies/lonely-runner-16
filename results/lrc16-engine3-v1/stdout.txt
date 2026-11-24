@@ -1,0 +1,529 @@
+===== run-01-python: python -m unittest -v test_prune test_c
+
+===== run-02-python: python job_engine3.py --out-dir /out --workers 4
+{"part": "X", "k": 8, "p": 61, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "X", "k": 8, "p": 73, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "X", "k": 9, "p": 83, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "X", "k": 9, "p": 101, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "X", "k": 10, "p": 103, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "X", "k": 10, "p": 131, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "X", "k": 11, "p": 137, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "X", "k": 11, "p": 163, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "X", "k": 12, "p": 199, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": null}
+{"part": "X", "k": 12, "p": 173, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": null}
+{"part": "X", "k": 13, "p": 211, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": null}
+{"part": "X", "k": 14, "p": 241, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": null}
+{"part": "T", "k": 14, "p": 197, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 181, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 211, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 223, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 227, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 229, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 241, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 239, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 269, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 181, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 251, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 191, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 199, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 223, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 211, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 233, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 263, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 241, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 251, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 14, "p": 283, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 263, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 257, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 277, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "T", "k": 15, "p": 239, "prune": null, "status": null, "tau": null, "seconds": null, "cover_seconds": null, "agree": true}
+{"part": "S", "k": 15, "p": 271, "prune": 3, "status": "gt", "tau": 0, "seconds": 242.876, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 269, "prune": 3, "status": "gt", "tau": 0, "seconds": 285.885, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 283, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.06, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 281, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.123, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 293, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.111, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 307, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.129, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 311, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.005, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 313, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.154, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 317, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.08, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 331, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.107, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 337, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.117, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 347, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.101, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 349, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.104, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 353, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.134, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 359, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.119, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 367, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.081, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 373, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.067, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 379, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.057, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 383, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.15, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 389, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.104, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 397, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.037, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 401, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.137, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 409, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.072, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 419, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.198, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 421, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.074, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 431, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.224, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 433, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.036, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 439, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.087, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 461, "prune": 3, "status": "unknown", "tau": 0, "seconds": 461.442, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 443, "prune": 3, "status": "unknown", "tau": 0, "seconds": 618.791, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 449, "prune": 3, "status": "unknown", "tau": 0, "seconds": 575.735, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 457, "prune": 3, "status": "unknown", "tau": 0, "seconds": 461.837, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 467, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.096, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 463, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.128, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 487, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.009, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 479, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.145, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 491, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.11, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 499, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.192, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 503, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.186, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 509, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.247, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 521, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.039, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 523, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.008, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 541, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.104, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 547, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.194, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 557, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.105, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 563, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.14, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 569, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.096, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 571, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.238, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 593, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.083, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 587, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.15, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 577, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.255, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 599, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.146, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 617, "prune": 3, "status": "unknown", "tau": null, "seconds": null, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 607, "prune": 3, "status": "unknown", "tau": null, "seconds": null, "cover_seconds": null, "agree": null}{"part": "S", "k": 15, "p": 601, "prune": 3, "status": "unknown", "tau": null, "seconds": null, "cover_seconds": null, "agree": null}{"part": "S", "k": 15, "p": 613, "prune": 3, "status": "unknown", "tau": null, "seconds": null, "cover_seconds": null, "agree": null}
+
+
+{"part": "S", "k": 15, "p": 643, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.061, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 631, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.135, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 641, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.18, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 619, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.237, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 653, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.032, "cover_seconds": null, "agree": null}{"part": "S", "k": 15, "p": 647, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.204, "cover_seconds": null, "agree": null}
+
+{"part": "S", "k": 15, "p": 661, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.278, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 659, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.206, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 677, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.137, "cover_seconds": null, "agree": null}{"part": "S", "k": 15, "p": 673, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.216, "cover_seconds": null, "agree": null}
+
+{"part": "S", "k": 15, "p": 683, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.273, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 691, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.317, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 701, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.157, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 709, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.266, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 719, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.312, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 727, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.285, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 733, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.085, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 743, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.036, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 751, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.041, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 739, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.232, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 769, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.013, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 757, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.356, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 761, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.236, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 773, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.236, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 787, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.012, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 797, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.023, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 809, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.162, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 811, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.044, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 821, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.096, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 829, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.017, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 827, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.232, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 823, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.452, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 839, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.176, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 853, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.292, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 857, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.294, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 859, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.31, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 863, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.325, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 877, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.247, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 883, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.074, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 881, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.28, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 887, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.204, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 907, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.159, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 919, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.171, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 911, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.359, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 929, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.23, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 937, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.158, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 941, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.007, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 947, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.305, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 953, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.07, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 967, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.147, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 971, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.138, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 977, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.222, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 983, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.11, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 991, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.301, "cover_seconds": null, "agree": null}
+{"part": "S", "k": 15, "p": 997, "prune": 3, "status": "unknown", "tau": 0, "seconds": 400.29, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 281, "prune": 3, "status": "gt", "tau": 0, "seconds": 70.575, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 257, "prune": 3, "status": "gt", "tau": 0, "seconds": 93.87, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 277, "prune": 3, "status": "gt", "tau": 0, "seconds": 99.066, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 271, "prune": 3, "status": "gt", "tau": 0, "seconds": 156.649, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 293, "prune": 3, "status": "gt", "tau": 0, "seconds": 97.998, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 311, "prune": 3, "status": "gt", "tau": 0, "seconds": 126.064, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 313, "prune": 3, "status": "gt", "tau": 0, "seconds": 111.532, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 307, "prune": 3, "status": "gt", "tau": 0, "seconds": 189.873, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 317, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.098, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 331, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.067, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 337, "prune": 3, "status": "gt", "tau": 0, "seconds": 263.453, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 347, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.027, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 359, "prune": 3, "status": "gt", "tau": 0, "seconds": 144.552, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 349, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.11, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 353, "prune": 3, "status": "gt", "tau": 0, "seconds": 266.789, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 367, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.075, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 373, "prune": 3, "status": "gt", "tau": 0, "seconds": 292.031, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 379, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.076, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 383, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.14, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 389, "prune": 3, "status": "gt", "tau": 0, "seconds": 248.124, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 397, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.011, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 401, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.204, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 409, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.011, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 419, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.233, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 421, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.101, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 431, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.147, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 433, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.168, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 439, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.069, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 443, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.084, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 449, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.027, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 457, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.003, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 461, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.021, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 463, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.129, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 467, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.131, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 479, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.003, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 487, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.066, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 491, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.044, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 499, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.16, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 503, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.197, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 509, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.027, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 521, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.084, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 523, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.15, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 541, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.078, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 547, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.246, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 557, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.055, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 563, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.155, "cover_seconds": null, "agree": null}
+{"part": "R", "k": 14, "p": 569, "prune": 3, "status": "unknown", "tau": 0, "seconds": 300.09, "cover_seconds": null, "agree": null}
+{
+ "A1_crosscheck": {
+  "gates": 12,
+  "both_finished": 8,
+  "disagreements": [],
+  "result": "holds"
+ },
+ "A2_consistency_with_tau_v2": {
+  "rows": 24,
+  "disagreements": [],
+  "prune3_unknown": [],
+  "result": "holds"
+ },
+ "certificates_failing_independent_check": [],
+ "S1_speedup": {
+  "rows_with_speedup": 24,
+  "median": 0.9835,
+  "all": [
+   0.91,
+   0.865,
+   0.686,
+   1.222,
+   0.838,
+   1.368,
+   1.106,
+   1.349,
+   0.776,
+   0.986,
+   0.766,
+   1.139,
+   1.322,
+   1.248,
+   1.162,
+   1.008,
+   1.074,
+   0.907,
+   0.861,
+   0.981,
+   0.858,
+   0.783,
+   0.735,
+   1.329
+  ],
+  "result": "falsified"
+ },
+ "part_S_k15": {
+  "primes": 111,
+  "tau_le_13": [],
+  "tau_ge_14": [
+   269,
+   271
+  ],
+  "unknown": [
+   281,
+   283,
+   293,
+   307,
+   311,
+   313,
+   317,
+   331,
+   337,
+   347,
+   349,
+   353,
+   359,
+   367,
+   373,
+   379,
+   383,
+   389,
+   397,
+   401,
+   409,
+   419,
+   421,
+   431,
+   433,
+   439,
+   443,
+   449,
+   457,
+   461,
+   463,
+   467,
+   479,
+   487,
+   491,
+   499,
+   503,
+   509,
+   521,
+   523,
+   541,
+   547,
+   557,
+   563,
+   569,
+   571,
+   577,
+   587,
+   593,
+   599,
+   601,
+   607,
+   613,
+   617,
+   619,
+   631,
+   641,
+   643,
+   647,
+   653,
+   659,
+   661,
+   673,
+   677,
+   683,
+   691,
+   701,
+   709,
+   719,
+   727,
+   733,
+   739,
+   743,
+   751,
+   757,
+   761,
+   769,
+   773,
+   787,
+   797,
+   809,
+   811,
+   821,
+   823,
+   827,
+   829,
+   839,
+   853,
+   857,
+   859,
+   863,
+   877,
+   881,
+   883,
+   887,
+   907,
+   911,
+   919,
+   929,
+   937,
+   941,
+   947,
+   953,
+   967,
+   971,
+   977,
+   983,
+   991,
+   997
+  ],
+  "tau_histogram_le_13": {},
+  "largest_prime_with_tau_le_13_all_runs": 277,
+  "all_tau_ge_14_primes_all_runs": [
+   29,
+   31,
+   239,
+   269,
+   271
+  ],
+  "gate_plan_tau_ge_14_from_100": {
+   "primes": [
+    239,
+    269,
+    271
+   ],
+   "count": 3,
+   "logsum": 16.6733,
+   "reaches_483_239": false
+  }
+ },
+ "P3": {
+  "statement": "every prime p in [400, 1000] has tau_15(p) >= 14",
+  "counterexamples": [],
+  "decided": 0,
+  "untested": [
+   401,
+   409,
+   419,
+   421,
+   431,
+   433,
+   439,
+   443,
+   449,
+   457,
+   461,
+   463,
+   467,
+   479,
+   487,
+   491,
+   499,
+   503,
+   509,
+   521,
+   523,
+   541,
+   547,
+   557,
+   563,
+   569,
+   571,
+   577,
+   587,
+   593,
+   599,
+   601,
+   607,
+   613,
+   617,
+   619,
+   631,
+   641,
+   643,
+   647,
+   653,
+   659,
+   661,
+   673,
+   677,
+   683,
+   691,
+   701,
+   709,
+   719,
+   727,
+   733,
+   739,
+   743,
+   751,
+   757,
+   761,
+   769,
+   773,
+   787,
+   797,
+   809,
+   811,
+   821,
+   823,
+   827,
+   829,
+   839,
+   853,
+   857,
+   859,
+   863,
+   877,
+   881,
+   883,
+   887,
+   907,
+   911,
+   919,
+   929,
+   937,
+   941,
+   947,
+   953,
+   967,
+   971,
+   977,
+   983,
+   991,
+   997
+  ],
+  "result": "untested"
+ },
+ "R1_k14_table": {
+  "new_primes": 47,
+  "new_agree": 13,
+  "disagree": [],
+  "unknown": [
+   317,
+   331,
+   347,
+   349,
+   367,
+   379,
+   383,
+   397,
+   401,
+   409,
+   419,
+   421,
+   431,
+   433,
+   439,
+   443,
+   449,
+   457,
+   461,
+   463,
+   467,
+   479,
+   487,
+   491,
+   499,
+   503,
+   509,
+   521,
+   523,
+   541,
+   547,
+   557,
+   563,
+   569
+  ],
+  "agree_total_of_71": 37,
+  "result": "partly untested"
+ },
+ "caps_seconds": {
+  "x": 300,
+  "t": 400,
+  "s": 400,
+  "r": 300
+ },
+ "wall_minutes": 278.1
+}

@@ -1,0 +1,27 @@
+===== run-01-python: python -m unittest -v test_prune test_c
+test_covers_identical_for_every_prune_value (test_prune.EngineThree.test_covers_identical_for_every_prune_value) ... ok
+test_covers_match_reference_with_pruning (test_prune.EngineThree.test_covers_match_reference_with_pruning) ... ok
+test_gate_identical (test_prune.EngineThree.test_gate_identical) ... ok
+test_tau_identical_and_certificate_is_an_irredundant_cover (test_prune.EngineThree.test_tau_identical_and_certificate_is_an_irredundant_cover) ... ok
+test_forbidden_rule_never_removes_a_class_of_an_irredundant_cover (test_prune.RulesByBruteForce.test_forbidden_rule_never_removes_a_class_of_an_irredundant_cover) ... ok
+test_fractional_bound_never_exceeds_true_minimum (test_prune.RulesByBruteForce.test_fractional_bound_never_exceeds_true_minimum) ... ok
+test_symmetry_used_by_the_engine (test_prune.RulesByBruteForce.test_symmetry_used_by_the_engine) ... ok
+test_bb_lifting_equals_bruteforce_lifting (test_c.CEngine.test_bb_lifting_equals_bruteforce_lifting) ... ok
+test_cascade_matches_reference (test_c.CEngine.test_cascade_matches_reference) ... ok
+test_covers_match_reference (test_c.CEngine.test_covers_match_reference) ... ok
+test_gate_json_engines_agree (test_c.CEngine.test_gate_json_engines_agree) ... ok
+test_gate_with_shift (test_c.CEngine.test_gate_with_shift) ... ok
+test_one_to_k_lifts (test_c.CEngine.test_one_to_k_lifts) ... ok
+test_shift_cascade_matches_reference (test_c.CEngine.test_shift_cascade_matches_reference) ... ok
+test_shift_filter_two_lifting_methods_agree (test_c.CEngine.test_shift_filter_two_lifting_methods_agree) ... ok
+test_shiftok_matches_reference (test_c.CEngine.test_shiftok_matches_reference) ... ok
+test_two_normalisations_agree (test_c.CEngine.test_two_normalisations_agree) ... ok
+test_old_failure_is_a_length_effect (test_c.VectorShape.test_old_failure_is_a_length_effect) ... ok
+test_shiftok_vectors_have_length_k (test_c.VectorShape.test_shiftok_vectors_have_length_k) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 14.710s
+
+OK
+
+===== run-02-python: python job_engine3.py --out-dir /out --workers 4

@@ -1,0 +1,58 @@
+{
+ "contract": "mv2-compete-result-v1",
+ "name": "lrc16-engine3-v1",
+ "id": "1b4485649ef0",
+ "field": "open-problems",
+ "run": "20261122T173520Z-open-problems",
+ "kind": "compete",
+ "status": "ok",
+ "reason": "",
+ "host": "blade",
+ "image": "python:3.12",
+ "started_at": "2026-11-24T08:51:20.483664+00:00",
+ "finished_at": "2026-11-24T13:32:00.351513+00:00",
+ "duration_seconds": 16839,
+ "limits": {
+  "cpu": 4.0,
+  "memory_gb": 1.0,
+  "timeout_minutes": 480.0
+ },
+ "peak_memory_gb": 0.09,
+ "network": {
+  "setup": null,
+  "run": false
+ },
+ "steps": [
+  {
+   "step": "run-01-python",
+   "cmd": "python -m unittest -v test_prune test_c",
+   "exit": 0,
+   "seconds": 16
+  },
+  {
+   "step": "run-02-python",
+   "cmd": "python job_engine3.py --out-dir /out --workers 4",
+   "exit": 0,
+   "seconds": 16686
+  }
+ ],
+ "out_files": [
+  "lrc",
+  "sha256.txt",
+  "speed3.jsonl",
+  "summary_engine3.json",
+  "tau3_k14.jsonl",
+  "tau3_k15.jsonl",
+  "xcheck3.jsonl"
+ ],
+ "out_files_total": 7,
+ "out_skipped": [],
+ "upload_skipped": [],
+ "summary_tail": "[run-02-python stdout]   457,\n   461,\n   463,\n   467,\n   479,\n   487,\n   491,\n   499,\n   503,\n   509,\n   521,\n   523,\n   541,\n   547,\n   557,\n   563,\n   569,\n   571,\n   577,\n   587,\n   593,\n   599,\n   601,\n   607,\n   613,\n   617,\n   619,\n   631,\n   641,\n   643,\n   647,\n   653,\n   659,\n   661,\n   673,\n   677,\n   683,\n   691,\n   701,\n   709,\n   719,\n   727,\n   733,\n   739,\n   743,\n   751,\n   757,\n   761,\n   769,\n   773,\n   787,\n   797,\n   809,\n   811,\n   821,\n   823,\n   827,\n   829,\n   839,\n   853,\n   857,\n   859,\n   863,\n   877,\n   881,\n   883,\n   887,\n   907,\n   911,\n   919,\n   929,\n   937,\n   941,\n   947,\n   953,\n   967,\n   971,\n   977,\n   983,\n   991,\n   997\n  ],\n  \"result\": \"untested\"\n },\n \"R1_k14_table\": {\n  \"new_primes\": 47,\n  \"new_agree\": 13,\n  \"disagree\": [],\n  \"unknown\": [\n   317,\n   331,\n   347,\n   349,\n   367,\n   379,\n   383,\n   397,\n   401,\n   409,\n   419,\n   421,\n   431,\n   433,\n   439,\n   443,\n   449,\n   457,\n   461,\n   463,\n   467,\n   479,\n   487,\n   491,\n   499,\n   503,\n   509,\n   521,\n   523,\n   541,\n   547,\n   557,\n   563,\n   569\n  ],\n  \"agree_total_of_71\": 37,\n  \"result\": \"partly untested\"\n },\n \"caps_seconds\": {\n  \"x\": 300,\n  \"t\": 400,\n  \"s\": 400,\n  \"r\": 300\n },\n \"wall_minutes\": 278.1\n}\n",
+ "paths": {
+  "workdir": "/work (copy of E:\\MV2-Pursuit\\work\\20261122T173520Z-open-problems\\lonely-runner-16)",
+  "out": "/out -> out/",
+  "data": "/data (docker volume mv2c-data-lrc-none, kept for later jobs)"
+ },
+ "note": ""
+}
