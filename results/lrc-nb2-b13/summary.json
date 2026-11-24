@@ -1,0 +1,61 @@
+{
+ "contract": "mv2-compete-result-v1",
+ "name": "lrc16-engine2-v5",
+ "id": "b89ab03a63f3",
+ "field": "open-problems",
+ "run": "20261124T072213Z-open-problems",
+ "kind": "compete",
+ "status": "ok",
+ "reason": "",
+ "host": "dell",
+ "image": "python:3.12",
+ "started_at": "2026-11-24T12:56:16.495739+00:00",
+ "finished_at": "2026-11-24T15:35:57.828927+00:00",
+ "duration_seconds": 9581,
+ "limits": {
+  "cpu": 1.0,
+  "memory_gb": 1.0,
+  "timeout_minutes": 420.0
+ },
+ "peak_memory_gb": 0.04,
+ "network": {
+  "setup": null,
+  "run": true
+ },
+ "steps": [
+  {
+   "step": "run-01-python",
+   "cmd": "python fetch_nb3.py --out-dir /out",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "step": "run-02-python",
+   "cmd": "python run_tests_c.py",
+   "exit": 0,
+   "seconds": 46
+  },
+  {
+   "step": "run-03-python",
+   "cmd": "python job_b13.py --out-dir /out --minutes 400",
+   "exit": 0,
+   "seconds": 9304
+  }
+ ],
+ "out_files": [
+  "base_b13.json",
+  "caps_b13.json",
+  "pinned_sha256.txt",
+  "summary_nb2.json"
+ ],
+ "out_files_total": 4,
+ "out_skipped": [],
+ "upload_skipped": [],
+ "summary_tail": "[run-03-python stdout] \": \"inf\", \"sizes\": {\"f1\": 1, \"f2\": 1, \"L_B\": 0}, \"f1\": {\"parents\": 1, \"done\": 1, \"nodes\": 1111, \"leaves\": 2, \"seconds\": 0.003, \"cut\": false}, \"f2\": {\"parents\": 1, \"done\": 1, \"nodes\": 18839529813, \"leaves\": 2, \"seconds\": 1949.439, \"cut\": false}, \"B\": {\"parents\": 1, \"done\": 1, \"nodes\": 683, \"leaves\": 1, \"seconds\": 0.007, \"cut\": false}}\n{\"base\": \"b13\", \"mode\": \"P0\", \"sizes\": {\"f1\": 5, \"f2\": 13, \"L_B\": 3}, \"f1\": {\"parents\": 1, \"done\": 1, \"nodes\": 2551, \"leaves\": 126, \"seconds\": 0.003, \"cut\": false}, \"f2\": {\"parents\": 1, \"done\": 1, \"nodes\": 18839529813, \"leaves\": 5468957041, \"seconds\": 6632.489, \"cut\": false}, \"B\": {\"parents\": 13, \"done\": 13, \"nodes\": 14967, \"leaves\": 271, \"seconds\": 0.088, \"cut\": false}}\n{\"base\": \"b13\", \"phase1\": true, \"N_inf_L_empty\": true, \"statement\": {\"holds\": true, \"text\": \"for every prime p >= 199, every lift of the orbit of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 24] to level 14 is proper (primes 199..2999 checked one by one; above 2999 by P*_14 = 245)\"}, \"P_star_L\": \"245\", \"scanned_to\": 2999}\n{\"base\": \"b13\", \"cross\": \"inf\", \"sizes\": {\"L_A\": null, \"L_C\": 0}, \"C1_agree\": true}\n{\"base\": \"b13\", \"cross\": \"P0\", \"sizes\": {\"L_A\": null, \"L_C\": 3}, \"C1_agree\": true}\ndone\n",
+ "paths": {
+  "workdir": "/work (copy of E:\\MV2-Pursuit\\work\\20261124T072213Z-open-problems\\lonely-runner-16)",
+  "out": "/out -> out/",
+  "data": "/data (docker volume mv2c-data-lrc-none, kept for later jobs)"
+ },
+ "note": ""
+}

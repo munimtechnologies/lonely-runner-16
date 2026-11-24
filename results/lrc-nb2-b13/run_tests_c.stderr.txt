@@ -1,0 +1,27 @@
+test_orders (test_nbc.Basics.test_orders) ... ok
+test_spec_words (test_nbc.Basics.test_spec_words) ... ok
+test_sym_ok (test_nbc.Basics.test_sym_ok) ... ok
+test_cut (test_nbc.CMatchesPy.test_cut) ... ok
+test_multiword (test_nbc.CMatchesPy.test_multiword) ... ok
+test_small_cases (test_nbc.CMatchesPy.test_small_cases) ... ok
+test_cases (test_nbc.PyMatchesPublished.test_cases) ... ok
+test_crt2 (test_uniform_nb.Basics.test_crt2) ... ok
+test_gcd_clause (test_uniform_nb.Basics.test_gcd_clause) ... ok
+test_units_canon (test_uniform_nb.Basics.test_units_canon) ... ok
+test_k3 (test_uniform_nb.BinaryAgrees.test_k3) ... ok
+test_k7 (test_uniform_nb.BinaryAgrees.test_k7) ... ok
+test_combine (test_uniform_nb.CombineMatchesChain.test_combine) ... ok
+test_k3_k4 (test_uniform_nb.DfsMatchesDirect.test_k3_k4) ... ok
+test_k3 (test_uniform_nb.ExactPerPrime.test_k3) ... ok
+test_k4 (test_uniform_nb.ExactPerPrime.test_k4) ... ok
+test_paper_vectors (test_uniform_nb.LinearLifts.test_paper_vectors) ... ok
+test_small (test_uniform_nb.LinearLifts.test_small) ... ok
+test_k3 (test_uniform_nb.Sandwich.test_k3) ... ok
+test_k4 (test_uniform_nb.Sandwich.test_k4) ... ok
+test_k5_level6 (test_uniform_nb.Sandwich.test_k5_level6) ... ok
+test_other_vectors (test_uniform_nb.Sandwich.test_other_vectors) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 45.445s
+
+OK
