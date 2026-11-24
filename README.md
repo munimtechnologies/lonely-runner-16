@@ -45,7 +45,33 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest (2026-11-24, `RESULTS_run24.md`): two per-prime searches become one computation each
+## Latest (2026-11-24, `THEORY_18.md`): the 16-runner tight orbit dies at level 16 at every prime p >= 251
+
+For 14 and 15 runners, the tight speed sets survive every binary lifting level, so
+the published proof runs an extra fibre search at each gate prime. For 16 runners
+the tight set is (1..15), and `THEORY_18.md` proves:
+
+- **Theorem 18.** At every prime p >= 251, no lift of the orbit of (1..15) to
+  level 16 is improper. So the 16-runner computation needs **no fibre search for
+  the tight orbit at any prime from 251 on.**
+- How: the prime-free cascade (`lrc16-uniform-v1`) leaves 9 classes at level 16.
+  For 8 of them every coordinate is i or i + 8 mod 16, so for odd b the witness
+  condition no longer depends on the prime; one explicit window of times per class
+  (length 1/576 to 5/1344) then catches a point of the grid of spacing 1/(8p). The
+  ninth class falls to a parity step: moving b by 4 moves its one odd coordinate
+  by 1/2 + 7/(2p).
+- `test_level16.py` checks every window in exact arithmetic and the predicted
+  witness of each class against the actual integer vectors at every prime from
+  251 to 3,000 (data in `level16_certificate.json`).
+- Conditional on Lemma U (`THEORY.md` 8.2) and the `lrc16-uniform-v1` computation.
+  A public per-prime check (jerryckim16/Math-Research pull request 5) reported the
+  same at the 79 candidate gates 251..743, one prime at a time; this covers every
+  prime from 251 on. It proves no case of the conjecture: the level-one cover
+  search, where nearly all the cost lies, is untouched.
+- `PLAN_addendum14.md` adds prediction T5 for the queued `lrc16-uniform-v2`: its
+  exact cascade must be empty at level 16 at every prime it scans.
+
+## Earlier (2026-11-24, `RESULTS_run24.md`): two per-prime searches become one computation each
 
 Job lrc-nb2 (`lrc16-engine2-v4`) was graded against its pre-registered plan
 (`PLAN_addendum11.md`). Every sanity check passed, and every set of the earlier job
@@ -69,12 +95,11 @@ lrc-nb was reproduced member for member.
   (`REVIEW_16.md`).
 
 The paper itself runs these searches prime by prime and says (its Section 7) that
-its observations are not an assertion about all primes. A separate public spot check
-(jerryckim16/Math-Research, pull request 5, 2026-11-23) reproduced the (1..14)
-level-15 kill at 4 gate primes, one prime at a time.
+its observations are not an assertion about all primes. A separate public check
+(jerryckim16/Math-Research, pull requests 5-19, 2026-11-23/24) re-checked the
+15-runner gates one prime at a time.
 
-Still waiting for compute: `lrc16-uniform-v2` (the same method for the 16-runner
-tight orbit (1..15) at binary levels), `lrc16-engine2-v5`, `lrc16-engine3-v1`
+Still waiting for compute: `lrc16-uniform-v2`, `lrc16-engine2-v5`, `lrc16-engine3-v1`
 (running since 2026-11-24), `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner
 preprint has appeared (checked 2026-11-24).
 
@@ -88,7 +113,7 @@ interval, and Lemmas D and U at binary levels. **No error that changes a claim**
 cosmetic rounding ((15/0.49)^2 = 937.1095, written 937.11) and four dependencies a
 human must check against the cited papers. `test_review_theory.py` asserts every
 number it uses in exact arithmetic, with the standard library only. This is still an
-AI review, not a human one.
+AI review, not a human one. (`THEORY_18.md` has not had its own adversarial pass yet.)
 
 Earlier: `REVIEW_9.md` (grid-point witnesses: no error found; `test_review9.py`
 imports no repository code). `RESULTS_run22.md` (`lrc-repro-k14-v1`'s cover search
@@ -147,7 +172,7 @@ Every lift that U_251 keeps does have strict witness intervals, only shorter tha
 Job `lrc16-uniform-v2` (queued) applies them to (1..15) and (1..13,15,28): U_251 to
 level 128, P*_L per level, and the exact cascade at every prime from 251 to at
 least 3,000. Its predictions are pre-registered in `PLAN_addendum9.md` (X5 read as
-in `PLAN_addendum12.md`).
+in `PLAN_addendum12.md`; T5 added in `PLAN_addendum14.md`).
 
 ## Engines 3 and 4: safe prunings of the cover search (`THEORY_13.md`, `THEORY_14.md`, `REVIEW_13_14.md`)
 
@@ -157,7 +182,7 @@ in `PLAN_addendum12.md`).
   up with the most private times (`LRC_PRUNE=4`).
 
 `test_prune.py` and `test_orbit.py` check them by brute force. Jobs
-`lrc16-engine3-v1` and `lrc16-orbit-v1` (queued) run the C half of those tests
+`lrc16-engine3-v1` and `lrc16-orbit-v1` run the C half of those tests
 first, then measure the speed-up; see `PLAN_addendum7.md` and `PLAN_addendum8.md`.
 
 ## The bound for 16 runners (worked out in `THEORY.md`, Sections 1-3)
@@ -189,15 +214,17 @@ gates sit higher (about 80 primes from 251 up to about 800), so the deciding
 number is the level-one generation cost at k = 15 for those primes. Job
 `lrc16-allik-probe-v1` (`probe.py`, queued) measures it with Allikvere's own
 generator built for 15 speeds; the decision rule is pre-registered in `COST.md`,
-Section 4.
+Section 4. A public estimate (jerryckim16/Math-Research pull request 5) puts the
+16-runner gates at about 1.75e5 CPU-hours, far beyond this project's hardware.
 
 ## Surviving orbits and tight sets (`THEORY.md`, Sections 5 and 7)
 
 For 14 and 15 runners, the tight vectors (1..13), (1..11,13,24) and (1..14) survive
 every binary lifting level. For 16 runners, k+1 = 16 = 2^4, so the binary levels
-reach the tight witness 1/16 directly (Lemmas L, S, C). By Zhang's classification
-(arXiv:2608.13599, building on Goddyn and Wong), (1..15) is the only tight set
-among [15] and its one-entry modifications (Lemma N).
+reach the tight witness 1/16 directly (Lemmas L, S, C), and `THEORY_18.md` shows
+the orbit of (1..15) is gone by level 16 at every prime p >= 251. By Zhang's
+classification (arXiv:2608.13599, building on Goddyn and Wong), (1..15) is the only
+tight set among [15] and its one-entry modifications (Lemma N).
 
 ## One computation for every prime (`THEORY.md` Section 8, `THEORY_9.md`, `REVIEW_9.md`)
 
@@ -217,15 +244,16 @@ sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
 | `nbc.py`, `nbc.c` | fast non-binary lifting: unit-symmetry reduction, search order, C engine (`THEORY_17.md`) |
 | `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test |
 | `bounds.py`, `capped.py` | exact flag bound, shape bound, gate planning; the dual-capped flag bound |
+| `level16_certificate.json` | the windows and step data of `THEORY_18.md` |
 | `job*.py` | compete jobs: `job.py`, `job_shift.py`, `job_tau.py`, `job_engine3.py`, `job_orbit.py`, `job_uniform.py`, `job_uniform2.py`, `job_nb.py`, `job_nb2.py`, `job_b13.py` (job_nb2 for one base with longer caps) |
 | `fetch_*.py` | fetch published files at a pinned commit for a compete job and record their SHA-256 (`fetch_nb3.py` fetches every file of job lrc-nb2) |
 | `run_tests_c.py` | runs `test_nbc` and `test_uniform_nb` with the C tests required (no skips) |
 | `probe.py` | cost probe of Allikvere's public pipeline (`COST.md`) |
 | `results/` | raw outputs of finished jobs, copied unchanged (`results/lrc-nb2/graded_nb2.json` is the grading table of run 24) |
-| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py` and `test_review_theory.py` import no repository code) |
-| `THEORY.md`, `THEORY_9.md` ... `THEORY_17.md` | the mathematics, written before each job ran |
+| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py`, `test_review_theory.py` and `test_level16.py` import no repository code) |
+| `THEORY.md`, `THEORY_9.md` ... `THEORY_18.md` | the mathematics, written before each job ran (`THEORY_18.md` is a hand proof checked by `test_level16.py`) |
 | `REVIEW_9.md`, `REVIEW_13_14.md`, `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md`, `REVIEW_THEORY_2_7.md` | adversarial reviews: a second agent told to break each section against the code or by re-derivation |
-| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum13.md` | the pre-registered plan and what counts as success |
+| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum14.md` | the pre-registered plan and what counts as success |
 | `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md`, `RESULTS_run22.md`, `RESULTS_run24.md` | graded results and job reports |
 
 Build and test:
@@ -234,6 +262,7 @@ Build and test:
 cc -O3 -o lrc lrc.c
 python -m unittest -v
 python run_tests_c.py            # Linux/macOS with cc: the C tests may not skip
+python test_level16.py           # THEORY_18, standard library only
 python job_nb2.py --out-dir out --only a14 --workers 1
 ```
 
