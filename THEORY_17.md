@@ -3,6 +3,9 @@
 MV2 of Munim, Inc. Made with AI agents working in MV2's name; CC BY 4.0.
 Not yet checked by a human expert. Written 2026-11-24 (run 19), after grading job
 lrc-nb (`RESULTS_run19.md`) and before any result of the job this sets up.
+Revised 2026-11-24 (run 21): 17.1 item 3 now includes the step that `REVIEW_17.md`
+found missing (the cells of beta are cut from the arcs of every alternative). No
+statement, code or prediction changed.
 
 ## 17.0 Why
 
@@ -30,15 +33,21 @@ lambda = mu (mod c). Then:
 3. lambda z' is P-killed by the test that `lift_children` applies exactly when z'
    is. That test uses only the betas in Z_{L2} not divisible by c. The map
    beta -> beta lambda permutes this set, because lambda is a unit, and
-   (beta lambda) z'_i = beta (lambda z'_i). So the two vectors meet the same list of
-   position vectors. The gcd clause depends only on which coordinates each prime
-   d | L2 divides, and multiplying by a unit does not change that.
+   (beta lambda) z'_i = beta (lambda z'_i). The cells of a beta are cut from the
+   arcs of **every** alternative {z_i + L a : a = 0..c-1} of every coordinate, not
+   only the chosen ones. Because lambda = 1 (mod L), multiplication by lambda
+   permutes the alternatives of each coordinate. So the cells (and the big cells)
+   of beta lambda are the cells of beta. Hence the two vectors meet the same list
+   of position vectors in the same cell partitions, with the same masks and exact
+   bits. The gcd clause depends only on which coordinates each prime d | L2
+   divides, and multiplying by a unit does not change that.
 
 Every orbit {mu y} with y != 0 contains exactly one y whose first nonzero
 coordinate, in any fixed order, equals 1. Take mu = (that coordinate)^{-1}. So
 the search may skip every child whose first nonzero y-coordinate is not 1, and
-the set of canonical forms it returns is unchanged. It visits about 1/(c-1) of
-the leaves: 1/6 for c = 7, 1/4 for c = 5, 1/2 for c = 3. []
+the set of canonical forms it returns is unchanged. (y = 0 is its own orbit and is
+always searched.) It visits about 1/(c-1) of the leaves: 1/6 for c = 7, 1/4 for
+c = 5, 1/2 for c = 3. []
 
 Pruning stays sound because the prune test (some big cell that no remaining
 alternative can cover) is computed over all alternatives. That set contains the

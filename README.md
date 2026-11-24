@@ -45,27 +45,34 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest (2026-11-24, `RESULTS_run20.md`, `REVIEW_17.md`)
+## Latest (2026-11-24, `REVIEW_15.md`, `REVIEW_16.md`, `PLAN_addendum12.md`)
 
-- **Job lrc-nb2 stopped at its test gate** (`lrc16-engine2-v3`): `run_tests_c.py`
-  loads `test_uniform_nb`, which the fetch step had not downloaded. The search never
-  started, so no prediction was tested. All 7 tests of `test_nbc.py` passed on
-  Linux with the C engine forced on (C = Python node for node; Python = the
-  published `uniform_nb`). `fetch_nb3.py` now fetches every file the job runs at
-  its published commit. Re-filed as `lrc16-engine2-v4`, with the predictions of
-  `PLAN_addendum11.md` unchanged.
-- **REVIEW_17.md:** an adversarial read of Lemma S against the code. Correct as
-  implemented. One step was missing from the written proof (the unit must also
-  permute each coordinate's alternatives, because the cells are cut from all of
-  them); the review supplies it.
-- Earlier (`RESULTS_run19.md`): U_inf(15) is empty for (1..14) by two routes
-  (N1 held). (`RESULTS_run17.md`): the tight orbit (1..15) dies by level 16 at all
-  ten pilot primes (P1 held); (1..13, 15, 28) dies by level 4 everywhere (P2 held).
-  (`RESULTS_run16.md`): U_inf(16) is empty for (1..15) (P5b held), but U_251 keeps
-  9 lifts at level 16 and 2 at level 32 (P5 **failed**). (`RESULTS_run14.md`): our
-  tau search agrees with Table 2 of arXiv:2609.02604 v2 at 24 of its 71 primes,
-  with no disagreement. Every prime from 17 to 277 except 29, 31 and 239 has a
-  cover on at most 13 classes for 16 runners (269 and 271 undecided).
+- No job has reported since run 20. `lrc16-engine2-v4` (lrc-nb2) and
+  `lrc16-uniform-v2` wait for compute. No 16-runner preprint has appeared (checked
+  2026-11-24).
+- **REVIEW_15.md:** an adversarial read of Lemmas A, E, T and R (`THEORY_15.md`)
+  against `thresh.py` and `job_uniform2.py`. All four are correct as written and as
+  implemented. One pre-registered cross-check (X5) was worded too strongly: the
+  Lemma-S filter of `lrc.c` may remove more lifts than `thresh.py`, so a
+  disagreement is a bug in only one direction unless X5 is read against the
+  unfiltered `cascadebb` rows. The recorded outputs show both modes agree at all
+  ten pilot primes, so the outcome cannot change.
+- **REVIEW_16.md:** an adversarial read of Lemmas N1-N4 (`THEORY_16.md`) against
+  `uniform_nb.py`. Correct as written and as implemented. Two scope remarks for any
+  write-up: emptiness is the strong direction (our pruning is never stronger than
+  the paper's), and gate primes below P0 are not covered.
+- **PLAN_addendum12.md** fixes the reading of X5 and sharpens the first question
+  of the bug hunt if N3 fails, before either job reports. **THEORY_17.md** now
+  includes the proof step that `REVIEW_17.md` supplied.
+- Earlier (`RESULTS_run20.md`): lrc-nb2's first try stopped at its test gate (a
+  missing fetch), and was re-filed with every file pinned. (`RESULTS_run19.md`):
+  U_inf(15) is empty for (1..14) by two routes (N1 held). (`RESULTS_run17.md`): the
+  tight orbit (1..15) dies by level 16 at all ten pilot primes (P1 held);
+  (1..13, 15, 28) dies by level 4 everywhere (P2 held). (`RESULTS_run16.md`):
+  U_inf(16) is empty for (1..15) (P5b held), but U_251 keeps 9 lifts at level 16
+  and 2 at level 32 (P5 **failed**). (`RESULTS_run14.md`): our tau search agrees
+  with Table 2 of arXiv:2609.02604 v2 at 24 of its 71 primes, with no
+  disagreement.
 
 ## A faster non-binary lift (`THEORY_17.md`, `REVIEW_17.md`)
 
@@ -81,7 +88,7 @@ This is the finite-checking framework from those papers:
   and checks the C engine against the reference: same children, same node and
   leaf counts.
 
-## Non-binary levels: re-checking the 14- and 15-runner fibre searches (`THEORY_16.md`)
+## Non-binary levels: re-checking the 14- and 15-runner fibre searches (`THEORY_16.md`, `REVIEW_16.md`)
 
 The published 14- and 15-runner proofs run two extra searches at **every** gate
 prime. They lift the tight orbits (1..13) and (1..11,13,24) to level 14, and
@@ -95,7 +102,7 @@ ask whether one computation can replace those per-prime searches at every prime
 from 239 (k = 14) or 199 (k = 13) upward. They also re-check the paper's outcome
 at its gate primes.
 
-## From the uniform cascade to every prime (`THEORY_15.md`)
+## From the uniform cascade to every prime (`THEORY_15.md`, `REVIEW_15.md`)
 
 Every lift that U_251 keeps does have strict witness intervals, only shorter than
 1/251. `thresh.py` lists those intervals exactly, which gives:
@@ -109,7 +116,8 @@ Every lift that U_251 keeps does have strict witness intervals, only shorter tha
 
 Job `lrc16-uniform-v2` (queued) applies them to (1..15) and (1..13,15,28): U_251 to
 level 128, P*_L per level, and the exact cascade at every prime from 251 to at
-least 3,000. Its predictions are pre-registered in `PLAN_addendum9.md`.
+least 3,000. Its predictions are pre-registered in `PLAN_addendum9.md` (X5 read as
+in `PLAN_addendum12.md`).
 
 ## Engines 3 and 4: safe prunings of the cover search (`THEORY_13.md`, `THEORY_14.md`)
 
@@ -184,8 +192,9 @@ sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
 | `probe.py` | cost probe of Allikvere's public pipeline (`COST.md`) |
 | `results/` | raw outputs of finished jobs, copied unchanged |
 | `test_*.py` | tests against brute force and between independent implementations |
-| `THEORY.md`, `THEORY_9.md` ... `THEORY_17.md`, `REVIEW_17.md` | the mathematics, written before each job ran; adversarial reviews |
-| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum11.md` | the pre-registered plan and what counts as success |
+| `THEORY.md`, `THEORY_9.md` ... `THEORY_17.md` | the mathematics, written before each job ran |
+| `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md` | adversarial reviews: a second agent told to break Sections 15, 16 and 17 against the code |
+| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum12.md` | the pre-registered plan and what counts as success |
 | `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md` | graded results and job reports |
 
 Build and test:
