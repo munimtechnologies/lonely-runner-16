@@ -45,31 +45,29 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest results (2026-11-24, `RESULTS_run19.md`)
+## Latest (2026-11-24, `RESULTS_run20.md`, `REVIEW_17.md`)
 
-- **Job lrc-nb, graded:** U_inf(15) is empty for (1..14) (prediction N1 held). Two
-  independent routes agree: the chain 1 -> 3 -> 15 and the CRT combination of
-  levels 3 and 5. Without the gcd clause it has exactly 3 classes, each with every
-  coordinate divisible by 3 or by 5. This agrees with the 15-runner proof's
-  Section 4.4, now for every prime at once, but it proves nothing new on its own.
-  Every other prediction (N2-N4, X1) is **untested**: the pure-Python lifting hit
-  its deadlines (the 7^13 lifts for k = 13, and every P0 run). No sanity check
-  failed.
-- **Next:** `THEORY_17.md` adds a C engine (`nbc.c`), a unit-symmetry reduction
-  that skips all but about 1/(c-1) of the children (Lemma S), and the cheap lifting
-  order 7 -> 14 first. Job `lrc-nb2` (filed as `lrc16-engine2-v3`,
-  `PLAN_addendum11.md`) asks the same questions again.
-- Earlier (`RESULTS_run17.md`): the tight orbit (1..15) dies by level 16 at all ten
-  pilot primes (P1 held); (1..13, 15, 28) dies by level 4 everywhere (P2 held); the
-  shift-filtered pilot gates finished none of the ten k = 15 cover searches (P4
-  untested). (`RESULTS_run16.md`): U_inf(16) is empty for (1..15) (P5b held), but
-  U_251 keeps 9 lifts at level 16 and 2 at level 32 (P5 **failed**).
-  (`RESULTS_run14.md`): our tau search agrees with Table 2 of arXiv:2609.02604 v2
-  at 24 of its 71 primes, with no disagreement. Every prime from 17 to 277 except
-  29, 31 and 239 has a cover on at most 13 classes for 16 runners (269 and 271
-  undecided).
+- **Job lrc-nb2 stopped at its test gate** (`lrc16-engine2-v3`): `run_tests_c.py`
+  loads `test_uniform_nb`, which the fetch step had not downloaded. The search never
+  started, so no prediction was tested. All 7 tests of `test_nbc.py` passed on
+  Linux with the C engine forced on (C = Python node for node; Python = the
+  published `uniform_nb`). `fetch_nb3.py` now fetches every file the job runs at
+  its published commit. Re-filed as `lrc16-engine2-v4`, with the predictions of
+  `PLAN_addendum11.md` unchanged.
+- **REVIEW_17.md:** an adversarial read of Lemma S against the code. Correct as
+  implemented. One step was missing from the written proof (the unit must also
+  permute each coordinate's alternatives, because the cells are cut from all of
+  them); the review supplies it.
+- Earlier (`RESULTS_run19.md`): U_inf(15) is empty for (1..14) by two routes
+  (N1 held). (`RESULTS_run17.md`): the tight orbit (1..15) dies by level 16 at all
+  ten pilot primes (P1 held); (1..13, 15, 28) dies by level 4 everywhere (P2 held).
+  (`RESULTS_run16.md`): U_inf(16) is empty for (1..15) (P5b held), but U_251 keeps
+  9 lifts at level 16 and 2 at level 32 (P5 **failed**). (`RESULTS_run14.md`): our
+  tau search agrees with Table 2 of arXiv:2609.02604 v2 at 24 of its 71 primes,
+  with no disagreement. Every prime from 17 to 277 except 29, 31 and 239 has a
+  cover on at most 13 classes for 16 runners (269 and 271 undecided).
 
-## A faster non-binary lift (`THEORY_17.md`)
+## A faster non-binary lift (`THEORY_17.md`, `REVIEW_17.md`)
 
 - **Lemma S:** when c is an odd prime coprime to L, the units of Z_{cL} that are
   1 mod L permute the children of a class, keep their canonical form, and keep
@@ -181,14 +179,14 @@ sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
 | `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test |
 | `bounds.py`, `capped.py` | exact flag bound, shape bound, gate planning; the dual-capped flag bound |
 | `job*.py` | compete jobs: `job.py`, `job_shift.py`, `job_tau.py`, `job_engine3.py`, `job_orbit.py`, `job_uniform.py`, `job_uniform2.py`, `job_nb.py`, `job_nb2.py` |
-| `fetch_*.py` | fetch published files at a pinned commit for a compete job and record their SHA-256 |
+| `fetch_*.py` | fetch published files at a pinned commit for a compete job and record their SHA-256 (`fetch_nb3.py` fetches every file of job lrc-nb2) |
 | `run_tests_c.py` | runs `test_nbc` and `test_uniform_nb` with the C tests required (no skips) |
 | `probe.py` | cost probe of Allikvere's public pipeline (`COST.md`) |
 | `results/` | raw outputs of finished jobs, copied unchanged |
 | `test_*.py` | tests against brute force and between independent implementations |
-| `THEORY.md`, `THEORY_9.md` ... `THEORY_17.md` | the mathematics, written before each job ran |
+| `THEORY.md`, `THEORY_9.md` ... `THEORY_17.md`, `REVIEW_17.md` | the mathematics, written before each job ran; adversarial reviews |
 | `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum11.md` | the pre-registered plan and what counts as success |
-| `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md` | graded results |
+| `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md` | graded results and job reports |
 
 Build and test:
 

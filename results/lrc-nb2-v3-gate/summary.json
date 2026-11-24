@@ -1,0 +1,58 @@
+{
+ "contract": "mv2-compete-result-v1",
+ "name": "lrc16-engine2-v3",
+ "id": "b48e704380c9",
+ "field": "open-problems",
+ "run": "20261124T012615Z-open-problems",
+ "kind": "compete",
+ "status": "failed",
+ "reason": "run step exited 1",
+ "host": "dell",
+ "image": "python:3.12",
+ "started_at": "2026-11-24T01:55:35.397876+00:00",
+ "finished_at": "2026-11-24T01:56:54.139446+00:00",
+ "duration_seconds": 78,
+ "limits": {
+  "cpu": 2,
+  "memory_gb": 1.0,
+  "timeout_minutes": 420.0
+ },
+ "peak_memory_gb": null,
+ "network": {
+  "setup": null,
+  "run": true
+ },
+ "steps": [
+  {
+   "step": "run-01-python",
+   "cmd": "python fetch_nb2.py --out-dir /out",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "step": "run-02-python",
+   "cmd": "python run_tests_c.py",
+   "exit": 1,
+   "seconds": 28
+  },
+  {
+   "step": "run-03-python",
+   "cmd": "python job_nb2.py --out-dir /out --workers 3",
+   "exit": "not run",
+   "seconds": null
+  }
+ ],
+ "out_files": [
+  "pinned_sha256.txt"
+ ],
+ "out_files_total": 1,
+ "out_skipped": [],
+ "upload_skipped": [],
+ "summary_tail": "[run-02-python stderr] test_orders (test_nbc.Basics.test_orders) ... ok\ntest_spec_words (test_nbc.Basics.test_spec_words) ... ok\ntest_sym_ok (test_nbc.Basics.test_sym_ok) ... ok\ntest_cut (test_nbc.CMatchesPy.test_cut) ... ok\ntest_multiword (test_nbc.CMatchesPy.test_multiword) ... ok\ntest_small_cases (test_nbc.CMatchesPy.test_small_cases) ... ok\ntest_cases (test_nbc.PyMatchesPublished.test_cases) ... ok\ntest_uniform_nb (unittest.loader._FailedTest.test_uniform_nb) ... ERROR\n\n======================================================================\nERROR: test_uniform_nb (unittest.loader._FailedTest.test_uniform_nb)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_uniform_nb\nTraceback (most recent call last):\n  File \"/usr/local/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'test_uniform_nb'\n\n\n----------------------------------------------------------------------\nRan 8 tests in 27.522s\n\nFAILED (errors=1)\n[run-02-python stdout] skipped: 0\n",
+ "paths": {
+  "workdir": "/work (copy of E:\\MV2-Pursuit\\work\\20261124T012615Z-open-problems\\lonely-runner-16)",
+  "out": "/out -> out/",
+  "data": "/data (docker volume mv2c-data-lrc-none, kept for later jobs)"
+ },
+ "note": ""
+}

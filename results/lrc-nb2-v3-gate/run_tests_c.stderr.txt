@@ -1,0 +1,24 @@
+test_orders (test_nbc.Basics.test_orders) ... ok
+test_spec_words (test_nbc.Basics.test_spec_words) ... ok
+test_sym_ok (test_nbc.Basics.test_sym_ok) ... ok
+test_cut (test_nbc.CMatchesPy.test_cut) ... ok
+test_multiword (test_nbc.CMatchesPy.test_multiword) ... ok
+test_small_cases (test_nbc.CMatchesPy.test_small_cases) ... ok
+test_cases (test_nbc.PyMatchesPublished.test_cases) ... ok
+test_uniform_nb (unittest.loader._FailedTest.test_uniform_nb) ... ERROR
+
+======================================================================
+ERROR: test_uniform_nb (unittest.loader._FailedTest.test_uniform_nb)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_uniform_nb
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'test_uniform_nb'
+
+
+----------------------------------------------------------------------
+Ran 8 tests in 27.522s
+
+FAILED (errors=1)
