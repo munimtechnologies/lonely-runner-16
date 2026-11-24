@@ -45,34 +45,30 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest (2026-11-24, `REVIEW_15.md`, `REVIEW_16.md`, `PLAN_addendum12.md`)
+## Latest (2026-11-24, `RESULTS_run22.md`, `REVIEW_13_14.md`)
 
-- No job has reported since run 20. `lrc16-engine2-v4` (lrc-nb2) and
-  `lrc16-uniform-v2` wait for compute. No 16-runner preprint has appeared (checked
-  2026-11-24).
-- **REVIEW_15.md:** an adversarial read of Lemmas A, E, T and R (`THEORY_15.md`)
-  against `thresh.py` and `job_uniform2.py`. All four are correct as written and as
-  implemented. One pre-registered cross-check (X5) was worded too strongly: the
-  Lemma-S filter of `lrc.c` may remove more lifts than `thresh.py`, so a
-  disagreement is a bug in only one direction unless X5 is read against the
-  unfiltered `cascadebb` rows. The recorded outputs show both modes agree at all
-  ten pilot primes, so the outcome cannot change.
-- **REVIEW_16.md:** an adversarial read of Lemmas N1-N4 (`THEORY_16.md`) against
-  `uniform_nb.py`. Correct as written and as implemented. Two scope remarks for any
-  write-up: emptiness is the strong direction (our pruning is never stronger than
-  the paper's), and gate primes below P0 are not covered.
-- **PLAN_addendum12.md** fixes the reading of X5 and sharpens the first question
-  of the bug hunt if N3 fails, before either job reports. **THEORY_17.md** now
-  includes the proof step that `REVIEW_17.md` supplied.
-- Earlier (`RESULTS_run20.md`): lrc-nb2's first try stopped at its test gate (a
-  missing fetch), and was re-filed with every file pinned. (`RESULTS_run19.md`):
-  U_inf(15) is empty for (1..14) by two routes (N1 held). (`RESULTS_run17.md`): the
-  tight orbit (1..15) dies by level 16 at all ten pilot primes (P1 held);
-  (1..13, 15, 28) dies by level 4 everywhere (P2 held). (`RESULTS_run16.md`):
-  U_inf(16) is empty for (1..15) (P5b held), but U_251 keeps 9 lifts at level 16
-  and 2 at level 32 (P5 **failed**). (`RESULTS_run14.md`): our tau search agrees
-  with Table 2 of arXiv:2609.02604 v2 at 24 of its 71 primes, with no
-  disagreement.
+- **RESULTS_run22.md:** the first pre-registered job (`lrc-repro-k14-v1`, step 1 of
+  `PLAN.md`) finally ran. Its cover search hit the 1,500 s cap at all ten gate
+  primes of the 14/15-runner proof, so no tuple was lifted and step 1 is
+  **untested**. Combined with `lrc16-tau-v2`, our code alone gives
+  **tau_14(239) = 13** exactly, in line with the paper's tau >= 13. No other number
+  in it decides anything, and the job will not be re-run with a longer cap.
+- **REVIEW_13_14.md:** an adversarial read of the cover-search prunings (Lemmas F, P
+  and M of `THEORY_13.md` and `THEORY_14.md`) against `lrc.c`. All three are correct
+  as written and as implemented, including in tau mode. One process finding: the C
+  half of `test_prune.py` and `test_orbit.py` has never run (no C compiler in the
+  publish test gate, and no finished job ran those files). So `LRC_PRUNE != 0` stays
+  unused until `lrc16-engine3-v1` or `lrc16-orbit-v1` passes its test step on Linux.
+- Still waiting for compute: `lrc16-engine2-v4` (lrc-nb2), `lrc16-uniform-v2`,
+  `lrc16-engine3-v1`, `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner
+  preprint has appeared (checked 2026-11-24).
+- Earlier: `REVIEW_15.md` and `REVIEW_16.md` (Lemmas A, E, T, R and N1-N4 are
+  correct), `PLAN_addendum12.md` (how X5 is read), `RESULTS_run20.md` (lrc-nb2's
+  first try stopped at its test gate and was re-filed), `RESULTS_run19.md`
+  (U_inf(15) is empty for (1..14); N1 held), `RESULTS_run17.md` (the tight orbit
+  (1..15) dies by level 16 at all ten pilot primes; P1 held), `RESULTS_run16.md`
+  (P5b held, P5 **failed**), `RESULTS_run14.md` (our tau search agrees with Table 2
+  of arXiv:2609.02604 v2 at 24 of its 71 primes, with no disagreement).
 
 ## A faster non-binary lift (`THEORY_17.md`, `REVIEW_17.md`)
 
@@ -119,7 +115,7 @@ level 128, P*_L per level, and the exact cascade at every prime from 251 to at
 least 3,000. Its predictions are pre-registered in `PLAN_addendum9.md` (X5 read as
 in `PLAN_addendum12.md`).
 
-## Engines 3 and 4: safe prunings of the cover search (`THEORY_13.md`, `THEORY_14.md`)
+## Engines 3 and 4: safe prunings of the cover search (`THEORY_13.md`, `THEORY_14.md`, `REVIEW_13_14.md`)
 
 - **Lemma F (fractional bound)** and **Lemma P (forbidden classes)** cut only
   search nodes with no reportable cover below them (`LRC_PRUNE=3`).
@@ -127,8 +123,8 @@ in `PLAN_addendum12.md`).
   up with the most private times (`LRC_PRUNE=4`).
 
 `test_prune.py` and `test_orbit.py` check them by brute force. Jobs
-`lrc16-engine3-v1` and `lrc16-orbit-v1` (queued) measure the speed-up; see
-`PLAN_addendum7.md` and `PLAN_addendum8.md`.
+`lrc16-engine3-v1` and `lrc16-orbit-v1` (queued) run the C half of those tests
+first, then measure the speed-up; see `PLAN_addendum7.md` and `PLAN_addendum8.md`.
 
 ## The bound for 16 runners (worked out in `THEORY.md`, Sections 1-3)
 
@@ -193,9 +189,9 @@ sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
 | `results/` | raw outputs of finished jobs, copied unchanged |
 | `test_*.py` | tests against brute force and between independent implementations |
 | `THEORY.md`, `THEORY_9.md` ... `THEORY_17.md` | the mathematics, written before each job ran |
-| `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md` | adversarial reviews: a second agent told to break Sections 15, 16 and 17 against the code |
+| `REVIEW_13_14.md`, `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md` | adversarial reviews: a second agent told to break Sections 13 to 17 against the code |
 | `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum12.md` | the pre-registered plan and what counts as success |
-| `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md` | graded results and job reports |
+| `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md`, `RESULTS_run22.md` | graded results and job reports |
 
 Build and test:
 
