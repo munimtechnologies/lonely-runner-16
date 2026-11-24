@@ -45,7 +45,27 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest (2026-11-24, `THEORY_18.md`): the 16-runner tight orbit dies at level 16 at every prime p >= 251
+## Latest (2026-11-24, `REVIEW_18.md`): THEORY_18 survives an adversarial pass; a brute-force check of its input is queued
+
+- An agent told to break `THEORY_18.md` re-derived every window coordinate by
+  coordinate, the lift form w_i = i + 8p[i in D], the class-1 parity step
+  (4 w_14 = 56 + 8p mod 16p) and the assembly of the proof. **No error found.**
+  `test_review18.py` (standard library, no repository code, no data file) starts from
+  the 9 residue vectors alone, finds every component of the good set by an exact
+  sweep over the bad arcs, and confirms that each hand window is a whole component,
+  long enough at every prime from 251; it also re-checks a witness against the
+  actual lifts at every prime from 251 to 1,500.
+- The weakest premise is THEORY_18's input (ii), the computer list U_251(16): a
+  wrong kill in `uniform.py` would hide a class. Until now it was checked against
+  brute force only for 3- to 7-speed sets. `indep.py` and `indep_brute.c` compute the
+  cascade J_p(L) for (1..15) and (1..13,15,28) from the bare definition (every
+  lift, every time, no shortcuts) and compare it with U_251 level by level, at
+  every prime from 251 up. Job `lrc16-indep-v1` is queued; its predictions (I0-I5)
+  are fixed in `PLAN_addendum15.md` before it runs.
+- Wording fix (R5d): T5 of `PLAN_addendum14.md` runs inside U_251, so it tests the
+  hand argument but not the list; `lrc16-indep-v1` tests both.
+
+## Earlier (2026-11-24, `THEORY_18.md`): the 16-runner tight orbit dies at level 16 at every prime p >= 251
 
 For 14 and 15 runners, the tight speed sets survive every binary lifting level, so
 the published proof runs an extra fibre search at each gate prime. For 16 runners
@@ -99,11 +119,12 @@ its observations are not an assertion about all primes. A separate public check
 (jerryckim16/Math-Research, pull requests 5-19, 2026-11-23/24) re-checked the
 15-runner gates one prime at a time.
 
-Still waiting for compute: `lrc16-uniform-v2`, `lrc16-engine2-v5`, `lrc16-engine3-v1`
-(running since 2026-11-24), `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner
-preprint has appeared (checked 2026-11-24).
+Still waiting for compute: `lrc16-indep-v1` (new), `lrc16-uniform-v2`,
+`lrc16-engine2-v5`, `lrc16-engine3-v1` (running since 2026-11-24),
+`lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner preprint has appeared
+(checked 2026-11-24, about 14:00 UTC).
 
-## Every THEORY section has now had an adversarial pass (`REVIEW_THEORY_2_7.md`)
+## Every THEORY section has now had an adversarial pass (`REVIEW_THEORY_2_7.md`, `REVIEW_18.md`)
 
 `REVIEW_THEORY_2_7.md` (2026-11-24) re-derives THEORY.md Sections 1-3 and 5-8 by hand:
 the flag-bound constants, the n = 15 shape lemma (all polynomial identities, the
@@ -112,8 +133,8 @@ Lemmas L, S and C, the small-cover completion, Lemma N and the 1/1344 witness
 interval, and Lemmas D and U at binary levels. **No error that changes a claim**; one
 cosmetic rounding ((15/0.49)^2 = 937.1095, written 937.11) and four dependencies a
 human must check against the cited papers. `test_review_theory.py` asserts every
-number it uses in exact arithmetic, with the standard library only. This is still an
-AI review, not a human one. (`THEORY_18.md` has not had its own adversarial pass yet.)
+number it uses in exact arithmetic, with the standard library only. `REVIEW_18.md`
+does the same for `THEORY_18.md`. These are AI reviews, not human ones.
 
 Earlier: `REVIEW_9.md` (grid-point witnesses: no error found; `test_review9.py`
 imports no repository code). `RESULTS_run22.md` (`lrc-repro-k14-v1`'s cover search
@@ -230,7 +251,8 @@ tight set among [15] and its one-entry modifications (Lemma N).
 
 **Lemma U** separates the prime from the lifting problem: two prime-free cascades
 sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
-`uniform.py` and the independent `grid.py` (Lemma G) compute it.
+`uniform.py` and the independent `grid.py` (Lemma G) compute it. `indep.py` is a
+third, brute-force route at single primes (`REVIEW_18.md`).
 
 ## What is here
 
@@ -243,17 +265,18 @@ sandwich the true one, U_inf(L) <= J_p(L) <= U_P(L) for every prime p >= P.
 | `uniform_nb.py` | the same at any level (14 = 2*7, 15 = 3*5, ...): general gcd clause, divisor chains, CRT combination (`THEORY_16.md`) |
 | `nbc.py`, `nbc.c` | fast non-binary lifting: unit-symmetry reduction, search order, C engine (`THEORY_17.md`) |
 | `grid.py` | grid-point witnesses (Lemma G): a second, independent kill test |
+| `indep.py`, `indep_brute.c` | brute-force binary cascade J_p(L) from the bare definition, imports nothing else (`REVIEW_18.md`); `indep_job.py` is job `lrc16-indep-v1` |
 | `bounds.py`, `capped.py` | exact flag bound, shape bound, gate planning; the dual-capped flag bound |
 | `level16_certificate.json` | the windows and step data of `THEORY_18.md` |
 | `job*.py` | compete jobs: `job.py`, `job_shift.py`, `job_tau.py`, `job_engine3.py`, `job_orbit.py`, `job_uniform.py`, `job_uniform2.py`, `job_nb.py`, `job_nb2.py`, `job_b13.py` (job_nb2 for one base with longer caps) |
-| `fetch_*.py` | fetch published files at a pinned commit for a compete job and record their SHA-256 (`fetch_nb3.py` fetches every file of job lrc-nb2) |
-| `run_tests_c.py` | runs `test_nbc` and `test_uniform_nb` with the C tests required (no skips) |
+| `fetch_*.py` | fetch published files at a pinned commit for a compete job and record their SHA-256 (`fetch_nb3.py` fetches every file of job lrc-nb2; `fetch_indep.py` the U lists) |
+| `run_tests_c.py`, `run_tests_indep.py` | run the tests with the C engines required (no skips) |
 | `probe.py` | cost probe of Allikvere's public pipeline (`COST.md`) |
 | `results/` | raw outputs of finished jobs, copied unchanged (`results/lrc-nb2/graded_nb2.json` is the grading table of run 24) |
-| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py`, `test_review_theory.py` and `test_level16.py` import no repository code) |
-| `THEORY.md`, `THEORY_9.md` ... `THEORY_18.md` | the mathematics, written before each job ran (`THEORY_18.md` is a hand proof checked by `test_level16.py`) |
-| `REVIEW_9.md`, `REVIEW_13_14.md`, `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md`, `REVIEW_THEORY_2_7.md` | adversarial reviews: a second agent told to break each section against the code or by re-derivation |
-| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum14.md` | the pre-registered plan and what counts as success |
+| `test_*.py` | tests against brute force and between independent implementations (`test_review9.py`, `test_review_theory.py`, `test_level16.py` and `test_review18.py` import no repository code) |
+| `THEORY.md`, `THEORY_9.md` ... `THEORY_18.md` | the mathematics, written before each job ran (`THEORY_18.md` is a hand proof checked by `test_level16.py` and `test_review18.py`) |
+| `REVIEW_9.md`, `REVIEW_13_14.md`, `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md`, `REVIEW_THEORY_2_7.md`, `REVIEW_18.md` | adversarial reviews: a second agent told to break each section against the code or by re-derivation |
+| `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum15.md` | the pre-registered plan and what counts as success |
 | `RESULTS_run14.md`, `RESULTS_run16.md`, `RESULTS_run17.md`, `RESULTS_run19.md`, `RESULTS_run20.md`, `RESULTS_run22.md`, `RESULTS_run24.md` | graded results and job reports |
 
 Build and test:
@@ -262,7 +285,9 @@ Build and test:
 cc -O3 -o lrc lrc.c
 python -m unittest -v
 python run_tests_c.py            # Linux/macOS with cc: the C tests may not skip
+python run_tests_indep.py        # the brute-force cascade, C engine required
 python test_level16.py           # THEORY_18, standard library only
+python test_review18.py          # REVIEW_18, standard library only
 python job_nb2.py --out-dir out --only a14 --workers 1
 ```
 
