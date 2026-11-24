@@ -1,0 +1,59 @@
+{
+ "contract": "mv2-compete-result-v1",
+ "name": "lrc16-engine2-v2",
+ "id": "3e0af677b0d4",
+ "field": "open-problems",
+ "run": "20261123T131436Z-open-problems",
+ "kind": "compete",
+ "status": "ok",
+ "reason": "",
+ "host": "blade",
+ "image": "python:3.12",
+ "started_at": "2026-11-23T14:15:13.917439+00:00",
+ "finished_at": "2026-11-23T15:36:32.047865+00:00",
+ "duration_seconds": 4878,
+ "limits": {
+  "cpu": 1.0,
+  "memory_gb": 1.0,
+  "timeout_minutes": 240.0
+ },
+ "peak_memory_gb": 0.03,
+ "network": {
+  "setup": null,
+  "run": true
+ },
+ "steps": [
+  {
+   "step": "run-01-python",
+   "cmd": "python fetch_nb.py --out-dir /out",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "step": "run-02-python",
+   "cmd": "python -m unittest -v test_uniform_nb",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "step": "run-03-python",
+   "cmd": "python job_nb.py --out-dir /out",
+   "exit": 0,
+   "seconds": 4776
+  }
+ ],
+ "out_files": [
+  "pinned_sha256.txt",
+  "summary_nb.json"
+ ],
+ "out_files_total": 2,
+ "out_skipped": [],
+ "upload_skipped": [],
+ "summary_tail": "[run-03-python stdout] ne\": null}, \"C1_agree\": null, \"chain_cut\": {\"level\": 14, \"reason\": \"deadline\"}, \"f2_cut\": {\"level\": 7, \"reason\": \"deadline\"}, \"combine_cut\": null, \"chain_seconds\": 94.5}\n{\"base\": \"b13\", \"mode\": \"P0_nogcd\", \"sizes\": {\"2\": 8, \"7\": null, \"L_chain\": null, \"L_combine\": null}, \"C1_agree\": null, \"chain_cut\": {\"level\": 14, \"reason\": \"deadline\"}, \"f2_cut\": {\"level\": 7, \"reason\": \"deadline\"}, \"combine_cut\": null, \"chain_seconds\": 94.5}\n{\"base\": \"b13\", \"L\": 14, \"P0\": 199, \"P_star_L\": null, \"scan_bound\": null, \"scanned_to\": null, \"n_primes\": null, \"primes_with_J_L_nonempty\": null, \"S2\": {\"linear_in_U_inf_f1\": true, \"linear_in_U_inf_f2\": null, \"linear_not_in_U_inf_L\": null, \"linear_L_status\": \"t0\"}, \"S3_violations\": {\"2\": []}, \"S4\": null, \"S5_count\": null, \"S7\": {}, \"statement\": {\"holds\": false, \"reason\": \"U_P0(L) not computed (cut)\"}, \"seconds\": 1417.5, \"sizes\": {\"inf\": {\"2\": 1, \"7\": null, \"L_chain\": null, \"L_combine\": null}, \"P0\": {\"2\": 5, \"7\": null, \"L_chain\": null, \"L_combine\": null}, \"inf_nogcd\": {\"2\": 2, \"7\": null, \"L_chain\": null, \"L_combine\": null}, \"P0_nogcd\": {\"2\": 8, \"7\": null, \"L_chain\": null, \"L_combine\": null}}, \"C1\": {\"inf\": null, \"P0\": null, \"inf_nogcd\": null, \"P0_nogcd\": null}}\n",
+ "paths": {
+  "workdir": "/work (copy of E:\\MV2-Pursuit\\work\\20261123T131436Z-open-problems\\lonely-runner-16)",
+  "out": "/out -> out/",
+  "data": "/data (docker volume mv2c-data-lrc-none, kept for later jobs)"
+ },
+ "note": ""
+}

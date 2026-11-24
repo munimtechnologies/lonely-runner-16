@@ -1,0 +1,1325 @@
+{
+ "job": "lrc-nb",
+ "python": "3.12.15 (main, Oct  6 2026, 04:38:21) [GCC 14.2.0]",
+ "machine": "x86_64",
+ "started": "2026-11-23T14:15:17Z",
+ "runs": [
+  {
+   "base": "a14",
+   "s": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "k": 14,
+   "factors": [
+    3,
+    5
+   ],
+   "L": 15,
+   "P0": 239,
+   "minutes": 80,
+   "modes": {
+    "inf": {
+     "P": null,
+     "use_gcd": true,
+     "chain_seconds": 33.0,
+     "chain_cut": null,
+     "f2_seconds": 15.5,
+     "f2_cut": null,
+     "combine_seconds": 0.0,
+     "combine_tested": 4,
+     "combine_cut": false,
+     "sizes": {
+      "3": 1,
+      "5": 1,
+      "L_chain": 0,
+      "L_combine": 0
+     },
+     "C1_agree": true,
+     "L_size": 0,
+     "L_list": [],
+     "f1_list": [
+      [
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2
+      ]
+     ],
+     "f2_list": [
+      [
+       1,
+       2,
+       3,
+       4,
+       0,
+       1,
+       2,
+       3,
+       4,
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     ]
+    },
+    "P0": {
+     "P": 239,
+     "use_gcd": true,
+     "chain_seconds": 864.0,
+     "chain_cut": {
+      "level": 15,
+      "reason": "deadline"
+     },
+     "f2_seconds": 576.0,
+     "f2_cut": {
+      "level": 5,
+      "reason": "deadline"
+     },
+     "sizes": {
+      "3": 3,
+      "5": null,
+      "L_chain": null,
+      "L_combine": null
+     },
+     "C1_agree": null,
+     "L_size": null,
+     "L_list": null,
+     "f1_list": [
+      [
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2
+      ],
+      [
+       1,
+       2,
+       0,
+       1,
+       2,
+       1,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2
+      ],
+      [
+       1,
+       2,
+       0,
+       1,
+       2,
+       2,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2
+      ]
+     ],
+     "f2_list": null
+    },
+    "inf_nogcd": {
+     "P": null,
+     "use_gcd": false,
+     "chain_seconds": 76.1,
+     "chain_cut": null,
+     "f2_seconds": 16.4,
+     "f2_cut": null,
+     "combine_seconds": 0.0,
+     "combine_tested": 16,
+     "combine_cut": false,
+     "sizes": {
+      "3": 2,
+      "5": 2,
+      "L_chain": 3,
+      "L_combine": 3
+     },
+     "C1_agree": true,
+     "L_size": 3,
+     "L_list": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       3,
+       6,
+       9,
+       12,
+       0,
+       3,
+       6,
+       9,
+       12,
+       0,
+       3,
+       6,
+       9,
+       12
+      ],
+      [
+       5,
+       10,
+       0,
+       5,
+       10,
+       0,
+       5,
+       10,
+       0,
+       5,
+       10,
+       0,
+       5,
+       10
+      ]
+     ],
+     "f1_list": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2
+      ]
+     ],
+     "f2_list": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       2,
+       3,
+       4,
+       0,
+       1,
+       2,
+       3,
+       4,
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     ]
+    },
+    "P0_nogcd": {
+     "P": 239,
+     "use_gcd": false,
+     "chain_seconds": 216.0,
+     "chain_cut": {
+      "level": 15,
+      "reason": "deadline"
+     },
+     "f2_seconds": 144.0,
+     "f2_cut": {
+      "level": 5,
+      "reason": "deadline"
+     },
+     "sizes": {
+      "3": 5,
+      "5": null,
+      "L_chain": null,
+      "L_combine": null
+     },
+     "C1_agree": null,
+     "L_size": null,
+     "L_list": null,
+     "f1_list": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2
+      ],
+      [
+       1,
+       2,
+       0,
+       1,
+       2,
+       1,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2
+      ],
+      [
+       1,
+       2,
+       0,
+       1,
+       2,
+       2,
+       1,
+       2,
+       0,
+       1,
+       2,
+       0,
+       1,
+       2
+      ]
+     ],
+     "f2_list": null
+    }
+   },
+   "S2": {
+    "linear_in_U_inf_f1": true,
+    "linear_in_U_inf_f2": true,
+    "linear_not_in_U_inf_L": true,
+    "linear_L_status": "t0"
+   },
+   "S3_violations": {
+    "3": []
+   },
+   "S7": {
+    "inf": {
+     "agree": true,
+     "gcd_clause_members_of_free_set": 3
+    }
+   },
+   "statement": {
+    "holds": false,
+    "reason": "U_P0(L) not computed (cut)"
+   },
+   "seconds": 1941.1
+  },
+  {
+   "base": "a13",
+   "s": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+   ],
+   "k": 13,
+   "factors": [
+    2,
+    7
+   ],
+   "L": 14,
+   "P0": 199,
+   "minutes": 35,
+   "modes": {
+    "inf": {
+     "P": null,
+     "use_gcd": true,
+     "chain_seconds": 283.5,
+     "chain_cut": {
+      "level": 14,
+      "reason": "deadline"
+     },
+     "f2_seconds": 189.0,
+     "f2_cut": {
+      "level": 7,
+      "reason": "deadline"
+     },
+     "sizes": {
+      "2": 1,
+      "7": null,
+      "L_chain": null,
+      "L_combine": null
+     },
+     "C1_agree": null,
+     "L_size": null,
+     "L_list": null,
+     "f1_list": [
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1
+      ]
+     ],
+     "f2_list": null
+    },
+    "P0": {
+     "P": 199,
+     "use_gcd": true,
+     "chain_seconds": 378.0,
+     "chain_cut": {
+      "level": 14,
+      "reason": "deadline"
+     },
+     "f2_seconds": 252.0,
+     "f2_cut": {
+      "level": 7,
+      "reason": "deadline"
+     },
+     "sizes": {
+      "2": 9,
+      "7": null,
+      "L_chain": null,
+      "L_combine": null
+     },
+     "C1_agree": null,
+     "L_size": null,
+     "L_list": null,
+     "f1_list": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       1,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       1,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       1,
+       0,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       1,
+       1,
+       1,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       0,
+       1,
+       0,
+       1
+      ]
+     ],
+     "f2_list": null
+    },
+    "inf_nogcd": {
+     "P": null,
+     "use_gcd": false,
+     "chain_seconds": 94.5,
+     "chain_cut": {
+      "level": 14,
+      "reason": "deadline"
+     },
+     "f2_seconds": 63.0,
+     "f2_cut": {
+      "level": 7,
+      "reason": "deadline"
+     },
+     "sizes": {
+      "2": 2,
+      "7": null,
+      "L_chain": null,
+      "L_combine": null
+     },
+     "C1_agree": null,
+     "L_size": null,
+     "L_list": null,
+     "f1_list": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1
+      ]
+     ],
+     "f2_list": null
+    },
+    "P0_nogcd": {
+     "P": 199,
+     "use_gcd": false,
+     "chain_seconds": 94.5,
+     "chain_cut": {
+      "level": 14,
+      "reason": "deadline"
+     },
+     "f2_seconds": 63.0,
+     "f2_cut": {
+      "level": 7,
+      "reason": "deadline"
+     },
+     "sizes": {
+      "2": 12,
+      "7": null,
+      "L_chain": null,
+      "L_combine": null
+     },
+     "C1_agree": null,
+     "L_size": null,
+     "L_list": null,
+     "f1_list": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       1,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       1,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       1,
+       0,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       1,
+       1,
+       1,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       0,
+       1,
+       0,
+       1
+      ]
+     ],
+     "f2_list": null
+    }
+   },
+   "S2": {
+    "linear_in_U_inf_f1": true,
+    "linear_in_U_inf_f2": null,
+    "linear_not_in_U_inf_L": null,
+    "linear_L_status": "t0"
+   },
+   "S3_violations": {
+    "2": []
+   },
+   "S7": {},
+   "statement": {
+    "holds": false,
+    "reason": "U_P0(L) not computed (cut)"
+   },
+   "seconds": 1417.5
+  },
+  {
+   "base": "b13",
+   "s": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    13,
+    24
+   ],
+   "k": 13,
+   "factors": [
+    2,
+    7
+   ],
+   "L": 14,
+   "P0": 199,
+   "minutes": 35,
+   "modes": {
+    "inf": {
+     "P": null,
+     "use_gcd": true,
+     "chain_seconds": 283.5,
+     "chain_cut": {
+      "level": 14,
+      "reason": "deadline"
+     },
+     "f2_seconds": 189.0,
+     "f2_cut": {
+      "level": 7,
+      "reason": "deadline"
+     },
+     "sizes": {
+      "2": 1,
+      "7": null,
+      "L_chain": null,
+      "L_combine": null
+     },
+     "C1_agree": null,
+     "L_size": null,
+     "L_list": null,
+     "f1_list": [
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       0
+      ]
+     ],
+     "f2_list": null
+    },
+    "P0": {
+     "P": 199,
+     "use_gcd": true,
+     "chain_seconds": 378.0,
+     "chain_cut": {
+      "level": 14,
+      "reason": "deadline"
+     },
+     "f2_seconds": 252.0,
+     "f2_cut": {
+      "level": 7,
+      "reason": "deadline"
+     },
+     "sizes": {
+      "2": 5,
+      "7": null,
+      "L_chain": null,
+      "L_combine": null
+     },
+     "C1_agree": null,
+     "L_size": null,
+     "L_list": null,
+     "f1_list": [
+      [
+       0,
+       0,
+       0,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       0,
+       0,
+       0,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       0
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       1,
+       0,
+       1,
+       1,
+       0
+      ],
+      [
+       1,
+       0,
+       1,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       0,
+       1,
+       1,
+       1
+      ]
+     ],
+     "f2_list": null
+    },
+    "inf_nogcd": {
+     "P": null,
+     "use_gcd": false,
+     "chain_seconds": 94.5,
+     "chain_cut": {
+      "level": 14,
+      "reason": "deadline"
+     },
+     "f2_seconds": 63.0,
+     "f2_cut": {
+      "level": 7,
+      "reason": "deadline"
+     },
+     "sizes": {
+      "2": 2,
+      "7": null,
+      "L_chain": null,
+      "L_combine": null
+     },
+     "C1_agree": null,
+     "L_size": null,
+     "L_list": null,
+     "f1_list": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       0
+      ]
+     ],
+     "f2_list": null
+    },
+    "P0_nogcd": {
+     "P": 199,
+     "use_gcd": false,
+     "chain_seconds": 94.5,
+     "chain_cut": {
+      "level": 14,
+      "reason": "deadline"
+     },
+     "f2_seconds": 63.0,
+     "f2_cut": {
+      "level": 7,
+      "reason": "deadline"
+     },
+     "sizes": {
+      "2": 8,
+      "7": null,
+      "L_chain": null,
+      "L_combine": null
+     },
+     "C1_agree": null,
+     "L_size": null,
+     "L_list": null,
+     "f1_list": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       0,
+       0,
+       0,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       0
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       1
+      ],
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       1,
+       1,
+       0,
+       1,
+       1,
+       0
+      ],
+      [
+       1,
+       0,
+       1,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       0,
+       1,
+       1,
+       1
+      ]
+     ],
+     "f2_list": null
+    }
+   },
+   "S2": {
+    "linear_in_U_inf_f1": true,
+    "linear_in_U_inf_f2": null,
+    "linear_not_in_U_inf_L": null,
+    "linear_L_status": "t0"
+   },
+   "S3_violations": {
+    "2": []
+   },
+   "S7": {},
+   "statement": {
+    "holds": false,
+    "reason": "U_P0(L) not computed (cut)"
+   },
+   "seconds": 1417.5
+  }
+ ],
+ "finished": "2026-11-23T15:34:53Z"
+}
