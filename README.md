@@ -45,7 +45,23 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest (2026-11-24, run 29)
+## Latest (2026-11-24, runs 30-31)
+
+- **Wording made precise.** Of the two 16-runner orbits treated by `THEORY_18.md` and
+  `THEORY_19.md`, only (1..15) is tight. (1..13, 15, 28) is near-tight: it is not tight
+  by Goddyn and Wong's theorem (Zhang, arXiv:2608.13599, Thm 1.1 with n = 16, r = 14,
+  m = 2, where b = 3 is coprime to 14), and it has a strict level-1 witness interval of
+  length 1/1344 (`THEORY.md` 7.3). By Zhang's one-entry classification and Lemma N
+  (`THEORY.md` 7.2), (1..15) is the only known tight set for 16 runners. Earlier
+  summaries that called both orbits "singled out by the tight-set analysis" should be
+  read this way. No mathematical claim changes.
+- `REVIEW_indep_desk.md` (run 30): a line-by-line desk review of the never-run
+  brute-force job `lrc16-indep-v1` found no defect before it runs.
+- Still waiting for compute (memory on the shared machines): `lrc16-indep-v1`,
+  `lrc16-uniform-v2`, `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner
+  preprint has appeared (checked 2026-11-24, about 20:10 UTC).
+
+## Earlier (2026-11-24, run 29)
 
 ### `RESULTS_run29.md`: the third tight orbit of the 14-runner proof, at every prime from 199
 
@@ -79,19 +95,16 @@ routes agree).
 - Still conditional on Lemma U and the `lrc16-uniform-v1` list; the brute-force job
   `lrc16-indep-v1` (queued) tests both orbits from the bare definition.
 
-Still waiting for compute: `lrc16-indep-v1`, `lrc16-uniform-v2`, `lrc16-orbit-v1`,
-`lrc16-allik-probe-v1`. No 16-runner preprint has appeared (checked 2026-11-24, about
-16:20 UTC).
-
 ## Earlier (2026-11-24, run 28)
 
 ### `THEORY_19.md`: the second 16-runner orbit, (1..13, 15, 28), also dies at level 16 at every prime p >= 251
 
 - **Theorem 19.** At every prime p >= 251, no lift of the orbit of
-  (1, ..., 13, 15, 28) to level 16 is improper. With Theorem 18, **both level-one
-  orbits singled out by the tight-set analysis, (1..15) and (1..13, 15, 28), are
-  removed by binary lifting alone by level 16 at every prime from 251**, so a
-  16-runner computation needs no fibre search for either.
+  (1, ..., 13, 15, 28) to level 16 is improper. With Theorem 18, **both the tight
+  orbit (1..15) and the near-tight orbit (1..13, 15, 28), the 16-runner analogue of
+  the 14-runner survivor (1..11, 13, 24), are removed by binary lifting alone by
+  level 16 at every prime from 251**, so a 16-runner computation needs no fibre
+  search for either.
 - How: the prime-free cascade keeps 5 classes. Four have every coordinate s or
   s + 8 mod 16; for odd times their witness condition does not depend on the prime,
   and one explicit window per class (length 1/576 or 5/1344, next to 1/8 or 3/8)
@@ -129,9 +142,10 @@ arXiv:2609.02604 agree with the paper (37 of 71 in all), none disagrees.
 
 `REVIEW_THEORY_2_7.md` re-derives THEORY.md Sections 1-3 and 5-8 by hand (no error
 that changes a claim; `test_review_theory.py`). Also: `REVIEW_9.md`, `REVIEW_13_14.md`,
-`REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md`, `REVIEW_18.md`, `REVIEW_19.md`. These
-are AI reviews, not human ones. Graded results: `RESULTS_run14.md`, 16 (P5
-**failed**), 17, 19, 20, 22, 24, 28, 29.
+`REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md`, `REVIEW_18.md`, `REVIEW_19.md`, and the
+desk review of the brute-force job, `REVIEW_indep_desk.md`. These are AI reviews, not
+human ones. Graded results: `RESULTS_run14.md`, 16 (P5 **failed**), 17, 19, 20, 22,
+24, 28, 29.
 
 ## Other parts
 
@@ -169,7 +183,7 @@ are AI reviews, not human ones. Graded results: `RESULTS_run14.md`, 16 (P5
 | `results/` | raw outputs of finished jobs, copied unchanged |
 | `test_*.py` | tests against brute force and between independent implementations (`test_review9.py`, `test_review_theory.py`, `test_level16.py`, `test_review18.py`, `test_level16_gw.py` and `test_review19.py` import no repository code) |
 | `THEORY.md`, `THEORY_9.md` ... `THEORY_19.md` | the mathematics, written before each job ran |
-| `REVIEW_*.md` | adversarial reviews: a second agent told to break each section |
+| `REVIEW_*.md` | adversarial reviews: a second agent told to break each section (and `REVIEW_indep_desk.md`, a desk review of a job before it runs) |
 | `PLAN.md`, `PLAN_addendum6.md` ... `PLAN_addendum16.md` | the pre-registered plan and what counts as success |
 | `RESULTS_run*.md` | graded results and job reports |
 
