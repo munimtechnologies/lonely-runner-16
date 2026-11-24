@@ -45,7 +45,32 @@ This is the finite-checking framework from those papers:
    times by multiplicative translates of an interval), then lift through levels
    2, 4, 8, 16, 32 until every lift is proper.
 
-## Latest (2026-11-24, runs 30-31)
+## Latest (2026-11-24, run 32)
+
+### `RESULTS_run32.md`: a second, computational route to Theorems 18 and 19
+
+Job `lrc16-uniform-v2` graded against `PLAN_addendum9.md` and `PLAN_addendum14.md`
+(both written before it ran). Raw output in `results/lrc16-uniform-v2/`.
+
+- **T1, T4, T5 hold; S2-S6, R1, X5, X6 all clean.** At each of the 377 primes from
+  251 to 2,999 the exact per-prime test (`thresh.py`) finds no improper lift of
+  (1..15) at level 16, agreeing with the hand proof of `THEORY_18.md`; the re-run
+  lists the same 9 level-16 classes; at the ten pilot primes it agrees with the
+  separate C engine (`lrc16-shift-v2`).
+- **(1..15): the death level is exactly 16 at every prime p >= 251** (P*_16 = 288
+  above the scan; the linear lift keeps level 8 non-empty at every prime).
+- **(1..13, 15, 28): gone by level 8 at every prime p >= 251** (latest at
+  p = 257, 269, 281, 293; for p > 1,344 already at level 1). This sharpens
+  Theorem 19 from level 16 to level 8.
+- **One defect, reported:** the job's `statement.holds` flag (prediction T2) read
+  false because of an off-by-one in its own condition (it required the last prime
+  scanned to be at least 3,000; the last prime below 3,000 is 2,999). T2's stated
+  condition holds in the raw numbers; we do not count it as a clean pass.
+- Same inputs as before (Lemma U and `uniform.py`'s class list). The brute-force
+  check of that list, `lrc16-indep-v1`, is still queued. No case of the conjecture
+  is proved, and the level-one cover search (the real cost) is untouched.
+
+## Earlier (2026-11-24, runs 30-31)
 
 - **Wording made precise.** Of the two 16-runner orbits treated by `THEORY_18.md` and
   `THEORY_19.md`, only (1..15) is tight. (1..13, 15, 28) is near-tight: it is not tight
@@ -58,8 +83,8 @@ This is the finite-checking framework from those papers:
 - `REVIEW_indep_desk.md` (run 30): a line-by-line desk review of the never-run
   brute-force job `lrc16-indep-v1` found no defect before it runs.
 - Still waiting for compute (memory on the shared machines): `lrc16-indep-v1`,
-  `lrc16-uniform-v2`, `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner
-  preprint has appeared (checked 2026-11-24, about 20:10 UTC).
+  `lrc16-orbit-v1`, `lrc16-allik-probe-v1`. No 16-runner preprint has appeared
+  (checked 2026-11-24, about 21:50 UTC).
 
 ## Earlier (2026-11-24, run 29)
 
@@ -145,7 +170,7 @@ that changes a claim; `test_review_theory.py`). Also: `REVIEW_9.md`, `REVIEW_13_
 `REVIEW_15.md`, `REVIEW_16.md`, `REVIEW_17.md`, `REVIEW_18.md`, `REVIEW_19.md`, and the
 desk review of the brute-force job, `REVIEW_indep_desk.md`. These are AI reviews, not
 human ones. Graded results: `RESULTS_run14.md`, 16 (P5 **failed**), 17, 19, 20, 22,
-24, 28, 29.
+24, 28, 29, 32 (T2 flag defective, reported).
 
 ## Other parts
 
@@ -154,7 +179,7 @@ human ones. Graded results: `RESULTS_run14.md`, 16 (P5 **failed**), 17, 19, 20, 
   re-check above.
 - **From the uniform cascade to every prime** (`THEORY_15.md`, `thresh.py`): exact
   per-prime test, kill thresholds, exact cascade inside U_P (Lemmas E, T, R). Job
-  `lrc16-uniform-v2` (queued; `PLAN_addendum9.md`, 12, 14).
+  `lrc16-uniform-v2` graded in `RESULTS_run32.md` (`PLAN_addendum9.md`, 12, 14).
 - **Engines 3 and 4** (`THEORY_13.md`, `THEORY_14.md`): safe prunings of the cover
   search. Engine 3 is correct and no faster (`RESULTS_run28.md`); engine 4 is tested
   by the queued `lrc16-orbit-v1`.

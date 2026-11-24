@@ -1,0 +1,19 @@
+===== run-01-python: python fetch_uniform.py --out-dir /out
+
+===== run-02-python: python -m unittest -v test_thresh
+test_k3 (test_thresh.ExactPerPrime.test_k3) ... ok
+test_k4_other (test_thresh.ExactPerPrime.test_k4_other) ... ok
+test_k4_tight (test_thresh.ExactPerPrime.test_k4_tight) ... ok
+test_matches_brute_cascade (test_thresh.PrimeLevels.test_matches_brute_cascade) ... ok
+test_primes (test_thresh.PrimeLevels.test_primes) ... ok
+test_threshold_value_example (test_thresh.PrimeLevels.test_threshold_value_example) ... ok
+test_matches_uniform (test_thresh.Threshold.test_matches_uniform) ... ok
+test_none_means_improper_everywhere (test_thresh.Threshold.test_none_means_improper_everywhere) ... ok
+test_proper_above_threshold (test_thresh.Threshold.test_proper_above_threshold) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.279s
+
+OK
+
+===== run-03-python: python job_uniform2.py --out-dir /out --minutes 60
