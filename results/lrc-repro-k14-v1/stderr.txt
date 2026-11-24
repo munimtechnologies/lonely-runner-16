@@ -1,0 +1,25 @@
+===== run-01-python: python -m unittest -v test_bounds test_ref test_c
+test_A13_A14 (test_bounds.FlagBound.test_A13_A14) ... ok
+test_K14_exact (test_bounds.FlagBound.test_K14_exact) ... ok
+test_lcm16 (test_bounds.FlagBound.test_lcm16) ... ok
+test_product_bounds (test_bounds.FlagBound.test_product_bounds) ... ok
+test_ratios (test_bounds.FlagBound.test_ratios) ... ok
+test_required_logsum_14 (test_bounds.FlagBound.test_required_logsum_14) ... ok
+test_family_minima_match_paper (test_bounds.ShapeBound.test_family_minima_match_paper) ... ok
+test_paper_shape_constants (test_bounds.ShapeBound.test_paper_shape_constants) ... ok
+test_rigorous_sweep_below_minimum (test_bounds.ShapeBound.test_rigorous_sweep_below_minimum) ... ok
+test_cascade_monotone (test_ref.Reference.test_cascade_monotone) ... ok
+test_each_class_covers_m_times (test_ref.Reference.test_each_class_covers_m_times) ... ok
+test_level_witness_one_over_kplus1 (test_ref.Reference.test_level_witness_one_over_kplus1) ... ok
+test_one_to_k_is_level1_improper (test_ref.Reference.test_one_to_k_is_level1_improper) ... ok
+test_orbit_expansion_equals_bruteforce (test_ref.Reference.test_orbit_expansion_equals_bruteforce) ... ok
+test_cascade_matches_reference (test_c.CEngine.test_cascade_matches_reference) ... ok
+test_covers_match_reference (test_c.CEngine.test_covers_match_reference) ... ok
+test_gate_json (test_c.CEngine.test_gate_json) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 1.760s
+
+OK
+
+===== run-02-python: python job.py repro --out-dir /out --workers 4

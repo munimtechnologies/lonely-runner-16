@@ -1,0 +1,16 @@
+===== run-01-python: python -m unittest -v test_bounds test_ref test_c
+
+===== run-02-python: python job.py repro --out-dir /out --workers 4
+bounds done in 9.2s
+{"13": {"H_lower_bound": 664.8532763448937, "r_n_used": "101/200", "log_product_bound": "341.031990695377257336278695584931765336404842586504738953178", "required_gate_logsum": "328.237131884611881065414965650512368949093700185230471085337"}, "14": {"H_lower_bound": 798.2131184627046, "r_n_used": "1/2", "log_product_bound": "414.779364556699817152829093488837555989861490902189864280908", "required_gate_logsum": "401.984505745934440881965363554418159602550348500915596413067"}, "15": {"H_lower_bound": 944.8395618905731, "r_n_used": "61/125", "log_product_bound": "496.665422181958916078061760055369718832568824572902391236792", "required_gate_logsum": "483.177416190633594497780797999492145877182182037267868114830"}}
+{"k": 14, "p": 449, "tau": 14, "orbits_by_size": {"14": 4}, "cover_seconds": 1500.139, "cover_timed_out": 1, "tuples": 0, "killed": 0, "survived": 0, "overflow": 0, "complete": 0, "wall_seconds": 1503.2, "error": null}
+{"k": 14, "p": 401, "tau": 14, "orbits_by_size": {"14": 7}, "cover_seconds": 1500.18, "cover_timed_out": 1, "tuples": 0, "killed": 0, "survived": 0, "overflow": 0, "complete": 0, "wall_seconds": 1503.3, "error": null}
+{"k": 14, "p": 569, "tau": 14, "orbits_by_size": {"14": 1}, "cover_seconds": 1500.249, "cover_timed_out": 1, "tuples": 0, "killed": 0, "survived": 0, "overflow": 0, "complete": 0, "wall_seconds": 1503.3, "error": null}
+{"k": 14, "p": 503, "tau": 14, "orbits_by_size": {"14": 1}, "cover_seconds": 1500.352, "cover_timed_out": 1, "tuples": 0, "killed": 0, "survived": 0, "overflow": 0, "complete": 0, "wall_seconds": 1503.4, "error": null}
+{"k": 14, "p": 353, "tau": 14, "orbits_by_size": {"14": 227}, "cover_seconds": 1500.006, "cover_timed_out": 1, "tuples": 0, "killed": 0, "survived": 0, "overflow": 0, "complete": 0, "wall_seconds": 1503.0, "error": null}
+{"k": 14, "p": 307, "tau": 13, "orbits_by_size": {"13": 1, "14": 3511}, "cover_seconds": 1500.024, "cover_timed_out": 1, "tuples": 0, "killed": 0, "survived": 0, "overflow": 0, "complete": 0, "wall_seconds": 1503.1, "error": null}
+{"k": 14, "p": 271, "tau": 13, "orbits_by_size": {"13": 168, "14": 179903}, "cover_seconds": 1500.126, "cover_timed_out": 1, "tuples": 0, "killed": 0, "survived": 0, "overflow": 0, "complete": 0, "wall_seconds": 1503.1, "error": null}
+{"k": 14, "p": 239, "tau": 13, "orbits_by_size": {"13": 20, "14": 40051}, "cover_seconds": 1500.118, "cover_timed_out": 1, "tuples": 0, "killed": 0, "survived": 0, "overflow": 0, "complete": 0, "wall_seconds": 1503.1, "error": null}
+{"k": 13, "p": 401, "tau": 13, "orbits_by_size": {"13": 286}, "cover_seconds": 1500.002, "cover_timed_out": 1, "tuples": 0, "killed": 0, "survived": 0, "overflow": 0, "complete": 0, "wall_seconds": 1503.0, "error": null}
+{"k": 13, "p": 479, "tau": 13, "orbits_by_size": {"13": 105}, "cover_seconds": 1500.132, "cover_timed_out": 1, "tuples": 0, "killed": 0, "survived": 0, "overflow": 0, "complete": 0, "wall_seconds": 1503.1, "error": null}
+done

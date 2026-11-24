@@ -1,0 +1,64 @@
+{
+ "contract": "mv2-compete-result-v1",
+ "name": "lrc-repro-k14-v1",
+ "id": "04ac148be858",
+ "field": "open-problems",
+ "run": "20261121T081901Z-open-problems",
+ "kind": "compete",
+ "status": "ok",
+ "reason": "",
+ "host": "dell",
+ "image": "python:3.12",
+ "started_at": "2026-11-23T18:57:17.494456+00:00",
+ "finished_at": "2026-11-23T20:13:26.618190+00:00",
+ "duration_seconds": 4569,
+ "limits": {
+  "cpu": 2,
+  "memory_gb": 3.0,
+  "timeout_minutes": 300.0
+ },
+ "peak_memory_gb": 0.07,
+ "network": {
+  "setup": null,
+  "run": false
+ },
+ "steps": [
+  {
+   "step": "run-01-python",
+   "cmd": "python -m unittest -v test_bounds test_ref test_c",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "step": "run-02-python",
+   "cmd": "python job.py repro --out-dir /out --workers 4",
+   "exit": 0,
+   "seconds": 4520
+  }
+ ],
+ "out_files": [
+  "bounds.json",
+  "gates/k13_p401.json",
+  "gates/k13_p479.json",
+  "gates/k14_p239.json",
+  "gates/k14_p271.json",
+  "gates/k14_p307.json",
+  "gates/k14_p353.json",
+  "gates/k14_p401.json",
+  "gates/k14_p449.json",
+  "gates/k14_p503.json",
+  "gates/k14_p569.json",
+  "lrc",
+  "summary_repro.json"
+ ],
+ "out_files_total": 13,
+ "out_skipped": [],
+ "upload_skipped": [],
+ "summary_tail": "[run-02-python stdout]  \"complete\": 0, \"wall_seconds\": 1503.0, \"error\": null}\n{\"k\": 14, \"p\": 307, \"tau\": 13, \"orbits_by_size\": {\"13\": 1, \"14\": 3511}, \"cover_seconds\": 1500.024, \"cover_timed_out\": 1, \"tuples\": 0, \"killed\": 0, \"survived\": 0, \"overflow\": 0, \"complete\": 0, \"wall_seconds\": 1503.1, \"error\": null}\n{\"k\": 14, \"p\": 271, \"tau\": 13, \"orbits_by_size\": {\"13\": 168, \"14\": 179903}, \"cover_seconds\": 1500.126, \"cover_timed_out\": 1, \"tuples\": 0, \"killed\": 0, \"survived\": 0, \"overflow\": 0, \"complete\": 0, \"wall_seconds\": 1503.1, \"error\": null}\n{\"k\": 14, \"p\": 239, \"tau\": 13, \"orbits_by_size\": {\"13\": 20, \"14\": 40051}, \"cover_seconds\": 1500.118, \"cover_timed_out\": 1, \"tuples\": 0, \"killed\": 0, \"survived\": 0, \"overflow\": 0, \"complete\": 0, \"wall_seconds\": 1503.1, \"error\": null}\n{\"k\": 13, \"p\": 401, \"tau\": 13, \"orbits_by_size\": {\"13\": 286}, \"cover_seconds\": 1500.002, \"cover_timed_out\": 1, \"tuples\": 0, \"killed\": 0, \"survived\": 0, \"overflow\": 0, \"complete\": 0, \"wall_seconds\": 1503.0, \"error\": null}\n{\"k\": 13, \"p\": 479, \"tau\": 13, \"orbits_by_size\": {\"13\": 105}, \"cover_seconds\": 1500.132, \"cover_timed_out\": 1, \"tuples\": 0, \"killed\": 0, \"survived\": 0, \"overflow\": 0, \"complete\": 0, \"wall_seconds\": 1503.1, \"error\": null}\ndone\n",
+ "paths": {
+  "workdir": "/work (copy of E:\\MV2-Pursuit\\work\\20261121T081901Z-open-problems\\lonely-runner-16)",
+  "out": "/out -> out/",
+  "data": "/data (docker volume mv2c-data-lrc-none, kept for later jobs)"
+ },
+ "note": ""
+}
