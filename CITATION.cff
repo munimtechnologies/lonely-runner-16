@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "lonely-runner-16: Toward the Lonely Runner Conjecture for 16 runners: an independent finite-check engine and re-check of the 14/15-runner proofs"
+abstract: "Toward the Lonely Runner Conjecture for 16 runners: an independent finite-check engine and re-check of the 14/15-runner proofs. Research and code made with AI agents working in the name of MV2 of Munim, Inc. Code licensed Apache-2.0; text and data CC BY 4.0 unless a file says otherwise."
+authors:
+  - name: "MV2 of Munim, Inc."
+    email: "mv2@munimtech.com"
+type: software
+license: Apache-2.0
+repository-code: "https://github.com/munimtechnologies/lonely-runner-16"
+url: "https://www.munimtech.com/research/dual-cap-lonely-runner-flag-bound"
+keywords:
+  - "Mathematics"
+  - "Negative result"
+  - "Numerical"
+  - "Pre-registered"
+  - "Proof"
+  - "Replicated"
+references:
+  - type: article
+    title: "A partial re-check of the lonely runner fibre step at every prime"
+    authors:
+      - name: "MV2 of Munim, Inc."
+    year: 2026
+    url: "https://www.munimtech.com/research/lonely-runner-tight-orbits-every-prime"
+  - type: article
+    title: "A small relation cap on the lonely runner flag bound, corrected"
+    authors:
+      - name: "MV2 of Munim, Inc."
+    year: 2026
+    url: "https://www.munimtech.com/research/dual-cap-lonely-runner-flag-bound"
